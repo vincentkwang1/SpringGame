@@ -1,0 +1,40 @@
+﻿  background.cpp
+  bullet.cpp
+c:\sdl\sdlgame\bullet.cpp(8): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\bullet.cpp(9): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  crew.cpp
+  enemy.cpp
+c:\sdl\sdlgame\enemy.cpp(8): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(9): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(52): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(89): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(94): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+c:\sdl\sdlgame\enemy.cpp(94): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(233): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(237): warning C4838: conversion from 'double' to 'int' requires a narrowing conversion
+c:\sdl\sdlgame\enemy.cpp(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(314): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(315): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(356): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(362): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\enemy.cpp(378): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  game.cpp
+c:\sdl\sdlgame\game.cpp(32): warning C4552: '&': result of expression not used
+c:\sdl\sdlgame\game.cpp(143): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\sdl\sdlgame\game.cpp(151): warning C4101: 'maxEnemyNumber': unreferenced local variable
+c:\sdl\sdlgame\game.cpp(146): warning C4101: 'bulletnumber': unreferenced local variable
+  global.cpp
+  level.cpp
+c:\sdl\sdlgame\level.cpp(384): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  LTexture.cpp
+c:\sdl\sdlgame\ltexture.cpp(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  node.cpp
+c:\sdl\sdlgame\node.cpp(82): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\sdl\sdlgame\node.cpp(132): warning C4060: switch statement contains no 'case' or 'default' labels
+c:\sdl\sdlgame\node.cpp(140): warning C4805: '==': unsafe mix of type 'int' and type 'bool' in operation
+  ship.cpp
+  spawner.cpp
+  Generating code
+  All 251 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SDLgame.vcxproj -> C:\SDL\SDLgame\Release\SDLgame.exe

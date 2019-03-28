@@ -1,0 +1,23 @@
+﻿  background.cpp
+c:\sdl\sdlgame\ltexture.h(1): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  bullet.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  crew.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  enemy.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  game.cpp
+c:\sdl\sdlgame\ltexture.h(1): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  global.cpp
+c:\sdl\sdlgame\global.cpp(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  level.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  LTexture.cpp
+c:\sdl\sdlgame\ltexture.cpp(1): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  node.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  ship.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  spawner.cpp
+c:\sdl\sdlgame\global.h(4): fatal error C1083: Cannot open include file: 'SDL.h': No such file or directory
+  Generating Code...
