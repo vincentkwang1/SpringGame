@@ -1,6 +1,0 @@
-﻿  LTexture.cpp
-c:\sdl\sdlgame\ltexture.cpp(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  level.cpp
-c:\sdl\sdlgame\level.cpp(384): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
-  SDLgame.vcxproj -> C:\SDL\SDLgame\Debug\SDLgame.exe
