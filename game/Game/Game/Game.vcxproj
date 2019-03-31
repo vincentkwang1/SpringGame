@@ -142,6 +142,9 @@
     <ClInclude Include="LTexture.h" />
     <ClInclude Include="troop.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="tile.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
