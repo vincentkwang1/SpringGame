@@ -10,6 +10,7 @@ SDL_Window* gWindow;
 SDL_Renderer* gRenderer;
 TTF_Font *gFont;
 LTexture gTextTexture;
+LTexture gSwordsmanTexture;
 //DELETE THIS
 LTexture gTestTexture;
 //DELETE THIS

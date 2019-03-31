@@ -10,6 +10,7 @@ extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;
+extern LTexture gSwordsmanTexture;
 //DELETE THIS
 extern LTexture gTestTexture;
 //DELETE THIS

@@ -1,5 +1,6 @@
 #include "LTexture.h"
 #include "global.h"
+#include "troop.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -28,6 +29,7 @@ void loadMedia() {
 	//LOADS ALL TEXTURES FROM THE RESOURCE FOLDER
 	gFont = TTF_OpenFont("resource/font1.ttf", 40);
 	gTestTexture.loadFromFile("resource/2.png");
+	gSwordsmanTexture.loadFromFile("resource/sword.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -51,6 +53,10 @@ int main(int argc, char* args[]) {
 	SDL_Event e;
 	srand(time(NULL));
 
+	//CONSTRUCTING CLASSES
+
+	troop troop = {500, 500, 1};
+
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -62,13 +68,15 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
+				case SDLK_a: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				}
 			}
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
-		gTestTexture.render(0, 0);
+		//gTestTexture.render(0, 0);
+		troop.render();
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
