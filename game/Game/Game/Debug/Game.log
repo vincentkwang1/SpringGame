@@ -1,3 +1,4 @@
 ﻿  Source.cpp
 c:\github\springgame\game\game\game\source.cpp(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  LINK : C:\GitHub\SpringGame\game\Game\Debug\Game.exe not found or not built by the last incremental link; performing full link
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
