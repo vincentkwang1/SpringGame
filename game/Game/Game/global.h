@@ -9,4 +9,8 @@ typedef int32_t s32;
 extern SDL_Window* gWindow;
 extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
+extern LTexture gTextTexture;
+//DELETE THIS
+extern LTexture gTestTexture;
+//DELETE THIS
 #endif // !global_h_
