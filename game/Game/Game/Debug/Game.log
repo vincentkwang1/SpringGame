@@ -1,0 +1,4 @@
+﻿  game.cpp
+c:\github\springgame\game\game\game\game.cpp(25): warning C4552: '&': result of expression not used
+c:\github\springgame\game\game\game\game.cpp(56): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

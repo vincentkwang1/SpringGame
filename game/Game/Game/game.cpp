@@ -31,7 +31,7 @@ void loadMedia() {
 	gFont = TTF_OpenFont("resource/font1.ttf", 40);
 	gTestTexture.loadFromFile("resource/2.png");
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
-	gTile.loadFromFile("resource/Tile.jpg");
+	gTile.loadFromFile("resource/Tile.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
