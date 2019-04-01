@@ -1,6 +1,7 @@
 #include "LTexture.h"
 #include "global.h"
 #include "troop.h"
+#include "tile.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -30,6 +31,7 @@ void loadMedia() {
 	gFont = TTF_OpenFont("resource/font1.ttf", 40);
 	gTestTexture.loadFromFile("resource/2.png");
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
+	gTile.loadFromFile("resource/Tile.jpg");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -57,6 +59,11 @@ int main(int argc, char* args[]) {
 
 	troop troop = {500, 500, 1};
 
+	//Robert Testing
+	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
+	tile tile = {1,1,true,true,1000,700,1,building};
+	///////////////
+
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -77,6 +84,10 @@ int main(int argc, char* args[]) {
 
 		//gTestTexture.render(0, 0);
 		troop.render();
+
+		//Robert Testing////
+		tile.render();
+		///////////////////
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };

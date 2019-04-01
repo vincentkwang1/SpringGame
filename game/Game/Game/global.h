@@ -11,6 +11,11 @@ extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;
 extern LTexture gSwordsmanTexture;
+
+//Robert testing////////
+extern LTexture gTile;
+////////////////////////
+
 //DELETE THIS
 extern LTexture gTestTexture;
 //DELETE THIS

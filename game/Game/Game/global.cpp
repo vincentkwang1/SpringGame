@@ -11,6 +11,11 @@ SDL_Renderer* gRenderer;
 TTF_Font *gFont;
 LTexture gTextTexture;
 LTexture gSwordsmanTexture;
+
+//Robert Testing///
+LTexture gTile;
+///////////////////
+
 //DELETE THIS
 LTexture gTestTexture;
 //DELETE THIS

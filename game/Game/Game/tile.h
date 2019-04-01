@@ -14,6 +14,9 @@ public:
 	tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, int buildings[]);
 
 
+	//Rendering Function
+	void render();
+
 	//Get Functions
 	int getX();
 	int getY();
@@ -27,16 +30,16 @@ public:
 	int getBuildSlot(int slotNum);
 
 	//Set Functions
-	int setX(int x);
-	int setY(int y);
+	void setX(int x);
+	void setY(int y);
 
-	int setNoise(int noise);
-	int setTemp(int temp);
-	bool setTrees(bool trees);
-	bool setRiver(bool river);
+	void setNoise(int noise);
+	void setTemp(int temp);
+	void setTrees(bool trees);
+	void setRiver(bool river);
 
-	int setDev(int dev);
-	int setBuildSlot(int slot, int building);
+	void setDev(int dev);
+	void setBuildSlot(int slot, int building);
 
 
 
@@ -55,6 +58,9 @@ private:
 	//Manage Extra stuff
 	int devScale; // 0- no development, 10- metropolis
 	int buildingSlots[10]; //tracks what infastructure is built in a given tile
+
+	//Texture Ver
+	SDL_Rect tileClip;
 
 };
 #endif 
