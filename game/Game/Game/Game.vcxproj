@@ -135,6 +135,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="global.cpp" />
+    <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
