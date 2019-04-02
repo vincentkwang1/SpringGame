@@ -135,12 +135,14 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="global.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h" />
     <ClInclude Include="LTexture.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="troop.h" />
   </ItemGroup>
   <ItemGroup>
