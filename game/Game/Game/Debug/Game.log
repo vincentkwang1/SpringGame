@@ -1,11 +1,2 @@
 ﻿  map.cpp
-c:\github\springgame\game\game\game\map.h(20): error C2373: 'map::mapWidth': redefinition; different type modifiers
-  c:\github\springgame\game\game\game\map.h(9): note: see declaration of 'map::mapWidth'
-c:\github\springgame\game\game\game\map.h(20): error C2373: 'map::mapHeight': redefinition; different type modifiers
-  c:\github\springgame\game\game\game\map.h(8): note: see declaration of 'map::mapHeight'
-c:\github\springgame\game\game\game\map.cpp(9): error C2664: 'std::unique_ptr<tile [],std::default_delete<_Ty>>::unique_ptr(const std::unique_ptr<_Ty,std::default_delete<_Ty>> &)': cannot convert argument 1 from 'tile (*)[100]' to 'std::nullptr_t'
-          with
-          [
-              _Ty=tile []
-          ]
-  c:\github\springgame\game\game\game\map.cpp(9): note: nullptr can only be converted to pointer or handle types
+  Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

@@ -1,24 +1,38 @@
 #include "map.h"
 #include "tile.h"
-
-
-map::map(int width /*Max Width 100*/, int height /*Max Height 100*/, int mapdata[]) {
-
-
-	//make array got help from link at bottom of code at [1]
-	std::unique_ptr<tile[]> mapContainer(tile[100][100]);
-	////////////////////
+#include <vector>
 
 
 
-	for (int i = 0; i < 100; i++) {
+map::map(int width, int height, int mapdata[],int tempdata[]) {
 
-		for (int j = 0; j < 100; j++) {
 
-			mapContainer
+	mapContainer.resize(height, std::vector<tile>(width));
+
+	int j = 0;
+	
+	//for each piece of map data
+	for (int i = 0; i < width*height; i++) {
+		
+		std::cout << "row" << j << " colum " << i  << std::endl;
+		
+		//if you hit the end of a line
+		if (i >= width+1) {
+			
+			j++;
 		}
+		//adds a tile to the end of the row at height k
+		mapContainer[j].push_back(createTile(mapdata[i], tempdata[i]));
+
 	}
 
+}
+
+
+
+
+tile map::createTile(int noise, int temp){
+	return tile();
 }
 
 
@@ -29,4 +43,3 @@ map::map(int width /*Max Width 100*/, int height /*Max Height 100*/, int mapdata
 
 
 
-// [1] https://stackoverflow.com/questions/14345031/confused-with-object-arrays-in-c

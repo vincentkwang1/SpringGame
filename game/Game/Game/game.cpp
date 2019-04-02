@@ -2,6 +2,7 @@
 #include "global.h"
 #include "troop.h"
 #include "tile.h"
+#include "map.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -57,11 +58,13 @@ int main(int argc, char* args[]) {
 
 	//CONSTRUCTING CLASSES
 
-	troop troop = {500, 500, 1};
+	troop troop = { 500, 500, 1 };
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	tile tile = {1,1,true,true,1000,700,1,building};
+	tile tile = { 1,1,true,true,1000,700,1,building };
+	int test[4] = { 1,2,3,4 };
+	map map = { 2, 2, test, test };
 	///////////////
 
 	//GAME MAIN LOOP
