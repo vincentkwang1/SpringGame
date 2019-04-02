@@ -18,5 +18,6 @@ LTexture gTile;
 
 //DELETE THIS
 LTexture gTestTexture;
+LTexture gGrassTexture;
 //DELETE THIS
 #endif // !global_h_

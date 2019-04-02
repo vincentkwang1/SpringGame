@@ -16,7 +16,5 @@ extern LTexture gSwordsmanTexture;
 extern LTexture gTile;
 ////////////////////////
 
-//DELETE THIS
-extern LTexture gTestTexture;
-//DELETE THIS
+extern LTexture gGrassTexture;
 #endif // !global_h_

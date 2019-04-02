@@ -12,6 +12,14 @@ troop::troop(int xPos, int yPos, int type) {
 		troopClips[i].h = 86;
 	}
 }
+void troop::move(int direction) {
+	switch (direction) {
+	case 0: tPosX = tPosX + 5; break;
+	case 1: tPosY = tPosY - 5; break;
+	case 2: tPosX = tPosX - 5; break;
+	case 3: tPosY = tPosY + 5; break;
+	}
+}
 void troop::render() {
 	SDL_Rect* currentClip [6];
 	if (attacking) { //if attacking is true, execute attack animation

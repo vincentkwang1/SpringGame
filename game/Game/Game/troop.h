@@ -6,7 +6,7 @@ class troop {
 public:
 	troop();
 	troop(int xPos, int yPos, int type); //constructor with type of troop and position
-	void move(); //moves the troop, not yet implemented
+	void move(int direction); //moves the troop when panning
 	void attack();
 	void render(); //draws the troop
 private:

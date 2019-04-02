@@ -8,19 +8,66 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 	tempScale = temp;
 	hasTrees = trees;
 	hasRiver = river;
-	xLoc = x;
-	yLoc = y;
+	xCoord = x;
+	yCoord = y;
+	setPosition();
+
 	devScale = dev;
 	for (int i = 0; i < 10; i++) {
 		buildingSlots[i] = buildings[i];
 	}
-
-
+	for (int i = 0; i < 4; i++) {
+		grassClips[i].x = 240 * i;
+		grassClips[i].y = 0;
+		grassClips[i].w = 240;
+		grassClips[i].h = 120;
+	}
+}
+void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is up
+	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
+	{
+		switch (e.key.keysym.sym)
+		{
+		case SDLK_LEFT: velX += panSpeed; break;
+		case SDLK_DOWN: velY += panSpeed; break;
+		case SDLK_RIGHT: velX -= panSpeed; break;
+		case SDLK_UP: velY -= panSpeed; break;
+		}
+	}
+	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
+	{
+		//Adjust the velocity
+		switch (e.key.keysym.sym)
+		{
+		case SDLK_LEFT: velX -= panSpeed; break;
+		case SDLK_DOWN: velY -= panSpeed; break;
+		case SDLK_RIGHT: velX += panSpeed; break;
+		case SDLK_UP: velY += panSpeed; break;
+		}
+	}
+}
+void tile::setPosition() {
+	random = rand() % 4; //creates the random number associated with the tile
+	if ((yCoord % 2) == 1) { //if odd
+		xLoc = 240 * (xCoord - 1);
+		yLoc = 60 * (yCoord - 1);
+	}
+	else { //if even
+		xLoc = 240 * (xCoord - 1) + 120;
+		yLoc = 60 * (yCoord - 1);
+	}
 }
 
 void tile::render() {
-	gTile.render(xLoc, yLoc);
+	SDL_Rect* currentClip;
+	currentClip = &grassClips[random];
+	gGrassTexture.render(xLoc, yLoc, currentClip); 
 	
+}
+
+void tile::move() { //0 is left, 1 is down, 2 is right, 3 is up
+	xLoc += velX;
+	yLoc += velY;
 }
 
 //Get Functions

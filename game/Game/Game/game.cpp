@@ -31,9 +31,9 @@ bool init() {
 void loadMedia() {
 	//LOADS ALL TEXTURES FROM THE RESOURCE FOLDER
 	gFont = TTF_OpenFont("resource/font1.ttf", 40);
-	gTestTexture.loadFromFile("resource/2.png");
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
 	gTile.loadFromFile("resource/Tile.png");
+	gGrassTexture.loadFromFile("resource/grass.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -63,7 +63,12 @@ int main(int argc, char* args[]) {
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	tile tile = {1,1,true,true,1000,700,1,building};
+	tile tile[171];
+	for (int x = 0; x < 9; x++) {
+		for (int y = 0; y < 19; y++) {
+			tile[19 * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
+		}
+	}
 	///////////////
 
 	std::vector<int> heightArray;
@@ -87,12 +92,16 @@ int main(int argc, char* args[]) {
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
+		//Robert Testing////
+		for (int i = 0; i < 171; i++) {
+			tile[i].move();
+			tile[i].render();
+		}
+		///////////////////
+
 		//gTestTexture.render(0, 0);
 		troop.render();
 
-		//Robert Testing////
-		tile.render();
-		///////////////////
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
