@@ -2,6 +2,8 @@
 #include "global.h"
 #include "troop.h"
 #include "tile.h"
+#include "ppm.h"
+#include "Perlin.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -56,13 +58,16 @@ int main(int argc, char* args[]) {
 	srand(time(NULL));
 
 	//CONSTRUCTING CLASSES
-
+	Perlin perlin;
 	troop troop = {500, 500, 1};
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
 	tile tile = {1,1,true,true,1000,700,1,building};
 	///////////////
+
+	std::vector<int> heightArray;
+	heightArray = perlin.createArray();
 
 	//GAME MAIN LOOP
 	while (!quit) {

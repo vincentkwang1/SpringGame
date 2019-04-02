@@ -135,12 +135,19 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="global.cpp" />
+    <ClCompile Include="Perlin.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
+    <ClCompile Include="ppm.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h" />
+    <ClInclude Include="Perlin.h" />
     <ClInclude Include="LTexture.h" />
+    <ClInclude Include="PerlinCreateArray.h" />
+    <ClInclude Include="PerlinNoise.h" />
+    <ClInclude Include="ppm.h" />
     <ClInclude Include="troop.h" />
   </ItemGroup>
   <ItemGroup>
