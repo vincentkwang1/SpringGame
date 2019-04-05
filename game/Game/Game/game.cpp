@@ -62,11 +62,11 @@ int main(int argc, char* args[]) {
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	tile tile = { 1,1,true,true,1000,700,1,building };
-	int test[4] = { 1,2,3,4 };
+	tile tile = { 1,1,false,true,1000,700,1,building };
+	int test[4] = {1,2,3,4};
 	map map = { 2, 2, test, test };
 	///////////////
-
+	int ii = 1;
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
