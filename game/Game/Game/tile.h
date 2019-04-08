@@ -50,7 +50,9 @@ public:
 
 
 private:
-	int velX, velY;
+	bool showCoords = false; //debugging
+
+	int velX = 0, velY = 0;
 
 	int random; // random integer used to make variety in the tiles 
 

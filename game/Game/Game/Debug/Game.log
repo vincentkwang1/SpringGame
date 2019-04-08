@@ -1,6 +1,4 @@
 ﻿  game.cpp
 c:\github\springgame\game\game\game\game.cpp(27): warning C4552: '&': result of expression not used
 c:\github\springgame\game\game\game\game.cpp(58): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  tile.cpp
-  Generating Code...
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

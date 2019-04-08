@@ -59,16 +59,19 @@ int main(int argc, char* args[]) {
 
 	//CONSTRUCTING CLASSES
 	Perlin perlin;
-	troop troop = {500, 500, 1};
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	tile tile[171];
-	for (int x = 0; x < 9; x++) {
-		for (int y = 0; y < 19; y++) {
-			tile[19 * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
+	static const int tileX = 12;
+	static const int tileY = 12;
+	static const int number = tileX * tileY;
+	tile tile[number];
+	for (int x = 0; x < tileX; x++) {
+		for (int y = 0; y < tileY; y++) {
+			tile[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
 		}
 	}
+	troop troop = { 0, 0, 1, tile };
 	///////////////
 
 	std::vector<int> heightArray;
@@ -85,7 +88,15 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_a: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_w:
+					if (troop.getPos()[0] > 0) {
+						troop.moveTroop(tile, 0);
+					}
+					break;
+				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tile, 1); break; //MVOES THE TROOP
+				case SDLK_s: if (troop.getPos()[0] < tileX)troop.moveTroop(tile, 2); break; //MVOES THE TROOP
+				case SDLK_d: if (troop.getPos()[1] < tileY)troop.moveTroop(tile, 3); break; //MVOES THE TROOP
 				}
 			}
 		}
@@ -93,13 +104,16 @@ int main(int argc, char* args[]) {
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
 		//Robert Testing////
-		for (int i = 0; i < 171; i++) {
+		for (int i = 0; i < number; i++) {
+			tile[i].handleEvent(e);
 			tile[i].move();
 			tile[i].render();
 		}
 		///////////////////
 
 		//gTestTexture.render(0, 0);
+		troop.handleEvent(e);
+		troop.move();
 		troop.render();
 
 

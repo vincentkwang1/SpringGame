@@ -28,10 +28,11 @@ void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is 
 	{
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_LEFT: velX += panSpeed; break;
-		case SDLK_DOWN: velY += panSpeed; break;
-		case SDLK_RIGHT: velX -= panSpeed; break;
-		case SDLK_UP: velY -= panSpeed; break;
+		case SDLK_LEFT: velX = panSpeed; break;
+		case SDLK_DOWN: velY = -panSpeed; break;
+		case SDLK_RIGHT: velX = -panSpeed; break;
+		case SDLK_UP: velY = panSpeed; break;
+		case SDLK_F1: showCoords = true; break;
 		}
 	}
 	else if (e.type == SDL_KEYUP && e.key.repeat == 0)
@@ -39,23 +40,18 @@ void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is 
 		//Adjust the velocity
 		switch (e.key.keysym.sym)
 		{
-		case SDLK_LEFT: velX -= panSpeed; break;
-		case SDLK_DOWN: velY -= panSpeed; break;
-		case SDLK_RIGHT: velX += panSpeed; break;
-		case SDLK_UP: velY += panSpeed; break;
+		case SDLK_LEFT: velX = 0; break;
+		case SDLK_DOWN: velY = 0; break;
+		case SDLK_RIGHT: velX = 0; break;
+		case SDLK_UP: velY = 0; break;
+		case SDLK_F1: showCoords = false; break;
 		}
 	}
 }
 void tile::setPosition() {
 	random = rand() % 4; //creates the random number associated with the tile
-	if ((yCoord % 2) == 1) { //if odd
-		xLoc = 240 * (xCoord - 1);
-		yLoc = 60 * (yCoord - 1);
-	}
-	else { //if even
-		xLoc = 240 * (xCoord - 1) + 120;
-		yLoc = 60 * (yCoord - 1);
-	}
+	xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
+	yLoc = 1080 / 2 + 60 * (xCoord - yCoord);
 }
 
 void tile::render() {
@@ -63,6 +59,14 @@ void tile::render() {
 	currentClip = &grassClips[random];
 	gGrassTexture.render(xLoc, yLoc, currentClip); 
 	
+	if (showCoords) {
+		std::ostringstream strs;
+		SDL_Color textColor = { 255, 255 , 255 };
+		strs << xCoord << ", " << yCoord;
+		std::string str = strs.str();
+		gTextTexture.loadFromRenderedText(str, textColor);
+		gTextTexture.render(xLoc + 40, yLoc + 20);
+	}
 }
 
 void tile::move() { //0 is left, 1 is down, 2 is right, 3 is up
