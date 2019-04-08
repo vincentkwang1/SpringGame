@@ -63,8 +63,8 @@ int main(int argc, char* args[]) {
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
 	tile tile = { 1,1,false,true,1000,700,1,building };
-	int test[4] = {1,2,3,4};
-	map map = { 2, 2, test, test };
+	int test[9] = {1,2,3,4,5,6,7,8,9};
+	map map = { 3, 3, test, test };
 	///////////////
 	int ii = 1;
 	//GAME MAIN LOOP
