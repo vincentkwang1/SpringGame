@@ -11,13 +11,13 @@ public:
 	//Constructors
 	map() {};
 
-	map(int width, int height, int mapdata[], int tempdata[]);
+	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata);
 
 	//display map on screen
 	void render();
 
 	//takes map data and pushes out a tile
-	tile createTile(int noise, int temp);
+	tile createTile(int noise, int temp, int i, int j);
 
 private:
 

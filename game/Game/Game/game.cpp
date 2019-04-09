@@ -72,14 +72,16 @@ int main(int argc, char* args[]) {
 			tile[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
 		}
 	}
+
 	troop troop = { 0, 0, 1, tile };
 	///////////////
 
 	std::vector<int> heightArray;
-	heightArray = perlin.createArray();
+	heightArray = perlin.createArray(); //array containing the randomized heights
 
-	int test[9] = {1,2,3,4,5,6,7,8,9};
-	map map = { 3, 3, test, test };
+	//std::vector<int> test = {1,2,3,4,5,6,7,8,9};
+	map map = { 12, 12, heightArray, heightArray};
+	int ii = 0;
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -98,15 +100,15 @@ int main(int argc, char* args[]) {
 					}
 					break;
 				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tile, 1); break; //MVOES THE TROOP
-				case SDLK_s: if (troop.getPos()[0] < tileX)troop.moveTroop(tile, 2); break; //MVOES THE TROOP
-				case SDLK_d: if (troop.getPos()[1] < tileY)troop.moveTroop(tile, 3); break; //MVOES THE TROOP
+				case SDLK_s: if (troop.getPos()[0] < tileX- 1)troop.moveTroop(tile, 2); break; //MVOES THE TROOP
+				case SDLK_d: if (troop.getPos()[1] < tileY - 1)troop.moveTroop(tile, 3); break; //MVOES THE TROOP
 				}
 			}
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
-		//Robert Testing////
+		//Vinny Testing////
 		for (int i = 0; i < number; i++) {
 			tile[i].handleEvent(e);
 			tile[i].move();

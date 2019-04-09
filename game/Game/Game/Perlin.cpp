@@ -10,13 +10,13 @@ Perlin::Perlin() {
 std::vector<int> Perlin::createArray() {
 
 	// Define the size of the image
-	unsigned int width = 200, height = 200;
+	unsigned int width = 12, height = 12;
 	// Create an empty PPM image
 	ppm gImage(width, height);
 	// Define seed
 	unsigned int gSeed = 26354;
 	// Define frequency
-	int gFrequency = 5;//5, 15, 40
+	int gFrequency = 15;//5, 15, 40
 	// Define size
 	int gSize = width * height;
 
