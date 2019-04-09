@@ -14,8 +14,8 @@ troop::troop(int gXCoord, int gYCoord, int type, tile tiles[]) {
 	}
 }
 void troop::updatePos(tile tiles[]) {
-	tPosX = tiles[12 * xCoord + yCoord].getX() + 60;
-	tPosY = tiles[12 * xCoord + yCoord].getY() - 60;
+	tPosX = tiles[tileY * xCoord + yCoord].getX() + 60;
+	tPosY = tiles[tileY * xCoord + yCoord].getY() - 60;
 }
 void troop::move() {
 	tPosX += velX;

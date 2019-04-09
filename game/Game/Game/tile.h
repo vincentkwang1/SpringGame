@@ -14,6 +14,7 @@ public:
 	//Constructor
 	tile() {};
 	tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, int buildings[]);
+	tile(int side, int i); //hills constructor
 
 	void move();
 	//handle panning
@@ -47,9 +48,12 @@ public:
 	void setBuildSlot(int slot, int building);
 
 	void setPosition(); //determines position based on coordinates
-
+	void setHillPosition(int borderType); //determines positions of hills
+	//0 is x = 0, 1 is x = max, 2 is y = 0, 3 is y = max
 
 private:
+	bool sideHill = false; //remembers if its a border hill or not
+	int hillClip = 0;
 	bool showCoords = false; //debugging
 
 	int velX = 0, velY = 0;
@@ -76,6 +80,7 @@ private:
 
 	//Texture Ver
 	SDL_Rect grassClips[4];
+	SDL_Rect hillClips[8];
 
 };
 #endif 

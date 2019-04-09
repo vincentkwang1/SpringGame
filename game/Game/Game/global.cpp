@@ -5,6 +5,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "LTexture.h"
+//dimensions of tiles
+static const int tileX = 12;
+static const int tileY = 12;
+static const int number = (tileX) * (tileY);
 typedef int32_t s32;
 SDL_Window* gWindow;
 SDL_Renderer* gRenderer;
@@ -12,9 +16,8 @@ TTF_Font *gFont;
 LTexture gTextTexture;
 LTexture gSwordsmanTexture;
 
-//Robert Testing///
 LTexture gTile;
-///////////////////
+LTexture gHills;
 
 //DELETE THIS
 LTexture gTestTexture;

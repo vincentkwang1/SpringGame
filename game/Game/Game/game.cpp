@@ -35,6 +35,7 @@ void loadMedia() {
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
 	gTile.loadFromFile("resource/Tile.png");
 	gGrassTexture.loadFromFile("resource/grass.png");
+	gHills.loadFromFile("resource/hills.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -59,20 +60,24 @@ int main(int argc, char* args[]) {
 	srand(time(NULL));
 
 	//CONSTRUCTING CLASSES
-	Perlin perlin;
+	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	static const int tileX = 12;
-	static const int tileY = 12;
-	static const int number = tileX * tileY;
-	tile tile[number];
+	tile tiles[number];
 	for (int x = 0; x < tileX; x++) {
 		for (int y = 0; y < tileY; y++) {
-			tile[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
+			tiles[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
 		}
 	}
-	troop troop = { 0, 0, 1, tile };
+	//hill tiles
+	tile hillTile[tileX*4];
+	for (int side = 0; side < 4; side++) {
+		for (int i = 0; i < tileX; i++) {
+			hillTile[side * tileX + i] = { side, i };
+		}
+	}
+	troop troop = { 0, 0, 1, tiles };
 	///////////////
 
 	std::vector<int> heightArray;
@@ -94,12 +99,12 @@ int main(int argc, char* args[]) {
 				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_w:
 					if (troop.getPos()[0] > 0) {
-						troop.moveTroop(tile, 0);
+						troop.moveTroop(tiles, 0);
 					}
 					break;
-				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tile, 1); break; //MVOES THE TROOP
-				case SDLK_s: if (troop.getPos()[0] < tileX)troop.moveTroop(tile, 2); break; //MVOES THE TROOP
-				case SDLK_d: if (troop.getPos()[1] < tileY)troop.moveTroop(tile, 3); break; //MVOES THE TROOP
+				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tiles, 1); break; //MVOES THE TROOP
+				case SDLK_s: if (troop.getPos()[0] < tileX)troop.moveTroop(tiles, 2); break; //MVOES THE TROOP
+				case SDLK_d: if (troop.getPos()[1] < tileY)troop.moveTroop(tiles, 3); break; //MVOES THE TROOP
 				}
 			}
 		}
@@ -107,10 +112,15 @@ int main(int argc, char* args[]) {
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
 		//Robert Testing////
+		for (int i = tileX  * 4 - 1; i >= 0; i--) {
+			hillTile[i].handleEvent(e);
+			hillTile[i].move();
+			hillTile[i].render();
+		}
 		for (int i = 0; i < number; i++) {
-			tile[i].handleEvent(e);
-			tile[i].move();
-			tile[i].render();
+			tiles[i].handleEvent(e);
+			tiles[i].move();
+			tiles[i].render();
 		}
 		///////////////////
 
