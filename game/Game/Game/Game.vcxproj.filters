@@ -37,6 +37,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Perlin.cpp">
+    <ClCompile Include="map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +61,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Perlin.h">
+    <ClInclude Include="map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

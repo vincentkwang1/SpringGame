@@ -4,6 +4,7 @@
 #include "tile.h"
 #include "ppm.h"
 #include "Perlin.h"
+#include "map.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -77,6 +78,8 @@ int main(int argc, char* args[]) {
 	std::vector<int> heightArray;
 	heightArray = perlin.createArray();
 
+	int test[9] = {1,2,3,4,5,6,7,8,9};
+	map map = { 3, 3, test, test };
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
