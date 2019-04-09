@@ -146,7 +146,6 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="LTexture.h" />
-    <ClInclude Include="PerlinCreateArray.h" />
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="ppm.h" />
     <ClInclude Include="map.h" />
