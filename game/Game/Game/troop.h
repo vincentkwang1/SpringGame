@@ -1,18 +1,19 @@
 #pragma once
 #include "global.h"
 #include "tile.h"
+#include <vector>
 #ifndef troop_h_
 #define troop_h
 class troop {
 public:
 	static const int panSpeed = 5;
 	troop();
-	troop(int xPos, int yPos, int type, tile tiles[]); //constructor with type of troop and position
+	troop(int xPos, int yPos, int type, std::vector<std::vector<tile>> tiles); //constructor with type of troop and position
 	void move(); //moves the troop when panning
-	void moveTroop(tile tiles[], int direction); //actually moves the tile the troop is on
+	void moveTroop(std::vector<std::vector<tile>> tiles, int direction); //actually moves the tile the troop is on
 	//0 is with w, 1 is with a, 2 is with s, 3 is with d
 	void attack();
-	void updatePos(tile tiles[]); //updates the position to match the coordinate
+	void updatePos(std::vector<std::vector<tile>> tiles); //updates the position to match the coordinate
 	void render(); //draws the troop
 	void handleEvent(SDL_Event& e);
 	int * getPos();

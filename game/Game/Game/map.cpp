@@ -6,6 +6,8 @@
 
 map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempdata) {
 
+	mapHeight = height;
+	mapWidth = width;
 
 	mapContainer.resize(height, std::vector<tile>(0));
 
@@ -61,9 +63,16 @@ tile map::createTile(int noise, int temp, int i, int j){
 	return tile(noiseScale, temp, false, false, i, j, 0, jay );
 }
 
+std::vector<std::vector<tile>> map::getMapContainer() {
+	return mapContainer;
+}
 
-
-
+int map::getHeight() {
+	return mapHeight;
+}
+int map::getWidth() {
+	return mapWidth;
+}
 
 
 

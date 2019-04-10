@@ -61,27 +61,30 @@ int main(int argc, char* args[]) {
 	//CONSTRUCTING CLASSES
 	Perlin perlin;
 
+	//MAKE MAP
+	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
+	map gameMap = { 12, 12, heightArray, heightArray }; //2D vector containing the tiles
+
+
+
+
 	//Robert Testing
 	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
 	static const int tileX = 12;
 	static const int tileY = 12;
 	static const int number = tileX * tileY;
-	tile tile[number];
+	/*tile tile[number];
 	for (int x = 0; x < tileX; x++) {
 		for (int y = 0; y < tileY; y++) {
 			tile[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
 		}
 	}
-
-	troop troop = { 0, 0, 1, tile };
+	*/
+	troop troop = { 0, 0, 1, gameMap.getMapContainer() };
 	///////////////
 
-	std::vector<int> heightArray;
-	heightArray = perlin.createArray(); //array containing the randomized heights
-
-	//std::vector<int> test = {1,2,3,4,5,6,7,8,9};
-	map map = { 12, 12, heightArray, heightArray};
-	int ii = 0;
+	
+	int ThisExistsAsABreakPoint = 0;
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -96,26 +99,34 @@ int main(int argc, char* args[]) {
 				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_w:
 					if (troop.getPos()[0] > 0) {
-						troop.moveTroop(tile, 0);
+						troop.moveTroop(gameMap.getMapContainer(), 0);
 					}
 					break;
-				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tile, 1); break; //MVOES THE TROOP
-				case SDLK_s: if (troop.getPos()[0] < tileX- 1)troop.moveTroop(tile, 2); break; //MVOES THE TROOP
-				case SDLK_d: if (troop.getPos()[1] < tileY - 1)troop.moveTroop(tile, 3); break; //MVOES THE TROOP
+				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(gameMap.getMapContainer(), 1); break; //MVOES THE TROOP
+				case SDLK_s: if (troop.getPos()[0] < tileX- 1)troop.moveTroop(gameMap.getMapContainer(), 2); break; //MVOES THE TROOP
+				case SDLK_d: if (troop.getPos()[1] < tileY - 1)troop.moveTroop(gameMap.getMapContainer(), 3); break; //MVOES THE TROOP
 				}
 			}
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
-		//Vinny Testing////
+		/*//Vinny Testing////
 		for (int i = 0; i < number; i++) {
 			tile[i].handleEvent(e);
 			tile[i].move();
 			tile[i].render();
 		}
-		///////////////////
-
+		///////////////////*/
+		for (int i = 0; i < gameMap.getHeight(); i++)
+		{
+			for (int j = 0; j < gameMap.getWidth(); j++) {
+				gameMap.getMapContainer()[i][j].handleEvent(e);
+				gameMap.getMapContainer()[i][j].move();
+				gameMap.getMapContainer()[i][j].render();
+			}
+		}
+		//*/
 		//gTestTexture.render(0, 0);
 		troop.handleEvent(e);
 		troop.move();

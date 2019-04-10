@@ -6,8 +6,7 @@
 #define map_h
 class map {
 public:
-	static const int mapHeight = 100;
-	static const int mapWidth = 100;
+	
 	//Constructors
 	map() {};
 
@@ -19,12 +18,19 @@ public:
 	//takes map data and pushes out a tile
 	tile createTile(int noise, int temp, int i, int j);
 
+	//Get functions
+	std::vector<std::vector<tile>> getMapContainer();
+	int getHeight();
+	int getWidth();
+
 private:
 
 	
 
 	//Tile container
 	std::vector<std::vector<tile>> mapContainer; //[1]
+	int mapHeight;
+	int mapWidth;
 };
 #endif 
 

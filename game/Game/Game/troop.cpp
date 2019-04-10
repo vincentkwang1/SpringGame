@@ -1,8 +1,9 @@
 #include "troop.h"
+
 troop::troop() {
 	
 }
-troop::troop(int gXCoord, int gYCoord, int type, tile tiles[]) {
+troop::troop(int gXCoord, int gYCoord, int type, std::vector<std::vector<tile>> tiles) {
 	xCoord = gXCoord;
 	yCoord = gYCoord;
 	updatePos(tiles);
@@ -13,9 +14,9 @@ troop::troop(int gXCoord, int gYCoord, int type, tile tiles[]) {
 		troopClips[i].h = 86;
 	}
 }
-void troop::updatePos(tile tiles[]) {
-	tPosX = tiles[12 * xCoord + yCoord].getX() + 60;
-	tPosY = tiles[12 * xCoord + yCoord].getY() - 60;
+void troop::updatePos(std::vector<std::vector<tile>> tiles) {
+	tPosX = tiles[xCoord][yCoord]/*[12 * xCoord + yCoord]*/.getX() + 60;
+	tPosY = tiles[xCoord][yCoord]/*[12 * xCoord + yCoord]*/.getY() - 60;
 }
 void troop::move() {
 	tPosX += velX;
@@ -86,7 +87,7 @@ int * troop::getPos() {
 	coords[1] = yCoord;
 	return coords;
 }
-void troop::moveTroop(tile tiles[], int direction) {
+void troop::moveTroop(std::vector<std::vector<tile>> tiles, int direction) {
 	switch(direction){
 	case 0: xCoord = xCoord - 1; break;
 	case 1: yCoord = yCoord - 1; break;
