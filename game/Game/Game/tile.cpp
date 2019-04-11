@@ -56,9 +56,15 @@ void tile::setPosition() {
 
 void tile::render() {
 	SDL_Rect* currentClip;
-	currentClip = &grassClips[random];
-	gGrassTexture.render(xLoc, yLoc, currentClip); 
-	
+
+	if (noiseScale == 3) {
+		gWaterTexture.render(xLoc, yLoc);
+	}
+	else {
+		currentClip = &grassClips[random];
+		gGrassTexture.render(xLoc, yLoc, currentClip);
+	}
+
 	if (showCoords) {
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };

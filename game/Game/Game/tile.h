@@ -76,6 +76,6 @@ private:
 
 	//Texture Ver
 	SDL_Rect grassClips[4];
-
+	SDL_Rect waterClip;
 };
 #endif 

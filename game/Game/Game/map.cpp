@@ -15,9 +15,9 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 	int k = 0;
 	//for each piece of map data
 	for (int i = 0; i < width*height; i++) {
+		
 		//if you hit the end of a line
 		if (k >= width) {
-			//mapContainer.push_back()
 			j++;
 			k = 0;
 		}
@@ -25,9 +25,7 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 		//adds a tile to the end of the row at height k
 		mapContainer[j].push_back(createTile(mapdata[i], tempdata[i], k,j));
 		k++;
-		//std::cout << "row" << j << " colum " << i%width << std::endl;
 	}
-
 }
 
 

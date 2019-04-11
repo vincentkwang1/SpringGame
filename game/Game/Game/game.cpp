@@ -35,6 +35,7 @@ void loadMedia() {
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
 	gTile.loadFromFile("resource/Tile.png");
 	gGrassTexture.loadFromFile("resource/grass.png");
+	gWaterTexture.loadFromFile("resource/water.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -61,30 +62,19 @@ int main(int argc, char* args[]) {
 	//CONSTRUCTING CLASSES
 	Perlin perlin;
 
-	//MAKE MAP
+	//MAKE MAP////////////////////////////
+	int mapWidth = 12, mapHeight = 12;
 	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
-	map gameMap = { 12, 12, heightArray, heightArray }; //2D vector containing the tiles
+	map gameMap = { mapWidth, mapHeight, heightArray, heightArray }; //2D vector containing the tiles
+	//////////////////////////////////////
 
 
-
-
-	//Robert Testing
-	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
-	static const int tileX = 12;
-	static const int tileY = 12;
-	static const int number = tileX * tileY;
-	/*tile tile[number];
-	for (int x = 0; x < tileX; x++) {
-		for (int y = 0; y < tileY; y++) {
-			tile[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
-		}
-	}
-	*/
+	//Generate Armies//
 	troop troop = { 0, 0, 1, gameMap.getMapContainer() };
-	///////////////
+	
 
 	
-	int ThisExistsAsABreakPoint = 0;
+	
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -97,14 +87,14 @@ int main(int argc, char* args[]) {
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
 				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-				case SDLK_w:
-					if (troop.getPos()[0] > 0) {
-						troop.moveTroop(gameMap.getMapContainer(), 0);
-					}
-					break;
-				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(gameMap.getMapContainer(), 1); break; //MVOES THE TROOP
-				case SDLK_s: if (troop.getPos()[0] < tileX- 1)troop.moveTroop(gameMap.getMapContainer(), 2); break; //MVOES THE TROOP
-				case SDLK_d: if (troop.getPos()[1] < tileY - 1)troop.moveTroop(gameMap.getMapContainer(), 3); break; //MVOES THE TROOP
+
+
+				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
+				case SDLK_w: if (troop.getPos()[0] > 0)troop.moveTroop(gameMap.getMapContainer(), 0); break;
+				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(gameMap.getMapContainer(), 1); break; 
+				case SDLK_s: if (troop.getPos()[0] < mapWidth- 1)troop.moveTroop(gameMap.getMapContainer(), 2); break; 
+				case SDLK_d: if (troop.getPos()[1] < mapHeight - 1)troop.moveTroop(gameMap.getMapContainer(), 3); break; 
+				/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
 		}
@@ -121,6 +111,7 @@ int main(int argc, char* args[]) {
 		for (int i = 0; i < gameMap.getHeight(); i++)
 		{
 			for (int j = 0; j < gameMap.getWidth(); j++) {
+				
 				gameMap.getMapContainer()[i][j].handleEvent(e);
 				gameMap.getMapContainer()[i][j].move();
 				gameMap.getMapContainer()[i][j].render();
