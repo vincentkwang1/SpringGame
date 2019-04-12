@@ -57,13 +57,27 @@ void tile::setPosition() {
 void tile::render() {
 	SDL_Rect* currentClip;
 
-	if (noiseScale == 3) {
+
+	//If water
+	if (noiseScale == 0) {
 		gWaterTexture.render(xLoc, yLoc);
 	}
-	else {
+	else if (noiseScale == 1) {
 		currentClip = &grassClips[random];
 		gGrassTexture.render(xLoc, yLoc, currentClip);
 	}
+	else if(noiseScale == 2) {
+		gHillTexture.render(xLoc, yLoc);
+	}
+	else if (noiseScale == 3) {
+		gMountainTexture.render(xLoc, yLoc);
+	}
+	else if (noiseScale == 4) {
+		gImpassableTexture.render(xLoc, yLoc);
+	}
+	
+	
+	
 
 	if (showCoords) {
 		std::ostringstream strs;

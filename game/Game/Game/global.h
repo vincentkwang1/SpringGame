@@ -15,6 +15,9 @@ extern LTexture gSwordsmanTexture;
 //Robert testing////////
 extern LTexture gTile;
 extern LTexture gWaterTexture;
+extern LTexture gHillTexture;
+extern LTexture gMountainTexture;
+extern LTexture gImpassableTexture;
 ////////////////////////
 
 extern LTexture gGrassTexture;

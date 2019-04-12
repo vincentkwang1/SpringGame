@@ -15,6 +15,9 @@ LTexture gSwordsmanTexture;
 //Robert Testing///
 LTexture gTile;
 LTexture gWaterTexture;
+LTexture gHillTexture;
+LTexture gMountainTexture;
+LTexture gImpassableTexture;
 ///////////////////
 
 //DELETE THIS

@@ -35,7 +35,10 @@ void loadMedia() {
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
 	gTile.loadFromFile("resource/Tile.png");
 	gGrassTexture.loadFromFile("resource/grass.png");
-	gWaterTexture.loadFromFile("resource/water.png");
+	gWaterTexture.loadFromFile("resource/TempTiles/water.png");
+	gHillTexture.loadFromFile("resource/TempTiles/hill.png");
+	gMountainTexture.loadFromFile("resource/TempTiles/mountain.png");
+	gImpassableTexture.loadFromFile("resource/TempTiles/impassable.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
