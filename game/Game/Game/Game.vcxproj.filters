@@ -12,13 +12,34 @@
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="global.h" />
-    <ClInclude Include="Perlin.h" />
-    <ClInclude Include="LTexture.h" />
-    <ClInclude Include="PerlinNoise.h" />
-    <ClInclude Include="ppm.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="troop.h" />
-    <ClInclude Include="tile.h" />
+    <ClInclude Include="global.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LTexture.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Perlin.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ppm.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="tile.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="troop.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{9375258a-5ddc-42e1-a7c1-27b217925f11}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

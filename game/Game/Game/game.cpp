@@ -39,6 +39,7 @@ void loadMedia() {
 	gHillTexture.loadFromFile("resource/TempTiles/hill.png");
 	gMountainTexture.loadFromFile("resource/TempTiles/mountain.png");
 	gImpassableTexture.loadFromFile("resource/TempTiles/impassable.png");
+	gHills.loadFromFile("resource/hills.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -63,13 +64,29 @@ int main(int argc, char* args[]) {
 	srand(time(NULL));
 
 	//CONSTRUCTING CLASSES
-	Perlin perlin;
+	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
 	//MAKE MAP////////////////////////////
 	int mapWidth = 12, mapHeight = 12;
 	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
 	map gameMap = { mapWidth, mapHeight, heightArray, heightArray }; //2D vector containing the tiles
 	//////////////////////////////////////
+
+	int building[10] = { 1,0,0,0,0,0,0,0,0,0 };
+	tile tiles[number];
+	for (int x = 0; x < tileX; x++) {
+		for (int y = 0; y < tileY; y++) {
+			tiles[tileY * x + y] = { 1,1,true,true, x ,y ,1,building }; //8, 9
+		}
+	}
+	//hill tiles
+	tile hillTile[tileX*4];
+	for (int side = 0; side < 4; side++) {
+		for (int i = 0; i < tileX; i++) {
+			hillTile[side * tileX + i] = { side, i };
+		}
+	}
+	///////////////
 
 
 	//Generate Armies//
@@ -91,7 +108,6 @@ int main(int argc, char* args[]) {
 				case SDLK_ESCAPE: quit = true; break;
 				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 
-
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (troop.getPos()[0] > 0)troop.moveTroop(gameMap.getMapContainer(), 0); break;
 				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(gameMap.getMapContainer(), 1); break; 
@@ -104,13 +120,17 @@ int main(int argc, char* args[]) {
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
 
-		/*//Vinny Testing////
+		/*for (int i = tileX  * 4 - 1; i >= 0; i--) {
+			hillTile[i].handleEvent(e);
+			hillTile[i].move();
+			hillTile[i].render();
+		}*/
+
 		for (int i = 0; i < number; i++) {
-			tile[i].handleEvent(e);
-			tile[i].move();
-			tile[i].render();
+			tiles[i].handleEvent(e);
+			tiles[i].move();
+			tiles[i].render();
 		}
-		///////////////////*/
 		for (int i = 0; i < gameMap.getHeight(); i++)
 		{
 			for (int j = 0; j < gameMap.getWidth(); j++) {

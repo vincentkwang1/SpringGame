@@ -1,8 +1,4 @@
 #include "tile.h"
-
-//tile::tile() {
-
-//}
 tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, int buildings[10]){
 	noiseScale = noise;
 	tempScale = temp;
@@ -11,11 +7,24 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 	xCoord = x;
 	yCoord = y;
 	setPosition();
-
+	//if its an edge tile, set the adjacent hill position
+	if (xCoord == 0) {
+		setHillPosition(0);
+	}
+	else if (xCoord == tileX - 1) {
+		setHillPosition(1);
+	}
+	else if (yCoord == 0) {
+		setHillPosition(2);
+	}
+	else if (yCoord == tileY - 1) {
+		setHillPosition(3);
+	}
 	devScale = dev;
 	for (int i = 0; i < 10; i++) {
 		buildingSlots[i] = buildings[i];
 	}
+	//creates the bounds for grassclips
 	for (int i = 0; i < 4; i++) {
 		grassClips[i].x = 240 * i;
 		grassClips[i].y = 0;
@@ -23,6 +32,25 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 		grassClips[i].h = 120;
 	}
 }
+tile::tile(int side, int i) {
+	setHillPosition(side);
+	switch (side) {
+	case 0: xCoord = -1; yCoord = i; break;
+	case 1: xCoord = tileX; yCoord = i; break;
+	case 2: xCoord = i; yCoord = -1; break;
+	case 3: xCoord = i; yCoord = tileY; break;
+	}
+	setPosition();
+	//bounds for hillClips
+	for (int i = 0; i < 8; i++) {
+		hillClips[i].x = 240 * i;
+		hillClips[i].y = 0;
+		hillClips[i].w = 240;
+		hillClips[i].h = 240;
+	}
+	sideHill = true;
+}
+
 void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is up
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -49,9 +77,24 @@ void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is 
 	}
 }
 void tile::setPosition() {
-	random = rand() % 4; //creates the random number associated with the tile
-	xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
-	yLoc = 1080 / 2 + 60 * (xCoord - yCoord);
+	if (!sideHill) {
+		random = rand() % 4; //creates the random number associated with the tile
+		xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
+		yLoc = 1080 / 2 + 60 * (xCoord - yCoord);
+	}
+	else {
+		xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
+		yLoc = 1080 / 2 + 60 * (xCoord - yCoord) - 200;
+	}
+}
+
+void tile::setHillPosition(int borderType) {
+	switch (borderType) {
+	case 0: hillClip = 6; break;
+	case 1: hillClip = 2; break;
+	case 2: hillClip = 1; break;
+	case 3: hillClip = 7; break;
+	}
 }
 
 void tile::render() {
@@ -76,6 +119,20 @@ void tile::render() {
 		gImpassableTexture.render(xLoc, yLoc);
 	}
 	
+	if (!sideHill) {
+		//handles grass clipping
+		SDL_Rect* currentGrassClip;
+		currentGrassClip = &grassClips[random];
+		gGrassTexture.render(xLoc, yLoc, currentGrassClip);
+	}
+	//handles hill clipping
+	if (sideHill) {
+		SDL_Rect* currentHillClip;
+		if (hillClip != 0) {
+			currentHillClip = &hillClips[hillClip];
+			gHills.render(xLoc, yLoc, currentHillClip);
+		}
+	}
 	
 	
 
