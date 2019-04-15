@@ -118,13 +118,7 @@ void tile::render() {
 	else if (noiseScale == 4) {
 		gImpassableTexture.render(xLoc, yLoc);
 	}
-	
-	if (!sideHill) {
-		//handles grass clipping
-		SDL_Rect* currentGrassClip;
-		currentGrassClip = &grassClips[random];
-		gGrassTexture.render(xLoc, yLoc, currentGrassClip);
-	}
+
 	//handles hill clipping
 	if (sideHill) {
 		SDL_Rect* currentHillClip;

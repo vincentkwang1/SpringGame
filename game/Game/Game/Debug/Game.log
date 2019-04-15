@@ -1,17 +1,4 @@
-﻿﻿  Perlin.cpp
-c:\github\springgame\game\game\game\perlin.cpp(8): warning C4930: 'std::vector<int,std::allocator<_Ty>> create(int,int,ppm,unsigned int,int,int)': prototyped function not called (was a variable definition intended?)
-          with
-          [
-              _Ty=int
-          ]
-c:\github\springgame\game\game\game\perlin.cpp(44): warning C4018: '<': signed/unsigned mismatch
-c:\github\springgame\game\game\game\perlin.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\github\springgame\game\game\game\perlin.cpp(51): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
 ﻿  game.cpp
 c:\github\springgame\game\game\game\game.cpp(28): warning C4552: '&': result of expression not used
-c:\github\springgame\game\game\game\game.cpp(60): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\github\springgame\game\game\game\game.cpp(64): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
