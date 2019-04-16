@@ -15,11 +15,10 @@ SDL_Renderer* gRenderer;
 TTF_Font *gFont;
 LTexture gTextTexture;
 LTexture gSwordsmanTexture;
-
+LTexture gMountainRockTexture;
 LTexture gTile;
 LTexture gWaterTexture;
 LTexture gHillTexture;
-LTexture gMountainTexture;
 LTexture gImpassableTexture;
 LTexture gHills;
 LTexture gTestTexture;

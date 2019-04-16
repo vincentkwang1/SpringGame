@@ -31,6 +31,20 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 		grassClips[i].w = 240;
 		grassClips[i].h = 120;
 	}
+	//creates the bounds for mountainClips
+	for (int i = 0; i < 10; i++) {
+		mountainClips[i].x = 240 * i;
+		mountainClips[i].y = 0;
+		mountainClips[i].w = 240;
+		mountainClips[i].h = 240;
+	}
+	//creates the bounds for waterClips
+	for (int i = 0; i < 3; i++) {
+		waterClips[i].x = 240 * i;
+		waterClips[i].y = 0;
+		waterClips[i].w = 240;
+		waterClips[i].h = 120;
+	}
 }
 tile::tile(int side, int i) {
 	setHillPosition(side);
@@ -78,7 +92,12 @@ void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is 
 }
 void tile::setPosition() {
 	if (!sideHill) {
-		random = rand() % 4; //creates the random number associated with the tile
+		if (noiseScale != 4) {
+			random = rand() % 4; //creates the random number associated with the tile
+		}
+		else {
+			random = rand() % 8;
+		}
 		xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
 		yLoc = 1080 / 2 + 60 * (xCoord - yCoord);
 	}
@@ -97,46 +116,54 @@ void tile::setHillPosition(int borderType) {
 	}
 }
 
-void tile::render() {
+void tile::render(bool mountain) {
 	SDL_Rect* currentClip;
-
-
-	//If water
-	if (noiseScale == 0) {
-		gWaterTexture.render(xLoc, yLoc);
-	}
-	else if (noiseScale == 1) {
-		currentClip = &grassClips[random];
-		gGrassTexture.render(xLoc, yLoc, currentClip);
-	}
-	else if(noiseScale == 2) {
-		gHillTexture.render(xLoc, yLoc);
-	}
-	else if (noiseScale == 3) {
-		gMountainTexture.render(xLoc, yLoc);
-	}
-	else if (noiseScale == 4) {
-		gImpassableTexture.render(xLoc, yLoc);
-	}
-
-	//handles hill clipping
-	if (sideHill) {
-		SDL_Rect* currentHillClip;
-		if (hillClip != 0) {
-			currentHillClip = &hillClips[hillClip];
-			gHills.render(xLoc, yLoc, currentHillClip);
+	if (mountain) {
+		if (noiseScale == 4) {
+			currentClip = &mountainClips[random];
+			gMountainRockTexture.render(xLoc, yLoc - 120, currentClip);
 		}
 	}
-	
-	
+	else {
+		//If water
+		if (noiseScale == 0) {
+			currentClip = &waterClips[random % 3];
+			gWaterTexture.render(xLoc, yLoc, currentClip);
+		}
+		else if (noiseScale == 1) {
+			currentClip = &grassClips[random];
+			gGrassTexture.render(xLoc, yLoc, currentClip);
+		}
+		else if (noiseScale == 2) {
+			gHillTexture.render(xLoc, yLoc);
+		}
+		else if (noiseScale == 3) {
+			gImpassableTexture.render(xLoc, yLoc);
+		}
+		else if (noiseScale == 4) {
+			currentClip = &mountainClips[8 + random % 2];
+			gMountainRockTexture.render(xLoc, yLoc, currentClip);
+		}
 
-	if (showCoords) {
-		std::ostringstream strs;
-		SDL_Color textColor = { 255, 255 , 255 };
-		strs << xCoord << ", " << yCoord;
-		std::string str = strs.str();
-		gTextTexture.loadFromRenderedText(str, textColor);
-		gTextTexture.render(xLoc + 40, yLoc + 20);
+		//handles hill clipping
+		if (sideHill) {
+			SDL_Rect* currentHillClip;
+			if (hillClip != 0) {
+				currentHillClip = &hillClips[hillClip];
+				gHills.render(xLoc, yLoc, currentHillClip);
+			}
+		}
+
+
+
+		if (showCoords) {
+			std::ostringstream strs;
+			SDL_Color textColor = { 255, 255 , 255 };
+			strs << xCoord << ", " << yCoord;
+			std::string str = strs.str();
+			gTextTexture.loadFromRenderedText(str, textColor);
+			gTextTexture.render(xLoc + 40, yLoc + 20);
+		}
 	}
 }
 

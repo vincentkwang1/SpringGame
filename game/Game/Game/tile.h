@@ -21,7 +21,7 @@ public:
 	void handleEvent(SDL_Event& e);
 
 	//Rendering Function
-	void render();
+	void render(bool mountain);
 
 	//Get Functions
 	int getX();
@@ -81,5 +81,7 @@ private:
 	//Texture Ver
 	SDL_Rect grassClips[4];
 	SDL_Rect hillClips[8];
+	SDL_Rect mountainClips[10];
+	SDL_Rect waterClips[3];
 };
 #endif 

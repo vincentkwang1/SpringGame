@@ -37,7 +37,7 @@ void loadMedia() {
 	gGrassTexture.loadFromFile("resource/grass.png");
 	gWaterTexture.loadFromFile("resource/TempTiles/water.png");
 	gHillTexture.loadFromFile("resource/TempTiles/hill.png");
-	gMountainTexture.loadFromFile("resource/TempTiles/mountain.png");
+	gMountainRockTexture.loadFromFile("resource/TempTiles/mountain1.png");
 	gImpassableTexture.loadFromFile("resource/TempTiles/impassable.png");
 	gHills.loadFromFile("resource/hills.png");
 }
@@ -67,8 +67,8 @@ int main(int argc, char* args[]) {
 	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
 	//MAKE MAP////////////////////////////
-	static const int mapWidth = 12;
-	static const int mapHeight = 12;
+	static const int mapWidth = tileX;
+	static const int mapHeight = tileY;
 	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
 	map gameMap = { mapWidth, mapHeight, heightArray, heightArray }; //2D vector containing the tiles
 	static const int number = mapWidth * mapHeight;
@@ -123,30 +123,21 @@ int main(int argc, char* args[]) {
 		for (int i = tileX  * 4 - 1; i >= 0; i--) {
 			hillTile[i].handleEvent(e);
 			hillTile[i].move();
-			hillTile[i].render();
+			hillTile[i].render(false);
 		}
-
-		/*for (int i = 0; i < number; i++) {
-			tiles[i].handleEvent(e);
-			tiles[i].move();
-			tiles[i].render();
-		}*/
-		/*for (int i = 0; i < gameMap.getHeight(); i++)
-		{
-			for (int j = 0; j < gameMap.getWidth(); j++) {
-				
-				gameMap.getMapContainer()[i][j].handleEvent(e);
-				gameMap.getMapContainer()[i][j].move();
-				gameMap.getMapContainer()[i][j].render();
-			}
-		}*/
 		for (int i = 0; i < gameMap.getHeight(); i++)
 		{
 			for (int j = 0; j < gameMap.getWidth(); j++) {
 
 				tiles[i*mapHeight + j].handleEvent(e);
 				tiles[i*mapHeight + j].move();
-				tiles[i*mapHeight + j].render();
+				tiles[i*mapHeight + j].render(false);
+			}
+		}
+		for (int i = 0; i < gameMap.getHeight(); i++)
+		{
+			for (int j = 0; j < gameMap.getWidth(); j++) {
+				tiles[i*mapHeight + j].render(true);
 			}
 		}
 		//*/

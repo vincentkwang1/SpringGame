@@ -36,20 +36,20 @@ tile map::createTile(int noise, int temp, int i, int j){
 	
 
 	//handele height/////////////////////////
-		if (noise >= 0 && noise < 51) {
-		noiseScale = 0;
+	if (noise >= 0 && noise < 101) {
+		noiseScale = 0; //water
 	}
-	else if (noise >= 51 && noise < 102) {
-		noiseScale = 1;
+	else if (noise >= 101 && noise < 132) {
+		noiseScale = 1; //grass
 	}
-	else if (noise >= 102 && noise < 153) {
-		noiseScale = 2;
+	else if (noise >= 132 && noise < 145) {
+		noiseScale = 2; //hill
 	}
-	else if (noise >= 153 && noise < 204) {
-		noiseScale = 3;
+	else if (noise >= 145 && noise < 165) {
+		noiseScale = 3; //steep hill or something?
 	}
-	else if (noise >= 204 && noise <= 255) {
-		noiseScale = 4;
+	else if (noise >= 165 && noise <= 255) {
+		noiseScale = 4; //mountain
 	}
 	////////////////////////////////////////////
 	int jay[10] = { 3,4,5,6,7,8,5,4,3,6 };
