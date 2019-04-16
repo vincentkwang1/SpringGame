@@ -16,7 +16,7 @@ std::vector<int> Perlin::createArray() {
 	// Define seed
 	unsigned int gSeed = rand() % 1000;
 	// Define frequency
-	int gFrequency = 3;//5, 15, 40
+	int gFrequency = 10;//5, 15, 40
 	// Define size
 	int gSize = width * height;
 
