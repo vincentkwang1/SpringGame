@@ -1,14 +1,27 @@
-﻿  Perlin.cpp
-c:\github\springgame\game\game\game\perlin.cpp(8): warning C4930: 'std::vector<int,std::allocator<_Ty>> create(int,int,ppm,unsigned int,int,int)': prototyped function not called (was a variable definition intended?)
-          with
-          [
-              _Ty=int
-          ]
-c:\github\springgame\game\game\game\perlin.cpp(44): warning C4018: '<': signed/unsigned mismatch
-c:\github\springgame\game\game\game\perlin.cpp(45): warning C4018: '<': signed/unsigned mismatch
-c:\github\springgame\game\game\game\perlin.cpp(51): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
+﻿  game.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(28,21): warning C4552:  '&': result of expression not used
+  LTexture.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(64,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  global.cpp
+  Perlin.cpp
+C:\GitHub\SpringGame\game\Game\Game\LTexture.cpp(10,1): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:  'std::vector<int,std::allocator<_Ty>> create(int,int,ppm,unsigned int,int,int)': prototyped function not called (was a variable definition intended?)
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         with
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         [
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:             _Ty=int
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         ]
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(44,29): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(45,30): warning C4018:  '<': signed/unsigned mismatch
+  PerlinNoise.cpp
+  ppm.cpp
+  map.cpp
+  tile.cpp
+  troop.cpp
+  Generating Code...
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244:  '=': conversion from 'double' to '_Ty', possible loss of data
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244:         with
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244:         [
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244:             _Ty=int
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244:         ]
+C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51,21): warning C4244: C:\GitHub\SpringGame\game\Game\Game\troop.cpp(88) : warning C4172: returning address of local variable or temporary: coords
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
