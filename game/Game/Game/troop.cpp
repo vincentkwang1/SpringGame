@@ -3,7 +3,8 @@
 troop::troop() {
 	
 }
-troop::troop(int gXCoord, int gYCoord, int type, tile * tiles ) {
+troop::troop(int gXCoord, int gYCoord, int type, tile * tiles, bool teamInit ) {
+	team = teamInit;
 	xCoord = gXCoord;
 	yCoord = gYCoord;
 	updatePos(tiles);
@@ -46,9 +47,10 @@ void troop::handleEvent(SDL_Event& e){
 	}
 }
 void troop::render() {
-	SDL_Rect* currentClip [6];
+	SDL_Rect* currentClip [1];
+	int i;
 	if (attacking) { //if attacking is true, execute attack animation
-		for (int i = 0; i < 6; i++) {
+		for (i = 0; i < 6; i++) {
 			currentClip[i] = &troopClips[(frame / 5 + i) % 20];
 		}
 		if ((frame / 5) % 20 == 19) { //stops attacking when last animation is done
@@ -56,30 +58,53 @@ void troop::render() {
 		}
 	}
 	else { //otherwise, idle animation
-		for (int i = 0; i < 6; i++) {
+		for (i = 0; i < 6; i++) {
 			currentClip[i] = &troopClips[9 + (frame / 10 + i * 2) % 4];
 		}
 	}
-	gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
-	gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
-	gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
-	gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
-	gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
-	gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
+	if (team) {
+		if (attacking) {
+			gSwordsmanTexture.render(tPosX + 130, tPosY + 30, currentClip[0]);
+		}
+		else {
+			gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);
+		}/*
+		gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
+		gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
+		gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
+		gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
+		gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
 
-	//UPDATING FRAME COUNTERS
-	if (frame < 100) {
-		frame++;
+		//UPDATING FRAME COUNTERS
+		if (frame < 100) {
+			frame++;
+		}
+		else {
+			frame = 0;
+		}
+		std::ostringstream strs;
+		SDL_Color textColor = { 255, 255 , 255 };
+		strs << movesTaken;
+		std::string str = strs.str();
+		gTextTexture.loadFromRenderedText(str, textColor);
+		gTextTexture.render(40, 20);
 	}
 	else {
-		frame = 0;
+		gEnemyTexture.render(tPosX, tPosY, currentClip[0]);/*
+		gEnemyTexture.render(tPosX + 40, tPosY, currentClip[1]);
+		gEnemyTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
+		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
+		gEnemyTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
+		gEnemyTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
+
+		//UPDATING FRAME COUNTERS
+		if (frame < 100) {
+			frame++;
+		}
+		else {
+			frame = 0;
+		}
 	}
-	std::ostringstream strs;
-	SDL_Color textColor = { 255, 255 , 255 };
-	strs << xCoord << ", " << yCoord;
-	std::string str = strs.str();
-	gTextTexture.loadFromRenderedText(str, textColor);
-	gTextTexture.render(40, 20);
 }
 int * troop::getPos() {
 	int coords[2];
@@ -87,16 +112,56 @@ int * troop::getPos() {
 	coords[1] = yCoord;
 	return coords;
 }
-void troop::moveTroop(tile * tiles, int direction) {
+bool troop::moveTroop(tile * tiles, int direction) {
+	bool success = true;
 	switch(direction){
-	case 0: xCoord = xCoord - 1; break;
-	case 1: yCoord = yCoord - 1; break;
-	case 2: xCoord = xCoord + 1; break;
-	case 3: yCoord = yCoord + 1; break;
+	case 0:
+		if (tiles[tileY * (xCoord-1) + yCoord].getPassable()) {
+			xCoord = xCoord - 1;
+		}
+		else{
+			success = false;
+		}
+		break;
+	case 1:
+		if (tiles[tileY * xCoord + (yCoord-1)].getPassable()) {
+			yCoord = yCoord - 1;
+		}
+		else {
+			success = false;
+		}
+		break;
+	case 2: 
+		if (tiles[tileY * (xCoord+1) + yCoord].getPassable()) {
+			xCoord = xCoord + 1;
+		}
+		else {
+			success = false;
+		}
+		break;
+	case 3:
+		if (tiles[tileY * xCoord + (yCoord+1)].getPassable()) {
+			yCoord = yCoord + 1;
+		}
+		else {
+			success = false;
+		}
+		break;
+	}
+	if (success) {
+		movesTaken++;
 	}
 	updatePos(tiles);
+	if (movesTaken == maxMoves) {
+		movesTaken = 0;
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 void troop::attack() {
+	movesTaken = 0;
 	frame = 0; //resets frame counter when starting attack animation
 	attacking = true;
 }

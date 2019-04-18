@@ -20,6 +20,7 @@ extern LTexture gTile;
 extern LTexture gWaterTexture;
 extern LTexture gHillTexture;
 extern LTexture gImpassableTexture;
+extern LTexture gEnemyTexture;
 extern LTexture gHills;
 extern LTexture gGrassTexture;
 #endif // !global_h_

@@ -19,4 +19,5 @@ LTexture gImpassableTexture;
 LTexture gHills;
 LTexture gTestTexture;
 LTexture gGrassTexture;
+LTexture gEnemyTexture;
 #endif // !global_h_

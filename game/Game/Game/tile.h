@@ -47,6 +47,7 @@ public:
 	void setDev(int dev);
 	void setBuildSlot(int slot, int building);
 
+	bool getPassable();
 	void setPosition(); //determines position based on coordinates
 	void setHillPosition(int borderType); //determines positions of hills
 	//0 is x = 0, 1 is x = max, 2 is y = 0, 3 is y = max

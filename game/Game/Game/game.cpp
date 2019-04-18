@@ -40,6 +40,7 @@ void loadMedia() {
 	gMountainRockTexture.loadFromFile("resource/TempTiles/mountain1.png");
 	gImpassableTexture.loadFromFile("resource/TempTiles/impassable.png");
 	gHills.loadFromFile("resource/hills.png");
+	gEnemyTexture.loadFromFile("resource/enemy.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -90,7 +91,9 @@ int main(int argc, char* args[]) {
 	//keep track of turns
 	int turn = 0;
 	//Generate Armies//
-	troop troop = { 0, 0, 1, tiles };
+	troop troop1 = { 0, 0, 1, tiles , true };
+	//Generatres enemies
+	troop enemy = { 5, 5, 1, tiles , false };
 	
 
 	
@@ -106,13 +109,13 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: troop.attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_0: troop1.attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (troop.getPos()[0] > 0)troop.moveTroop(tiles, 0); break;
-				case SDLK_a: if (troop.getPos()[1] > 0)troop.moveTroop(tiles, 1); break; 
-				case SDLK_s: if (troop.getPos()[0] < mapWidth- 1)troop.moveTroop(tiles, 2); break; 
-				case SDLK_d: if (troop.getPos()[1] < mapHeight - 1)troop.moveTroop(tiles, 3); break; 
+				case SDLK_w: if (troop1.getPos()[0] > 0) { if(troop1.moveTroop(tiles, 0)) turn++; } break;
+				case SDLK_a: if (troop1.getPos()[1] > 0) { if(troop1.moveTroop(tiles, 1)) turn++; }break;
+				case SDLK_s: if (troop1.getPos()[0] < mapWidth - 1) { if(troop1.moveTroop(tiles, 2)) turn++; }break;
+				case SDLK_d: if (troop1.getPos()[1] < mapHeight - 1) { if(troop1.moveTroop(tiles, 3)) turn++; }break;
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
@@ -142,9 +145,13 @@ int main(int argc, char* args[]) {
 		}
 		//*/
 		//gTestTexture.render(0, 0);
-		troop.handleEvent(e);
-		troop.move();
-		troop.render();
+		troop1.handleEvent(e);
+		troop1.move();
+		troop1.render();
+
+		enemy.handleEvent(e);
+		enemy.move();
+		enemy.render();
 
 
 		std::ostringstream strs;

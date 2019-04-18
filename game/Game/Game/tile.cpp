@@ -90,6 +90,14 @@ void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is 
 		}
 	}
 }
+bool tile::getPassable() {
+	if (noiseScale > 0 && noiseScale < 4) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 void tile::setPosition() {
 	if (!sideHill) {
 		if (noiseScale != 4) {
