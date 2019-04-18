@@ -87,8 +87,8 @@ int main(int argc, char* args[]) {
 		}
 	}
 	///////////////
-
-
+	//keep track of turns
+	int turn = 0;
 	//Generate Armies//
 	troop troop = { 0, 0, 1, tiles };
 	
@@ -149,7 +149,7 @@ int main(int argc, char* args[]) {
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << "Hello World";
+		strs << turn;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);

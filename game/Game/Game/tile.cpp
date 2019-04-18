@@ -138,7 +138,8 @@ void tile::render(bool mountain) {
 			gHillTexture.render(xLoc, yLoc);
 		}
 		else if (noiseScale == 3) {
-			gImpassableTexture.render(xLoc, yLoc);
+			currentClip = &mountainClips[8 + random % 2];
+			gMountainRockTexture.render(xLoc, yLoc, currentClip);
 		}
 		else if (noiseScale == 4) {
 			currentClip = &mountainClips[8 + random % 2];
