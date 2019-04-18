@@ -121,7 +121,7 @@ void tile::render(bool mountain) {
 	if (mountain) {
 		if (noiseScale == 4) {
 			currentClip = &mountainClips[random];
-			gMountainRockTexture.render(xLoc, yLoc - 120, currentClip);
+			 gMountainRockTexture.render(xLoc, yLoc - 120, currentClip);
 		}
 	}
 	else {

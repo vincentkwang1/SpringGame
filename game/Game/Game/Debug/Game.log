@@ -1,14 +1,2 @@
-﻿  Perlin.cpp
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8): warning C4930: 'std::vector<int,std::allocator<_Ty>> create(int,int,ppm,unsigned int,int,int)': prototyped function not called (was a variable definition intended?)
-          with
-          [
-              _Ty=int
-          ]
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(44): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(45): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(51): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
+﻿  tile.cpp
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
