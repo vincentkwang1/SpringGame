@@ -12,12 +12,10 @@ TTF_Font *gFont;
 LTexture gTextTexture;
 LTexture gSwordsmanTexture;
 LTexture gMountainRockTexture;
-LTexture gTile;
 LTexture gWaterTexture;
 LTexture gHillTexture;
-LTexture gImpassableTexture;
 LTexture gHills;
-LTexture gTestTexture;
 LTexture gGrassTexture;
 LTexture gEnemyTexture;
+LTexture gHighlightTexture;
 #endif // !global_h_

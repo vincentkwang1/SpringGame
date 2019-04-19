@@ -25,8 +25,8 @@ private:
 	int frame = 0;
 	SDL_Rect troopClips[20];
 	bool attacking = false; //determines whether the troop is in its attack animation
-	int tPosX, tPosY;
-	int xCoord, yCoord;
+	int tPosX = 0, tPosY = 0;
+	int xCoord = 0, yCoord = 0;
 	int velX = 0, velY = 0;
 	int type; //1 = infantry
 };

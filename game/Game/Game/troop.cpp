@@ -1,9 +1,9 @@
 #include "troop.h"
 
 troop::troop() {
-	
+
 }
-troop::troop(int gXCoord, int gYCoord, int type, tile * tiles, bool teamInit ) {
+troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 	team = teamInit;
 	xCoord = gXCoord;
 	yCoord = gYCoord;
@@ -15,7 +15,7 @@ troop::troop(int gXCoord, int gYCoord, int type, tile * tiles, bool teamInit ) {
 		troopClips[i].h = 86;
 	}
 }
-void troop::updatePos(tile * tiles) {
+void troop::updatePos(tile* tiles) {
 	tPosX = tiles[tileX * xCoord + yCoord].getX() + 60;
 	tPosY = tiles[tileY * xCoord + yCoord].getY() - 60;
 }
@@ -23,7 +23,7 @@ void troop::move() {
 	tPosX += velX;
 	tPosY += velY;
 }
-void troop::handleEvent(SDL_Event& e){
+void troop::handleEvent(SDL_Event& e) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
 		switch (e.key.keysym.sym)
@@ -47,10 +47,9 @@ void troop::handleEvent(SDL_Event& e){
 	}
 }
 void troop::render() {
-	SDL_Rect* currentClip [1];
-	int i;
+	SDL_Rect* currentClip[6];
 	if (attacking) { //if attacking is true, execute attack animation
-		for (i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			currentClip[i] = &troopClips[(frame / 5 + i) % 20];
 		}
 		if ((frame / 5) % 20 == 19) { //stops attacking when last animation is done
@@ -58,13 +57,19 @@ void troop::render() {
 		}
 	}
 	else { //otherwise, idle animation
-		for (i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			currentClip[i] = &troopClips[9 + (frame / 10 + i * 2) % 4];
 		}
 	}
+	int clip = frame / 5 % 20;
 	if (team) {
 		if (attacking) {
-			gSwordsmanTexture.render(tPosX + 130, tPosY + 30, currentClip[0]);
+			if (clip > 13 && clip < 18){
+				gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]);
+			}
+			else{
+				gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);
+			}
 		}
 		else {
 			gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);
@@ -90,7 +95,7 @@ void troop::render() {
 		gTextTexture.render(40, 20);
 	}
 	else {
-		gEnemyTexture.render(tPosX, tPosY, currentClip[0]);/*
+		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
 		gEnemyTexture.render(tPosX + 40, tPosY, currentClip[1]);
 		gEnemyTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
 		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);

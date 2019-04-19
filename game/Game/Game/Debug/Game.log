@@ -1,3 +1,4 @@
-﻿  troop.cpp
-  C:\GitHub\SpringGame\game\Game\Game\troop.cpp(113) : warning C4172: returning address of local variable or temporary: coords
+﻿  game.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(29,21): warning C4552:  '&': result of expression not used
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(92,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

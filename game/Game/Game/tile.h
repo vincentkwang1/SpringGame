@@ -21,7 +21,7 @@ public:
 	void handleEvent(SDL_Event& e);
 
 	//Rendering Function
-	void render(bool mountain);
+	void render(int noise);
 
 	//Get Functions
 	int getX();
@@ -39,11 +39,13 @@ public:
 	void setX(int x);
 	void setY(int y);
 
+	void setHighlight(bool newHighlight);
 	void setNoise(int noise);
 	void setTemp(int temp);
 	void setTrees(bool trees);
 	void setRiver(bool river);
 
+	SDL_Rect getCollider();
 	void setDev(int dev);
 	void setBuildSlot(int slot, int building);
 
@@ -53,6 +55,8 @@ public:
 	//0 is x = 0, 1 is x = max, 2 is y = 0, 3 is y = max
 
 private:
+	bool highlight = false;
+	SDL_Rect tCollider;
 	bool sideHill = false; //remembers if its a border hill or not
 	int hillClip = 0;
 	bool showCoords = false; //debugging
@@ -82,7 +86,7 @@ private:
 	//Texture Ver
 	SDL_Rect grassClips[4];
 	SDL_Rect hillClips[8];
-	SDL_Rect mountainClips[10];
+	SDL_Rect mountainClips[12];
 	SDL_Rect waterClips[3];
 };
 #endif 

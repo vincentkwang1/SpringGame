@@ -14,6 +14,7 @@
 bool init();
 void close();
 void loadMedia();
+bool checkClicked(SDL_Rect a, SDL_Event* e);
 
 //METHODS DEFINED
 
@@ -33,14 +34,13 @@ void loadMedia() {
 	//LOADS ALL TEXTURES FROM THE RESOURCE FOLDER
 	gFont = TTF_OpenFont("resource/font1.ttf", 40);
 	gSwordsmanTexture.loadFromFile("resource/sword.png");
-	gTile.loadFromFile("resource/Tile.png");
 	gGrassTexture.loadFromFile("resource/grass.png");
 	gWaterTexture.loadFromFile("resource/TempTiles/water.png");
 	gHillTexture.loadFromFile("resource/TempTiles/hill.png");
 	gMountainRockTexture.loadFromFile("resource/TempTiles/mountain1.png");
-	gImpassableTexture.loadFromFile("resource/TempTiles/impassable.png");
 	gHills.loadFromFile("resource/hills.png");
 	gEnemyTexture.loadFromFile("resource/enemy.png");
+	gHighlightTexture.loadFromFile("resource/highlight.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -54,6 +54,33 @@ void close() {
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
+}
+bool checkClicked(SDL_Rect a, SDL_Event* e) {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	if (x < a.x) {
+		return false;
+	}
+	else if (x > a.x + a.w) {
+		return false;
+	}
+	else if (y < a.y) {
+		return false;
+	}
+	else if (y > a.y + a.h) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+void drawTileLayer(map gameMap, tile * tiles, int layer) {
+	for (int i = gameMap.getHeight() - 1; i >= 0; i--)
+	{
+		for (int j = 0; j < gameMap.getWidth(); j++) {
+			tiles[i * tileX + j].render(layer);
+		}
+	}
 }
 //MAIN FUNCTION
 int main(int argc, char* args[]) {
@@ -94,7 +121,9 @@ int main(int argc, char* args[]) {
 	troop troop1 = { 0, 0, 1, tiles , true };
 	//Generatres enemies
 	troop enemy = { 5, 5, 1, tiles , false };
-	
+	//keeps track of selected tile
+	int selectedX = 0;
+	int selectedY = 0;
 
 	
 	
@@ -119,11 +148,42 @@ int main(int argc, char* args[]) {
 				/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
+			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
+				for (int x = 0; x < tileX; x++) {
+					for (int y = 0; y < tileY; y++) {
+						if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
+							tiles[tileY * x + y].setHighlight(true);
+							selectedX = x;
+							selectedY = y;
+							for (int i = 0; i < (tileY * x + y); i++) {
+								tiles[i].setHighlight(false);
+							}
+							for (int i = (tileY * x + y + 1); i < tileX * tileY; i++) {
+								tiles[i].setHighlight(false);
+							}
+						}
+					}
+				}
+			}
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
-
-		for (int i = tileX  * 4 - 1; i >= 0; i--) {
+		for (int i = tileX * 3; i < tileX * 4; i++) {
+			hillTile[i].handleEvent(e);
+			hillTile[i].move();
+			hillTile[i].render(false);
+		}
+		for (int i = tileX - 1; i >= 0; i--) {
+			hillTile[i].handleEvent(e);
+			hillTile[i].move();
+			hillTile[i].render(false);
+		}
+		for (int i = tileX * 2 - 1; i >= tileX; i--) {
+			hillTile[i].handleEvent(e);
+			hillTile[i].move();
+			hillTile[i].render(false);
+		}
+		for (int i = tileX * 2; i < tileX * 3; i++) {
 			hillTile[i].handleEvent(e);
 			hillTile[i].move();
 			hillTile[i].render(false);
@@ -132,17 +192,16 @@ int main(int argc, char* args[]) {
 		{
 			for (int j = 0; j < gameMap.getWidth(); j++) {
 
-				tiles[i*mapHeight + j].handleEvent(e);
-				tiles[i*mapHeight + j].move();
-				tiles[i*mapHeight + j].render(false);
+				tiles[i * mapHeight + j].handleEvent(e);
+				tiles[i * mapHeight + j].move();
+				tiles[i * mapHeight + j].render(0);
 			}
 		}
-		for (int i = 0; i < gameMap.getHeight(); i++)
-		{
-			for (int j = 0; j < gameMap.getWidth(); j++) {
-				tiles[i*mapHeight + j].render(true);
-			}
-		}
+		drawTileLayer(gameMap, tiles, 2);
+		drawTileLayer(gameMap, tiles, 0);
+		drawTileLayer(gameMap, tiles, 1);
+		drawTileLayer(gameMap, tiles, 3);
+		drawTileLayer(gameMap, tiles, 4);
 		//*/
 		//gTestTexture.render(0, 0);
 		troop1.handleEvent(e);
@@ -156,7 +215,7 @@ int main(int argc, char* args[]) {
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn;
+		strs << turn << ", sel: " << selectedX << ", " << selectedY;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);

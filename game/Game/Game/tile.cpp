@@ -6,6 +6,8 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 	hasRiver = river;
 	xCoord = x;
 	yCoord = y;
+	tCollider.w = 180;
+	tCollider.h = 90;
 	setPosition();
 	//if its an edge tile, set the adjacent hill position
 	if (xCoord == 0) {
@@ -32,7 +34,7 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 		grassClips[i].h = 120;
 	}
 	//creates the bounds for mountainClips
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 12; i++) {
 		mountainClips[i].x = 240 * i;
 		mountainClips[i].y = 0;
 		mountainClips[i].w = 240;
@@ -64,7 +66,14 @@ tile::tile(int side, int i) {
 	}
 	sideHill = true;
 }
-
+SDL_Rect tile::getCollider() {
+	tCollider.x = xLoc + 30;
+	tCollider.y = yLoc + 15;
+	return tCollider;
+}
+void tile::setHighlight(bool newHightlight) {
+	highlight = newHightlight;
+}
 void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is up
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
 	{
@@ -124,47 +133,48 @@ void tile::setHillPosition(int borderType) {
 	}
 }
 
-void tile::render(bool mountain) {
+void tile::render(int noise) {
 	SDL_Rect* currentClip;
-	if (mountain) {
-		if (noiseScale == 4) {
-			currentClip = &mountainClips[random];
-			 gMountainRockTexture.render(xLoc, yLoc - 120, currentClip);
+	//handles hill clipping
+	if (sideHill) {
+		SDL_Rect* currentHillClip;
+		if (hillClip != 0) {
+			currentHillClip = &hillClips[hillClip];
+			gHills.render(xLoc, yLoc, currentHillClip);
 		}
 	}
 	else {
-		//If water
-		if (noiseScale == 0) {
-			currentClip = &waterClips[random % 3];
-			gWaterTexture.render(xLoc, yLoc, currentClip);
-		}
-		else if (noiseScale == 1) {
-			currentClip = &grassClips[random];
-			gGrassTexture.render(xLoc, yLoc, currentClip);
-		}
-		else if (noiseScale == 2) {
-			gHillTexture.render(xLoc, yLoc);
-		}
-		else if (noiseScale == 3) {
-			currentClip = &mountainClips[8 + random % 2];
-			gMountainRockTexture.render(xLoc, yLoc, currentClip);
-		}
-		else if (noiseScale == 4) {
-			currentClip = &mountainClips[8 + random % 2];
-			gMountainRockTexture.render(xLoc, yLoc, currentClip);
-		}
-
-		//handles hill clipping
-		if (sideHill) {
-			SDL_Rect* currentHillClip;
-			if (hillClip != 0) {
-				currentHillClip = &hillClips[hillClip];
-				gHills.render(xLoc, yLoc, currentHillClip);
+		if (noise == 4) {
+			if (noiseScale == 4) {
+				currentClip = &mountainClips[8 + random % 2];
+				gMountainRockTexture.render(xLoc, yLoc, currentClip);
+				currentClip = &mountainClips[random];
+				gMountainRockTexture.render(xLoc, yLoc - 120, currentClip);
 			}
 		}
-
-
-
+		else if (noise == 3) {
+			if (noiseScale == 3) {
+				currentClip = &mountainClips[8 + random % 2];
+				gMountainRockTexture.render(xLoc, yLoc, currentClip);
+			}
+		}
+		else if (noise == 2) {
+			if (noiseScale == 2) {
+				gHillTexture.render(xLoc, yLoc);
+			}
+		}
+		else if (noise == 1) {
+			if (noiseScale == 1) {
+				currentClip = &grassClips[random];
+				gGrassTexture.render(xLoc, yLoc, currentClip);
+			}
+		}
+		else if (noise == 0) {
+			if (noiseScale == 0) {
+				currentClip = &waterClips[random % 3];
+				gWaterTexture.render(xLoc, yLoc, currentClip);
+			}
+		}
 		if (showCoords) {
 			std::ostringstream strs;
 			SDL_Color textColor = { 255, 255 , 255 };
@@ -173,6 +183,9 @@ void tile::render(bool mountain) {
 			gTextTexture.loadFromRenderedText(str, textColor);
 			gTextTexture.render(xLoc + 40, yLoc + 20);
 		}
+	}
+	if (highlight) {
+		gHighlightTexture.render(xLoc - 12, yLoc - 6);
 	}
 }
 
