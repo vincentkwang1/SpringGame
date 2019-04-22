@@ -10,7 +10,7 @@ public:
 	//Constructors
 	map() {};
 
-	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata);
+	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata, bool mapType);
 
 	//display map on screen
 	void render();
@@ -26,7 +26,7 @@ public:
 private:
 
 	
-
+	std::vector<int> worldArray; //height array for th eworld map
 	//Tile container
 	std::vector<std::vector<tile>> mapContainer; //[1]
 	int mapHeight;

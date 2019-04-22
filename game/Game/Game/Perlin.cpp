@@ -7,7 +7,7 @@
 Perlin::Perlin() {
 	std::vector<int> create(int width, int height, ppm image, unsigned int seed, int frequency, int size);
 }
-std::vector<int> Perlin::createArray(int gWidth, int gHeight) {
+std::vector<int> Perlin::createArray(int gWidth, int gHeight, int frequency) {
 
 	// Define the size of the image
 	unsigned int width = gWidth, height = gHeight;
@@ -16,7 +16,7 @@ std::vector<int> Perlin::createArray(int gWidth, int gHeight) {
 	// Define seed
 	unsigned int gSeed = rand() % 1000;
 	// Define frequency
-	int gFrequency = 10;//5, 15, 40
+	int gFrequency = frequency;//5, 15, 40
 	// Define size
 	int gSize = width * height;
 

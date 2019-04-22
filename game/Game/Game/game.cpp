@@ -103,12 +103,12 @@ int main(int argc, char* args[]) {
 	//MAKE WORLD MAP////////////////////////////
 	static const int worldWidth = 100;
 	static const int worldHeight = 100;
-	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight); //array containing the randomized heights
-	map worldMap = { worldWidth, worldHeight, worldArray, worldArray }; //2D vector containing the tiles
+	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5); //array containing the randomized heights
+	map worldMap = { worldWidth, worldHeight, worldArray, worldArray , true}; //2D vector containing the tiles
 
 	//MAKE MAP////////////////////////////
-	std::vector<int> heightArray = perlin.createArray(tileX, tileY); //array containing the randomized heights
-	map gameMap = { tileX, tileY, heightArray, heightArray }; //2D vector containing the tiles
+	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10); //array containing the randomized heights
+	map gameMap = { tileX, tileY, heightArray, heightArray , false}; //2D vector containing the tiles
 
 	static const int number = tileX * tileY;
 	tile tiles[number];
@@ -141,7 +141,7 @@ int main(int argc, char* args[]) {
 	//keeps track of selected tile
 	int selectedX = 0;
 	int selectedY = 0;
-
+	bool showWorldMap = false; //keeps track of whether to show world map or not
 
 
 	//GAME MAIN LOOP
@@ -158,12 +158,18 @@ int main(int argc, char* args[]) {
 				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: troops = createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemies = createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
+				case SDLK_TAB: showWorldMap = true; break;
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (troops[selectedTroop].getPos()[0] > 0) { if (troops[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
 				case SDLK_a: if (troops[selectedTroop].getPos()[1] > 0) { if (troops[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
 				case SDLK_s: if (troops[selectedTroop].getPos()[0] < tileX - 1) { if (troops[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
 				case SDLK_d: if (troops[selectedTroop].getPos()[1] < tileY - 1) { if (troops[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
+				}
+			}
+			else if (e.type == SDL_KEYUP) {
+				if (e.key.keysym.sym == SDLK_TAB) {
+					showWorldMap = false;
 				}
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
@@ -258,9 +264,14 @@ int main(int argc, char* args[]) {
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
 
+		//draw world map if tab is pressed
+		if (showWorldMap) {
+			worldMap.render();
+		}
+
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn << ", sel: " << selectedX << ", " << selectedY << ", selectedT: " << selectedTroop;
+		strs << turn;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
