@@ -14,6 +14,7 @@ troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 		troopClips[i].w = 94;
 		troopClips[i].h = 86;
 	}
+	SDL_Rect tCollider = { xCoord, yCoord, 94, 86 }; 
 }
 void troop::updatePos(tile* tiles) {
 	tPosX = tiles[tileX * xCoord + yCoord].getX() + 60;

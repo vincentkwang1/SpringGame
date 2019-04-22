@@ -71,8 +71,18 @@ SDL_Rect tile::getCollider() {
 	tCollider.y = yLoc + 15;
 	return tCollider;
 }
-void tile::setHighlight(bool newHightlight) {
+void tile::setHighlight(int newHightlight) {
 	highlight = newHightlight;
+}
+void tile::checkDist(int x, int y) {
+	if (abs(xCoord - x) + abs(yCoord - y) < 3) {
+		if (noiseScale != 0 && noiseScale != 4) {
+			highlight = 2;
+		}
+	}
+	else if (highlight != 1) {
+		highlight = 0;
+	}
 }
 void tile::handleEvent(SDL_Event& e) { //0 is left, 1 is down, 2 is right, 3 is up
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
@@ -184,7 +194,8 @@ void tile::render(int noise) {
 			gTextTexture.render(xLoc + 40, yLoc + 20);
 		}
 	}
-	if (highlight) {
+	if (highlight == 2) {
+		gHighlightTexture.colorMod(0, 255, 255);
 		gHighlightTexture.render(xLoc - 12, yLoc - 6);
 	}
 }

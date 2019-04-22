@@ -80,3 +80,6 @@ int LTexture::getWidth() {
 int LTexture::getHeight() {
 	return mHeight;
 }
+void LTexture::colorMod(int r, int g, int b) {
+	SDL_SetTextureColorMod(mTexture, r, g, b);
+}

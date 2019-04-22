@@ -82,6 +82,11 @@ void drawTileLayer(map gameMap, tile * tiles, int layer) {
 		}
 	}
 }
+std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoord, int yCoord) {
+	troop newTroop = { xCoord, yCoord, 1, tiles, true };
+	troops.push_back(newTroop);
+	return troops;
+}
 //MAIN FUNCTION
 int main(int argc, char* args[]) {
 
@@ -104,11 +109,11 @@ int main(int argc, char* args[]) {
 	for (int i = 0; i < gameMap.getHeight(); i++)
 	{
 		for (int j = 0; j < gameMap.getWidth(); j++) {
-			tiles[mapHeight*i + j] = gameMap.getMapContainer()[i][j];
+			tiles[mapHeight * i + j] = gameMap.getMapContainer()[i][j];
 		}
 	}
 	//hill tiles
-	tile hillTile[tileX*4];
+	tile hillTile[tileX * 4];
 	for (int side = 0; side < 4; side++) {
 		for (int i = 0; i < tileX; i++) {
 			hillTile[side * tileX + i] = { side, i };
@@ -118,15 +123,17 @@ int main(int argc, char* args[]) {
 	//keep track of turns
 	int turn = 0;
 	//Generate Armies//
-	troop troop1 = { 0, 0, 1, tiles , true };
+	std::vector<troop> troops;
+	troops = createTroop(tiles, troops, 1, 1);
+	//troops[0] = { 1 ,1 ,1, tiles, true };
 	//Generatres enemies
 	troop enemy = { 5, 5, 1, tiles , false };
 	//keeps track of selected tile
 	int selectedX = 0;
 	int selectedY = 0;
 
-	
-	
+
+
 	//GAME MAIN LOOP
 	while (!quit) {
 		while (SDL_PollEvent(&e) != 0) {
@@ -138,28 +145,36 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: troop1.attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-
+				case SDLK_0: troops[0].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_1: troops = createTroop(tiles, troops, 2, 2); break; //CREATES NEW TROOP
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (troop1.getPos()[0] > 0) { if(troop1.moveTroop(tiles, 0)) turn++; } break;
-				case SDLK_a: if (troop1.getPos()[1] > 0) { if(troop1.moveTroop(tiles, 1)) turn++; }break;
-				case SDLK_s: if (troop1.getPos()[0] < mapWidth - 1) { if(troop1.moveTroop(tiles, 2)) turn++; }break;
-				case SDLK_d: if (troop1.getPos()[1] < mapHeight - 1) { if(troop1.moveTroop(tiles, 3)) turn++; }break;
-				/////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case SDLK_w: if (troops[0].getPos()[0] > 0) { if (troops[0].moveTroop(tiles, 0)) turn++; } break;
+				case SDLK_a: if (troops[0].getPos()[1] > 0) { if (troops[0].moveTroop(tiles, 1)) turn++; }break;
+				case SDLK_s: if (troops[0].getPos()[0] < mapWidth - 1) { if (troops[0].moveTroop(tiles, 2)) turn++; }break;
+				case SDLK_d: if (troops[0].getPos()[1] < mapHeight - 1) { if (troops[0].moveTroop(tiles, 3)) turn++; }break;
+					/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
 				for (int x = 0; x < tileX; x++) {
 					for (int y = 0; y < tileY; y++) {
 						if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
-							tiles[tileY * x + y].setHighlight(true);
+							tiles[selectedX * tileY + selectedY].setHighlight(0);
+							tiles[tileY * x + y].setHighlight(1);
 							selectedX = x;
 							selectedY = y;
-							for (int i = 0; i < (tileY * x + y); i++) {
-								tiles[i].setHighlight(false);
+							int selected = selectedX * tileY + selectedY;
+							if (troops[0].getPos()[0] < selectedX) {
+								troops[0].moveTroop(tiles, 2);
 							}
-							for (int i = (tileY * x + y + 1); i < tileX * tileY; i++) {
-								tiles[i].setHighlight(false);
+							else if (troops[0].getPos()[1] < selectedY) {
+								troops[0].moveTroop(tiles, 3);
+							}
+							else if (troops[0].getPos()[0] > selectedX){
+								troops[0].moveTroop(tiles, 0);
+							}
+							else if (troops[0].getPos()[1] > selectedY) {
+								troops[0].moveTroop(tiles, 1);
 							}
 						}
 					}
@@ -194,6 +209,7 @@ int main(int argc, char* args[]) {
 
 				tiles[i * mapHeight + j].handleEvent(e);
 				tiles[i * mapHeight + j].move();
+				tiles[i * mapHeight + j].checkDist(troops[0].getPos()[1], troops[0].getPos()[0]);
 				tiles[i * mapHeight + j].render(0);
 			}
 		}
@@ -204,14 +220,17 @@ int main(int argc, char* args[]) {
 		drawTileLayer(gameMap, tiles, 4);
 		//*/
 		//gTestTexture.render(0, 0);
-		troop1.handleEvent(e);
-		troop1.move();
-		troop1.render();
-
+		for (int i = 0; i < troops.size(); i++) {
+			troops[i].handleEvent(e);
+			troops[i].move();
+			troops[i].render();
+		}
 		enemy.handleEvent(e);
 		enemy.move();
 		enemy.render();
 
+		gHighlightTexture.colorMod(255, 255, 255);
+		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX() - 12, tiles[selectedX * tileY + selectedY].getY() - 6);
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
@@ -221,6 +240,12 @@ int main(int argc, char* args[]) {
 		gTextTexture.render(100, 100);
 
 		//GAME THINGS HAPPENING END
+		SDL_Rect r;
+		r.x = 50;
+		r.y = 50;
+		r.w = 50;
+		r.h = 50;
+		SDL_RenderFillRect(gRenderer, &r);
 		SDL_RenderPresent(gRenderer);
 	}
 	close();

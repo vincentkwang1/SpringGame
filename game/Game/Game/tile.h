@@ -23,6 +23,7 @@ public:
 	//Rendering Function
 	void render(int noise);
 
+	void checkDist(int x, int y);
 	//Get Functions
 	int getX();
 	int getY();
@@ -39,7 +40,7 @@ public:
 	void setX(int x);
 	void setY(int y);
 
-	void setHighlight(bool newHighlight);
+	void setHighlight(int newHighlight);
 	void setNoise(int noise);
 	void setTemp(int temp);
 	void setTrees(bool trees);
@@ -55,7 +56,7 @@ public:
 	//0 is x = 0, 1 is x = max, 2 is y = 0, 3 is y = max
 
 private:
-	bool highlight = false;
+	int highlight = 0; //0 is empty, 1 is mouse, 2 is next to troop
 	SDL_Rect tCollider;
 	bool sideHill = false; //remembers if its a border hill or not
 	int hillClip = 0;

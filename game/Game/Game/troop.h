@@ -24,6 +24,7 @@ private:
 	int movesTaken = 0;
 	int frame = 0;
 	SDL_Rect troopClips[20];
+	SDL_Rect tCollider;
 	bool attacking = false; //determines whether the troop is in its attack animation
 	int tPosX = 0, tPosY = 0;
 	int xCoord = 0, yCoord = 0;
