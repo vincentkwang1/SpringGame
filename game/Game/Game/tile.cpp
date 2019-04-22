@@ -196,7 +196,7 @@ void tile::render(int noise) {
 	}
 	if (highlight == 2) {
 		gHighlightTexture.colorMod(0, 255, 255);
-		gHighlightTexture.render(xLoc - 12, yLoc - 6);
+		gHighlightTexture.render(xLoc, yLoc);
 	}
 }
 

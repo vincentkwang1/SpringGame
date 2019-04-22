@@ -41,6 +41,7 @@ void loadMedia() {
 	gHills.loadFromFile("resource/hills.png");
 	gEnemyTexture.loadFromFile("resource/enemy.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
+	gSelectingTexture.loadFromFile("resource/selectedTroop.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -82,8 +83,8 @@ void drawTileLayer(map gameMap, tile * tiles, int layer) {
 		}
 	}
 }
-std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoord, int yCoord) {
-	troop newTroop = { xCoord, yCoord, 1, tiles, true };
+std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoord, int yCoord, bool team) {
+	troop newTroop = { 1 + rand() % 5, 1  + rand() % 5, 1, tiles, team };
 	troops.push_back(newTroop);
 	return troops;
 }
@@ -100,16 +101,14 @@ int main(int argc, char* args[]) {
 	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
 	//MAKE MAP////////////////////////////
-	static const int mapWidth = tileX;
-	static const int mapHeight = tileY;
 	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
-	map gameMap = { mapWidth, mapHeight, heightArray, heightArray }; //2D vector containing the tiles
-	static const int number = mapWidth * mapHeight;
+	map gameMap = { tileX, tileY, heightArray, heightArray }; //2D vector containing the tiles
+	static const int number = tileX * tileY;
 	tile tiles[number];
 	for (int i = 0; i < gameMap.getHeight(); i++)
 	{
 		for (int j = 0; j < gameMap.getWidth(); j++) {
-			tiles[mapHeight * i + j] = gameMap.getMapContainer()[i][j];
+			tiles[tileY * i + j] = gameMap.getMapContainer()[i][j];
 		}
 	}
 	//hill tiles
@@ -124,10 +123,14 @@ int main(int argc, char* args[]) {
 	int turn = 0;
 	//Generate Armies//
 	std::vector<troop> troops;
-	troops = createTroop(tiles, troops, 1, 1);
-	//troops[0] = { 1 ,1 ,1, tiles, true };
+	troops = createTroop(tiles, troops, 1, 1, true);
 	//Generatres enemies
-	troop enemy = { 5, 5, 1, tiles , false };
+	std::vector<troop> enemies;
+	enemies = createTroop(tiles, enemies, 1, 1, false);
+	//keeps track of selected troop
+	int selectedTroop = 0;
+	bool selectingTroop = false; //helps separate clicking troops from clicking tiles
+	troops[0].setSelected(true); //makes the first troop selected by default
 	//keeps track of selected tile
 	int selectedX = 0;
 	int selectedY = 0;
@@ -145,40 +148,54 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: troops[0].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-				case SDLK_1: troops = createTroop(tiles, troops, 2, 2); break; //CREATES NEW TROOP
+				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_1: troops = createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
+				case SDLK_2: enemies = createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (troops[0].getPos()[0] > 0) { if (troops[0].moveTroop(tiles, 0)) turn++; } break;
-				case SDLK_a: if (troops[0].getPos()[1] > 0) { if (troops[0].moveTroop(tiles, 1)) turn++; }break;
-				case SDLK_s: if (troops[0].getPos()[0] < mapWidth - 1) { if (troops[0].moveTroop(tiles, 2)) turn++; }break;
-				case SDLK_d: if (troops[0].getPos()[1] < mapHeight - 1) { if (troops[0].moveTroop(tiles, 3)) turn++; }break;
+				case SDLK_w: if (troops[selectedTroop].getPos()[0] > 0) { if (troops[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
+				case SDLK_a: if (troops[selectedTroop].getPos()[1] > 0) { if (troops[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
+				case SDLK_s: if (troops[selectedTroop].getPos()[0] < tileX - 1) { if (troops[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
+				case SDLK_d: if (troops[selectedTroop].getPos()[1] < tileY - 1) { if (troops[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
-				for (int x = 0; x < tileX; x++) {
-					for (int y = 0; y < tileY; y++) {
-						if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
-							tiles[selectedX * tileY + selectedY].setHighlight(0);
-							tiles[tileY * x + y].setHighlight(1);
-							selectedX = x;
-							selectedY = y;
-							int selected = selectedX * tileY + selectedY;
-							if (troops[0].getPos()[0] < selectedX) {
-								troops[0].moveTroop(tiles, 2);
-							}
-							else if (troops[0].getPos()[1] < selectedY) {
-								troops[0].moveTroop(tiles, 3);
-							}
-							else if (troops[0].getPos()[0] > selectedX){
-								troops[0].moveTroop(tiles, 0);
-							}
-							else if (troops[0].getPos()[1] > selectedY) {
-								troops[0].moveTroop(tiles, 1);
+				//handles clicking troops
+				for (int x = 0; x < troops.size(); x++) {
+					if (checkClicked(troops[x].getCollider(), &e)) {
+						troops[selectedTroop].setSelected(false); //resets the old selected troop
+						selectedTroop = x;
+						selectingTroop = true;
+						troops[x].setSelected(true); //selected the new selected troop
+					}
+				}
+				if (!selectingTroop) {
+					//handles clicking tiles
+					for (int x = 0; x < tileX; x++) {
+						for (int y = 0; y < tileY; y++) {
+							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
+								tiles[selectedX * tileY + selectedY].setHighlight(0);
+								tiles[tileY * x + y].setHighlight(1);
+								selectedX = x;
+								selectedY = y;
+								int selected = selectedX * tileY + selectedY;
+								if (troops[selectedTroop].getPos()[0] < selectedX) {
+									troops[selectedTroop].moveTroop(tiles, 2);
+								}
+								else if (troops[selectedTroop].getPos()[1] < selectedY) {
+									troops[selectedTroop].moveTroop(tiles, 3);
+								}
+								else if (troops[selectedTroop].getPos()[0] > selectedX) {
+									troops[selectedTroop].moveTroop(tiles, 0);
+								}
+								else if (troops[selectedTroop].getPos()[1] > selectedY) {
+									troops[selectedTroop].moveTroop(tiles, 1);
+								}
 							}
 						}
 					}
 				}
+				selectingTroop = false;
 			}
 		}
 		SDL_RenderClear(gRenderer);
@@ -207,10 +224,10 @@ int main(int argc, char* args[]) {
 		{
 			for (int j = 0; j < gameMap.getWidth(); j++) {
 
-				tiles[i * mapHeight + j].handleEvent(e);
-				tiles[i * mapHeight + j].move();
-				tiles[i * mapHeight + j].checkDist(troops[0].getPos()[1], troops[0].getPos()[0]);
-				tiles[i * mapHeight + j].render(0);
+				tiles[i * tileY + j].handleEvent(e);
+				tiles[i * tileY + j].move();
+				tiles[i * tileY + j].checkDist(troops[selectedTroop].getPos()[1], troops[selectedTroop].getPos()[0]);
+				tiles[i * tileY + j].render(0);
 			}
 		}
 		drawTileLayer(gameMap, tiles, 2);
@@ -225,27 +242,24 @@ int main(int argc, char* args[]) {
 			troops[i].move();
 			troops[i].render();
 		}
-		enemy.handleEvent(e);
-		enemy.move();
-		enemy.render();
+		for (int i = 0; i < enemies.size(); i++) {
+			enemies[i].handleEvent(e);
+			enemies[i].move();
+			enemies[i].render();
+		}
 
 		gHighlightTexture.colorMod(255, 255, 255);
-		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX() - 12, tiles[selectedX * tileY + selectedY].getY() - 6);
+		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn << ", sel: " << selectedX << ", " << selectedY;
+		strs << turn << ", sel: " << selectedX << ", " << selectedY << ", selectedT: " << selectedTroop;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
 
 		//GAME THINGS HAPPENING END
-		SDL_Rect r;
-		r.x = 50;
-		r.y = 50;
-		r.w = 50;
-		r.h = 50;
-		SDL_RenderFillRect(gRenderer, &r);
+		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
 		SDL_RenderPresent(gRenderer);
 	}
 	close();

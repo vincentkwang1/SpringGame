@@ -18,8 +18,11 @@ public:
 	void render(); //draws the troop
 	void handleEvent(SDL_Event& e);
 	int * getPos();
+	void setSelected(bool newSelected);
+	SDL_Rect getCollider();
 private:
 	//FRAME COUNTER
+	bool selected = false;
 	bool team; //true is player, false is enemy
 	int movesTaken = 0;
 	int frame = 0;

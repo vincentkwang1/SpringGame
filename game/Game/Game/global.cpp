@@ -18,4 +18,5 @@ LTexture gHills;
 LTexture gGrassTexture;
 LTexture gEnemyTexture;
 LTexture gHighlightTexture;
+LTexture gSelectingTexture;
 #endif // !global_h_

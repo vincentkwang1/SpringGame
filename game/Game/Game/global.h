@@ -22,4 +22,5 @@ extern LTexture gEnemyTexture;
 extern LTexture gHills;
 extern LTexture gGrassTexture;
 extern LTexture gHighlightTexture;
+extern LTexture gSelectingTexture;
 #endif // !global_h_

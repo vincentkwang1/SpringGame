@@ -14,15 +14,16 @@ troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 		troopClips[i].w = 94;
 		troopClips[i].h = 86;
 	}
-	SDL_Rect tCollider = { xCoord, yCoord, 94, 86 }; 
 }
 void troop::updatePos(tile* tiles) {
 	tPosX = tiles[tileX * xCoord + yCoord].getX() + 60;
 	tPosY = tiles[tileY * xCoord + yCoord].getY() - 60;
+	tCollider = { tPosX + 30, tPosY + 50, 67, 68 };
 }
 void troop::move() {
 	tPosX += velX;
 	tPosY += velY;
+	tCollider = { tPosX + 30, tPosY + 50, 67, 68 };
 }
 void troop::handleEvent(SDL_Event& e) {
 	if (e.type == SDL_KEYDOWN && e.key.repeat == 0)
@@ -47,7 +48,16 @@ void troop::handleEvent(SDL_Event& e) {
 		}
 	}
 }
+SDL_Rect troop::getCollider() {
+	return tCollider;
+}
+void troop::setSelected(bool newSelected) {
+	selected = newSelected;
+}
 void troop::render() {
+	if (selected) {
+		gSelectingTexture.render(tPosX + 50, tPosY);
+	}
 	SDL_Rect* currentClip[6];
 	if (attacking) { //if attacking is true, execute attack animation
 		for (int i = 0; i < 6; i++) {
@@ -88,12 +98,12 @@ void troop::render() {
 		else {
 			frame = 0;
 		}
-		std::ostringstream strs;
+		/*std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
 		strs << movesTaken;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
-		gTextTexture.render(40, 20);
+		gTextTexture.render(40, 20);*/
 	}
 	else {
 		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
@@ -110,7 +120,7 @@ void troop::render() {
 		else {
 			frame = 0;
 		}
-	}
+	} 
 }
 int * troop::getPos() {
 	int coords[2];
