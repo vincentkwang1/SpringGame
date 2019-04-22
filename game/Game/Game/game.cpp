@@ -100,9 +100,16 @@ int main(int argc, char* args[]) {
 	//CONSTRUCTING CLASSES
 	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
+	//MAKE WORLD MAP////////////////////////////
+	static const int worldWidth = 100;
+	static const int worldHeight = 100;
+	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight); //array containing the randomized heights
+	map worldMap = { worldWidth, worldHeight, worldArray, worldArray }; //2D vector containing the tiles
+
 	//MAKE MAP////////////////////////////
-	std::vector<int> heightArray = perlin.createArray(); //array containing the randomized heights
+	std::vector<int> heightArray = perlin.createArray(tileX, tileY); //array containing the randomized heights
 	map gameMap = { tileX, tileY, heightArray, heightArray }; //2D vector containing the tiles
+
 	static const int number = tileX * tileY;
 	tile tiles[number];
 	for (int i = 0; i < gameMap.getHeight(); i++)
