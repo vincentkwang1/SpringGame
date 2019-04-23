@@ -75,10 +75,10 @@ bool checkClicked(SDL_Rect a, SDL_Event* e) {
 		return true;
 	}
 }
-void drawTileLayer(map gameMap, tile * tiles, int layer) {
-	for (int i = gameMap.getHeight() - 1; i >= 0; i--)
+void drawTileLayer(map * localMaps, tile * tiles, int layer) {
+	for (int i = localMaps[0].getHeight() - 1; i >= 0; i--)
 	{
-		for (int j = 0; j < gameMap.getWidth(); j++) {
+		for (int j = 0; j < localMaps[0].getWidth(); j++) {
 			tiles[i * tileX + j].render(layer);
 		}
 	}
@@ -87,6 +87,11 @@ std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoo
 	troop newTroop = { 1 + rand() % 5, 1  + rand() % 5, 1, tiles, team };
 	troops.push_back(newTroop);
 	return troops;
+}
+std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightArray) {
+	map localMap = { tileX, tileY, heightArray, heightArray, false };
+	localMaps.push_back(localMap);
+	return localMaps;
 }
 //MAIN FUNCTION
 int main(int argc, char* args[]) {
@@ -108,14 +113,16 @@ int main(int argc, char* args[]) {
 
 	//MAKE MAP////////////////////////////
 	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10); //array containing the randomized heights
-	map gameMap = { tileX, tileY, heightArray, heightArray , false}; //2D vector containing the tiles
+	std::vector<map> localMaps;
+	localMaps = createMap(localMaps, heightArray);
+	//map gameMap = { tileX, tileY, heightArray, heightArray , false}; //2D vector containing the tiles
 
 	static const int number = tileX * tileY;
 	tile tiles[number];
-	for (int i = 0; i < gameMap.getHeight(); i++)
+	for (int i = 0; i < localMaps[0].getHeight(); i++)
 	{
-		for (int j = 0; j < gameMap.getWidth(); j++) {
-			tiles[tileY * i + j] = gameMap.getMapContainer()[i][j];
+		for (int j = 0; j < localMaps[0].getWidth(); j++) {
+			tiles[tileY * i + j] = localMaps[0].getMapContainer()[i][j];
 		}
 	}
 	//hill tiles
@@ -158,18 +165,13 @@ int main(int argc, char* args[]) {
 				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: troops = createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemies = createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
-				case SDLK_TAB: showWorldMap = true; break;
+				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (troops[selectedTroop].getPos()[0] > 0) { if (troops[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
 				case SDLK_a: if (troops[selectedTroop].getPos()[1] > 0) { if (troops[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
 				case SDLK_s: if (troops[selectedTroop].getPos()[0] < tileX - 1) { if (troops[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
 				case SDLK_d: if (troops[selectedTroop].getPos()[1] < tileY - 1) { if (troops[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
-				}
-			}
-			else if (e.type == SDL_KEYUP) {
-				if (e.key.keysym.sym == SDLK_TAB) {
-					showWorldMap = false;
 				}
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
@@ -233,9 +235,9 @@ int main(int argc, char* args[]) {
 			hillTile[i].move();
 			hillTile[i].render(false);
 		}
-		for (int i = 0; i < gameMap.getHeight(); i++)
+		for (int i = 0; i < localMaps[0].getHeight(); i++)
 		{
-			for (int j = 0; j < gameMap.getWidth(); j++) {
+			for (int j = 0; j < localMaps[0].getWidth(); j++) {
 
 				tiles[i * tileY + j].handleEvent(e);
 				tiles[i * tileY + j].move();
@@ -243,11 +245,11 @@ int main(int argc, char* args[]) {
 				tiles[i * tileY + j].render(0);
 			}
 		}
-		drawTileLayer(gameMap, tiles, 2);
-		drawTileLayer(gameMap, tiles, 0);
-		drawTileLayer(gameMap, tiles, 1);
-		drawTileLayer(gameMap, tiles, 3);
-		drawTileLayer(gameMap, tiles, 4);
+		drawTileLayer(&localMaps[0], tiles, 2);
+		drawTileLayer(&localMaps[0], tiles, 0);
+		drawTileLayer(&localMaps[0], tiles, 1);
+		drawTileLayer(&localMaps[0], tiles, 3);
+		drawTileLayer(&localMaps[0], tiles, 4);
 		//*/
 		//gTestTexture.render(0, 0);
 		for (int i = 0; i < troops.size(); i++) {

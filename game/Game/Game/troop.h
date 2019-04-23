@@ -10,7 +10,7 @@ public:
 	static const int panSpeed = 5;
 	troop();
 	troop(int xPos, int yPos, int type, tile * tiles, bool teamInit); //constructor with type of troop and position
-	void move(); //moves the troop when panning
+	void move(); //moves the troop when panningx
 	bool moveTroop(tile * tiles, int direction); //actually moves the tile the troop is on, returns successful movement
 	//0 is with w, 1 is with a, 2 is with s, 3 is with d
 	void attack();
