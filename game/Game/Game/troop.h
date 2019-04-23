@@ -19,6 +19,7 @@ public:
 	void handleEvent(SDL_Event& e);
 	int * getPos();
 	void setSelected(bool newSelected);
+	void renderHealthBar();
 	SDL_Rect getCollider();
 private:
 	//FRAME COUNTER
@@ -33,5 +34,6 @@ private:
 	int xCoord = 0, yCoord = 0;
 	int velX = 0, velY = 0;
 	int type; //1 = infantry
+	SDL_Rect fillRect;
 };
 #endif 

@@ -75,21 +75,21 @@ void troop::render() {
 	int clip = frame / 5 % 20;
 	if (team) {
 		if (attacking) {
-			if (clip > 13 && clip < 18){
+			if (clip > 13 && clip < 18) {
 				gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]);
 			}
-			else{
-				gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);
+			else {
+				gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
 			}
 		}
 		else {
-			gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);
-		}/*
+			gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
+		}
 		gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
 		gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
 		gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
 		gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
-		gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
+		gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
 
 		//UPDATING FRAME COUNTERS
 		if (frame < 100) {
@@ -120,7 +120,22 @@ void troop::render() {
 		else {
 			frame = 0;
 		}
-	} 
+		
+
+	}
+	renderHealthBar();
+}
+
+void troop::renderHealthBar() {
+	//Render outside
+	fillRect = { tPosX + 20, tPosY, 100, 20 };
+	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
+	SDL_RenderFillRect(gRenderer, &fillRect);
+
+	//render inside
+	fillRect = { tPosX + 25, tPosY + 5, 90, 10 };
+	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+	SDL_RenderFillRect(gRenderer, &fillRect);
 }
 int * troop::getPos() {
 	int coords[2];
