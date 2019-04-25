@@ -142,7 +142,7 @@ int main(int argc, char* args[]) {
 	std::vector<troop> enemies;
 	enemies = createTroop(tiles, enemies, 1, 1, false);
 	//keeps track of selected troop
-	int selectedTroop = 0;
+	int selectedTroop = -1;
 	bool selectingTroop = false; //helps separate clicking troops from clicking tiles
 	troops[0].setSelected(true); //makes the first troop selected by default
 	//keeps track of selected tile
@@ -162,28 +162,40 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: troops = createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemies = createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
-				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
+				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
+				
+					if (selectedTroop != -1) {
+				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (troops[selectedTroop].getPos()[0] > 0) { if (troops[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
 				case SDLK_a: if (troops[selectedTroop].getPos()[1] > 0) { if (troops[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
 				case SDLK_s: if (troops[selectedTroop].getPos()[0] < tileX - 1) { if (troops[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
 				case SDLK_d: if (troops[selectedTroop].getPos()[1] < tileY - 1) { if (troops[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
+					}
 				}
 			}
+
+
+			//Handles Mouse Click Events////////////////////////////////////////////////////////////
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
-				//handles clicking troops
+				
+																					
+				//Fist Checks if you clicked on a troop... if you did it 
 				for (int x = 0; x < troops.size(); x++) {
 					if (checkClicked(troops[x].getCollider(), &e)) {
-						troops[selectedTroop].setSelected(false); //resets the old selected troop
+						if (selectedTroop != -1) {
+							troops[selectedTroop].setSelected(false); //resets the old selected troop
+						}
 						selectedTroop = x;
 						selectingTroop = true;
 						troops[x].setSelected(true); //selected the new selected troop
 					}
 				}
+
+				//Next, if you didn't select a troop, it sees what tile you pressed 
 				if (!selectingTroop) {
 					//handles clicking tiles
 					for (int x = 0; x < tileX; x++) {
@@ -194,23 +206,28 @@ int main(int argc, char* args[]) {
 								selectedX = x;
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;
-								if (troops[selectedTroop].getPos()[0] < selectedX) {
-									troops[selectedTroop].moveTroop(tiles, 2);
-								}
-								else if (troops[selectedTroop].getPos()[1] < selectedY) {
-									troops[selectedTroop].moveTroop(tiles, 3);
-								}
-								else if (troops[selectedTroop].getPos()[0] > selectedX) {
-									troops[selectedTroop].moveTroop(tiles, 0);
-								}
-								else if (troops[selectedTroop].getPos()[1] > selectedY) {
-									troops[selectedTroop].moveTroop(tiles, 1);
+
+								if (selectedTroop != -1) {
+									if (troops[selectedTroop].getPos()[0] < selectedX) {
+										troops[selectedTroop].moveTroop(tiles, 2);
+									}
+									else if (troops[selectedTroop].getPos()[1] < selectedY) {
+										troops[selectedTroop].moveTroop(tiles, 3);
+									}
+									else if (troops[selectedTroop].getPos()[0] > selectedX) {
+										troops[selectedTroop].moveTroop(tiles, 0);
+									}
+									else if (troops[selectedTroop].getPos()[1] > selectedY) {
+										troops[selectedTroop].moveTroop(tiles, 1);
+									}
 								}
 							}
 						}
 					}
+				selectedTroop = -1;
 				}
 				selectingTroop = false;
+				
 			}
 		}
 		SDL_RenderClear(gRenderer);
@@ -235,13 +252,14 @@ int main(int argc, char* args[]) {
 			hillTile[i].move();
 			hillTile[i].render(false);
 		}
+
 		for (int i = 0; i < localMaps[0].getHeight(); i++)
 		{
 			for (int j = 0; j < localMaps[0].getWidth(); j++) {
 
 				tiles[i * tileY + j].handleEvent(e);
 				tiles[i * tileY + j].move();
-				tiles[i * tileY + j].checkDist(troops[selectedTroop].getPos()[1], troops[selectedTroop].getPos()[0]);
+				if (selectedTroop != -1) { tiles[i * tileY + j].checkDist(troops[selectedTroop].getPos()[1], troops[selectedTroop].getPos()[0]); }
 				tiles[i * tileY + j].render(0);
 			}
 		}
