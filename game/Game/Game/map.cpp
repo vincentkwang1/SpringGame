@@ -2,14 +2,15 @@
 #include "tile.h"
 #include <vector>
 
-
-
-map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempdata, bool mapType) {
+map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempdata, bool mapType, int gLocalXCoord, int gLocalYCoord) {
 
 	mapHeight = height;
 	mapWidth = width;
 
 	if (!mapType) { //if its the regional map
+		localXCoord = gLocalXCoord;
+		localYCoord = gLocalYCoord;
+
 		mapContainer.resize(height, std::vector<tile>(0));
 
 		int j = 0;
@@ -33,34 +34,86 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 	}
 }
 
-void map::render() {
+void map::render(int currentMapX, int currentMapY) {
 	//draw the background gray
 	SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 0);
-	SDL_Rect background = { 540, 120, 840, 840 };
+	//map is 840x840
+	SDL_Rect background = { 600, 180, mapPixelWidth + 40, mapPixelWidth + 40 };
 	SDL_RenderFillRect(gRenderer, &background);
 	//draw the individual tiles
-	SDL_Rect r = { 0, 0, 8, 8 };
+	SDL_Rect r = { 0, 0, mapPixelWidth/mapWidth, mapPixelWidth/mapHeight };
+	bool highlight = false;
 	for (int x = 0; x < mapWidth; x++) {
 		for (int y = 0; y < mapHeight; y++) {
-			int height = worldArray[100 * y + x];
-			if (height >= 0 && height < 101) { //water
-				SDL_SetRenderDrawColor(gRenderer, 0, 119, 190, 0);
+			//decides whether to highlight && what color highlight
+			if (x == currentMapX && y == currentMapY) {
+				SDL_SetRenderDrawColor(gRenderer, 255, 211, 53, 0);
+				highlight = true;
 			}
-			else if (height >= 101 && height < 132) { //grass
-				SDL_SetRenderDrawColor(gRenderer, 10, 168, 54, 0);
+			else if (x == currentMapX) {
+				if (y == currentMapY - 1 || y == currentMapY + 1) {
+					SDL_SetRenderDrawColor(gRenderer, 53, 255, 211, 0);
+					highlight = true;
+				}
 			}
-			else if (height >= 132 && height < 145) { //hill
-				SDL_SetRenderDrawColor(gRenderer, 12, 137, 22, 0);
+			else if (y == currentMapY) {
+				if (x == currentMapX - 1 || x == currentMapX + 1) {
+					SDL_SetRenderDrawColor(gRenderer, 53, 255, 211, 0);
+					highlight = true;
+				}
 			}
-			else if (height >= 145 && height < 165) { //JV mountain
-				SDL_SetRenderDrawColor(gRenderer, 132, 132, 132, 0);
+			if(highlight){
+				r.x = 620 + mapPixelWidth / mapWidth * x;
+				r.y = 200 + mapPixelWidth / mapHeight * y;
+				r.w = mapPixelWidth / mapWidth;
+				r.h = mapPixelWidth / mapHeight;
+				SDL_RenderFillRect(gRenderer, &r); 
+				int height = worldArray[mapWidth * y + x];
+				if (height >= 0 && height < 101) { //water
+					SDL_SetRenderDrawColor(gRenderer, 0, 119, 190, 0);
+				}
+				else if (height >= 101 && height < 132) { //grass
+					SDL_SetRenderDrawColor(gRenderer, 10, 168, 54, 0);
+				}
+				else if (height >= 132 && height < 145) { //hill
+					SDL_SetRenderDrawColor(gRenderer, 12, 137, 22, 0);
+				}
+				else if (height >= 145 && height < 165) { //JV mountain
+					SDL_SetRenderDrawColor(gRenderer, 132, 132, 132, 0);
+				}
+				else if (height >= 165 && height <= 255) { //real mountain
+					SDL_SetRenderDrawColor(gRenderer, 229, 229, 229, 0);
+				}
+				r.x = 622 + mapPixelWidth / mapWidth * x;
+				r.y = 202 + mapPixelWidth / mapHeight * y;
+				r.w = mapPixelWidth/mapWidth - 4;
+				r.h = mapPixelWidth/mapHeight - 4;
+				SDL_RenderFillRect(gRenderer, &r);
+				r.w = mapPixelWidth / mapWidth;
+				r.h = mapPixelWidth / mapHeight;
+				highlight = false;
 			}
-			else if (height >= 165 && height <= 255) { //real mountain
-				SDL_SetRenderDrawColor(gRenderer, 229, 229, 229, 0);
+			else {
+				int height = worldArray[mapWidth * y + x];
+				if (height >= 0 && height < 101) { //water
+					SDL_SetRenderDrawColor(gRenderer, 0, 119, 190, 0);
+				}
+				else if (height >= 101 && height < 132) { //grass
+					SDL_SetRenderDrawColor(gRenderer, 10, 168, 54, 0);
+				}
+				else if (height >= 132 && height < 145) { //hill
+					SDL_SetRenderDrawColor(gRenderer, 12, 137, 22, 0);
+				}
+				else if (height >= 145 && height < 165) { //JV mountain
+					SDL_SetRenderDrawColor(gRenderer, 132, 132, 132, 0);
+				}
+				else if (height >= 165 && height <= 255) { //real mountain
+					SDL_SetRenderDrawColor(gRenderer, 229, 229, 229, 0);
+				}
+				r.x = 620 + mapPixelWidth / mapWidth * x;
+				r.y = 200 + mapPixelWidth / mapHeight * y;
+				SDL_RenderFillRect(gRenderer, &r);
 			}
-			r.x = 560 + 8*x;
-			r.y = 140 + 8*y;
-			SDL_RenderFillRect(gRenderer, &r);
 		}
 	}
 }

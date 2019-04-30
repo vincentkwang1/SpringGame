@@ -88,8 +88,8 @@ std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoo
 	troops.push_back(newTroop);
 	return troops;
 }
-std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightArray) {
-	map localMap = { tileX, tileY, heightArray, heightArray, false };
+std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightArray, int localXCoord ,int localYCoord) {
+	map localMap = { tileX, tileY, heightArray, heightArray, false, localXCoord, localYCoord };
 	localMaps.push_back(localMap);
 	return localMaps;
 }
@@ -106,16 +106,18 @@ int main(int argc, char* args[]) {
 	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
 
 	//MAKE WORLD MAP////////////////////////////
-	static const int worldWidth = 100;
-	static const int worldHeight = 100;
-	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5); //array containing the randomized heights
-	map worldMap = { worldWidth, worldHeight, worldArray, worldArray , true}; //2D vector containing the tiles
+	//create dimensions of the world map
+	static const int worldWidth = 30;
+	static const int worldHeight = 30;
 
-	//MAKE MAP////////////////////////////
+	//same as local map
+	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5); //array containing the randomized heights
+	map worldMap = { worldWidth, worldHeight, worldArray, worldArray, true, 0, 0}; 
+
+	//MAKE LOCAL MAP////////////////////////////
 	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10); //array containing the randomized heights
 	std::vector<map> localMaps;
-	localMaps = createMap(localMaps, heightArray);
-	//map gameMap = { tileX, tileY, heightArray, heightArray , false}; //2D vector containing the tiles
+	localMaps = createMap(localMaps, heightArray, 10, 10);
 
 	static const int number = tileX * tileY;
 	tile tiles[number];
@@ -132,24 +134,35 @@ int main(int argc, char* args[]) {
 			hillTile[side * tileX + i] = { side, i };
 		}
 	}
-	///////////////
 	//keep track of turns
 	int turn = 0;
+
 	//Generate Armies//
 	std::vector<troop> troops;
 	troops = createTroop(tiles, troops, 1, 1, true);
+
 	//Generatres enemies
 	std::vector<troop> enemies;
 	enemies = createTroop(tiles, enemies, 1, 1, false);
+
 	//keeps track of selected troop
 	int selectedTroop = 0;
 	bool selectingTroop = false; //helps separate clicking troops from clicking tiles
+
 	troops[0].setSelected(true); //makes the first troop selected by default
+
 	//keeps track of selected tile
 	int selectedX = 0;
 	int selectedY = 0;
-	bool showWorldMap = false; //keeps track of whether to show world map or not
 
+	//keeps track of current local map
+	int currentMapX = 20;
+	int currentMapY = 20;
+
+	//keeps track of whether to show world map or not, toggled with 'tab'
+	bool showWorldMap = false; 
+
+	int test = 0;
 
 	//GAME MAIN LOOP
 	while (!quit) {
@@ -184,8 +197,25 @@ int main(int argc, char* args[]) {
 						troops[x].setSelected(true); //selected the new selected troop
 					}
 				}
-				if (!selectingTroop) {
-					//handles clicking tiles
+				//handles clicking world map tiles
+				if (showWorldMap) {
+					for (int i = 0; i < 4; i++) {
+						int x, y;
+						switch (i) {
+						case 0: x = currentMapX; y = currentMapY - 1; break;
+						case 1: x = currentMapX; y = currentMapY + 1; break;
+						case 2: x = currentMapX + 1; y = currentMapY; break;
+						case 3: x = currentMapX + 1; y = currentMapY; break;
+						}
+						SDL_Rect worldTile = { 620 + x * mapPixelWidth / worldWidth, 200 + y * mapPixelWidth / worldWidth, mapPixelWidth / worldWidth, mapPixelWidth / worldHeight };
+						if (checkClicked(worldTile, &e)) {
+							test = 1000 * x + y;
+							std::cout << "test";
+						}
+					}
+				}
+				else if (!selectingTroop) {
+					//handles clicking local map tiles
 					for (int x = 0; x < tileX; x++) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
@@ -268,12 +298,12 @@ int main(int argc, char* args[]) {
 
 		//draw world map if tab is pressed
 		if (showWorldMap) {
-			worldMap.render();
+			worldMap.render(currentMapX, currentMapY);
 		}
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn;
+		strs << turn << ", " << test;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);

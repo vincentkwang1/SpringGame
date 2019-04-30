@@ -10,10 +10,10 @@ public:
 	//Constructors
 	map() {};
 
-	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata, bool mapType);
+	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata, bool mapType, int gLocalXCoord, int gLocalYCoord);
 
 	//display map on screen
-	void render();
+	void render(int currentMapX, int currentMapY);
 
 	//takes map data and pushes out a tile
 	tile createTile(int noise, int temp, int i, int j);
@@ -24,8 +24,8 @@ public:
 	int getWidth();
 
 private:
-
-	
+	int localXCoord = 0;
+	int localYCoord = 0;
 	std::vector<int> worldArray; //height array for th eworld map
 	//Tile container
 	std::vector<std::vector<tile>> mapContainer; //[1]

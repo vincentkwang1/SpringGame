@@ -8,6 +8,7 @@
 //dimensions of tiles
 static const int tileX = 12;
 static const int tileY = 12;
+static const int mapPixelWidth = 720; // size of the drawn map
 static const int number = (tileX) * (tileY);
 typedef int32_t s32;
 extern SDL_Window* gWindow;
