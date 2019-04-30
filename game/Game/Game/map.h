@@ -8,7 +8,7 @@ class map {
 public:
 	
 	//Constructors
-	map() {};
+	map();
 
 	map(int width, int height, std::vector<int> mapdata, std::vector<int> tempdata, bool mapType, int gLocalXCoord, int gLocalYCoord);
 
