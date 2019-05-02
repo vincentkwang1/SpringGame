@@ -1,7 +1,8 @@
 #include "troop.h"
 
 troop::troop() {
-
+	placeholder = true;
+	
 }
 troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 	team = teamInit;

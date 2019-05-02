@@ -9,6 +9,7 @@ public:
 	static const int maxMoves = 5;
 	static const int panSpeed = 5;
 	troop();
+	troop(int invisible);
 	troop(int xPos, int yPos, int type, tile * tiles, bool teamInit); //constructor with type of troop and position
 	void move(); //moves the troop when panningx
 	bool moveTroop(tile * tiles, int direction); //actually moves the tile the troop is on, returns successful movement
@@ -23,6 +24,7 @@ public:
 	SDL_Rect getCollider();
 private:
 	//FRAME COUNTER
+	bool placeholder;
 	bool selected = false;
 	bool team; //true is player, false is enemy
 	int movesTaken = 0;
