@@ -233,8 +233,11 @@ int main(int argc, char* args[]) {
 					for (int x = 0; x < tileX; x++) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
-								tiles[selectedX * tileY + selectedY].setHighlight(0);
-								tiles[tileY * x + y].setHighlight(1);
+
+								//if (!alliedArmy[selectedTroop].getPlaceholder()) {
+									//tiles[selectedX * tileY + selectedY].setHighlight(0);
+									//tiles[tileY * x + y].setHighlight(1);
+								//}
 								selectedX = x;
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;

@@ -5,6 +5,7 @@ troop::troop() {
 	
 }
 troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
+	placeholder = false;
 	team = teamInit;
 	xCoord = gXCoord;
 	yCoord = gYCoord;
@@ -52,79 +53,84 @@ void troop::handleEvent(SDL_Event& e) {
 SDL_Rect troop::getCollider() {
 	return tCollider;
 }
+bool troop::getPlaceholder() {
+	return placeholder;
+}
 void troop::setSelected(bool newSelected) {
 	selected = newSelected;
 }
 void troop::render() {
-	if (selected) {
-		gSelectingTexture.render(tPosX + 50, tPosY);
-	}
-	SDL_Rect* currentClip[6];
-	if (attacking) { //if attacking is true, execute attack animation
-		for (int i = 0; i < 6; i++) {
-			currentClip[i] = &troopClips[(frame / 5 + i) % 20];
+	if (!placeholder) {
+		if (selected) {
+			gSelectingTexture.render(tPosX + 50, tPosY);
 		}
-		if ((frame / 5) % 20 == 19) { //stops attacking when last animation is done
-			attacking = false;
+		SDL_Rect* currentClip[6];
+		if (attacking) { //if attacking is true, execute attack animation
+			for (int i = 0; i < 6; i++) {
+				currentClip[i] = &troopClips[(frame / 5 + i) % 20];
+			}
+			if ((frame / 5) % 20 == 19) { //stops attacking when last animation is done
+				attacking = false;
+			}
 		}
-	}
-	else { //otherwise, idle animation
-		for (int i = 0; i < 6; i++) {
-			currentClip[i] = &troopClips[9 + (frame / 10 + i * 2) % 4];
+		else { //otherwise, idle animation
+			for (int i = 0; i < 6; i++) {
+				currentClip[i] = &troopClips[9 + (frame / 10 + i * 2) % 4];
+			}
 		}
-	}
-	int clip = frame / 5 % 20;
-	if (team) {
-		if (attacking) {
-			if (clip > 13 && clip < 18) {
-				gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]);
+		int clip = frame / 5 % 20;
+		if (team) {
+			if (attacking) {
+				if (clip > 13 && clip < 18) {
+					gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]);
+				}
+				else {
+					gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
+				}
 			}
 			else {
 				gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
 			}
-		}
-		else {
-			gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
-		}
-		gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
-		gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
-		gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
-		gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
-		gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
+			gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
+			gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
+			gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
+			gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
+			gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
 
-		//UPDATING FRAME COUNTERS
-		if (frame < 100) {
-			frame++;
+			//UPDATING FRAME COUNTERS
+			if (frame < 100) {
+				frame++;
+			}
+			else {
+				frame = 0;
+			}
+			/*std::ostringstream strs;
+			SDL_Color textColor = { 255, 255 , 255 };
+			strs << movesTaken;
+			std::string str = strs.str();
+			gTextTexture.loadFromRenderedText(str, textColor);
+			gTextTexture.render(40, 20);*/
 		}
 		else {
-			frame = 0;
+			gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
+			gEnemyTexture.render(tPosX + 40, tPosY, currentClip[1]);
+			gEnemyTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
+			gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
+			gEnemyTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
+			gEnemyTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
+
+			//UPDATING FRAME COUNTERS
+			if (frame < 100) {
+				frame++;
+			}
+			else {
+				frame = 0;
+			}
+
+
 		}
-		/*std::ostringstream strs;
-		SDL_Color textColor = { 255, 255 , 255 };
-		strs << movesTaken;
-		std::string str = strs.str();
-		gTextTexture.loadFromRenderedText(str, textColor);
-		gTextTexture.render(40, 20);*/
+		renderHealthBar();
 	}
-	else {
-		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
-		gEnemyTexture.render(tPosX + 40, tPosY, currentClip[1]);
-		gEnemyTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
-		gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
-		gEnemyTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
-		gEnemyTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
-
-		//UPDATING FRAME COUNTERS
-		if (frame < 100) {
-			frame++;
-		}
-		else {
-			frame = 0;
-		}
-		
-
-	}
-	renderHealthBar();
 }
 
 void troop::renderHealthBar() {

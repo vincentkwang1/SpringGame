@@ -22,6 +22,7 @@ public:
 	void setSelected(bool newSelected);
 	void renderHealthBar();
 	SDL_Rect getCollider();
+	bool getPlaceholder();
 private:
 	//FRAME COUNTER
 	bool placeholder;
