@@ -62,7 +62,7 @@ void troop::setSelected(bool newSelected) {
 void troop::render() {
 	if (!placeholder) {
 		if (selected) {
-			gSelectingTexture.render(tPosX + 50, tPosY);
+			//gSelectingTexture.render(tPosX + 50, tPosY);
 		}
 		SDL_Rect* currentClip[6];
 		if (attacking) { //if attacking is true, execute attack animation

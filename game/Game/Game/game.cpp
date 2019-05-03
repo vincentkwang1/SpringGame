@@ -41,7 +41,7 @@ void loadMedia() {
 	gHills.loadFromFile("resource/hills.png");
 	gEnemyTexture.loadFromFile("resource/enemy.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
-	gSelectingTexture.loadFromFile("resource/selectedTroop.png");
+	//gSelectingTexture.loadFromFile("resource/selectedTroop.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -234,10 +234,10 @@ int main(int argc, char* args[]) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
 
-								//if (!alliedArmy[selectedTroop].getPlaceholder()) {
-									//tiles[selectedX * tileY + selectedY].setHighlight(0);
-									//tiles[tileY * x + y].setHighlight(1);
-								//}
+								
+									tiles[selectedX * tileY + selectedY].setHighlight(0);
+									tiles[tileY * x + y].setHighlight(1);
+								
 								selectedX = x;
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;
@@ -253,12 +253,17 @@ int main(int argc, char* args[]) {
 								else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
 									alliedArmy[selectedTroop].moveTroop(tiles, 1);
 								}
+								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
+								else { test++; }
 							}
+							
 						}
 					}
 				}
 				selectingTroop = false;
+				
 			}
+			
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
@@ -288,7 +293,11 @@ int main(int argc, char* args[]) {
 
 				tiles[i * tileY + j].handleEvent(e);
 				tiles[i * tileY + j].move();
+				tiles[i * tileY + j].setHighlight(0);
+				if (!alliedArmy[selectedTroop].getPlaceholder()){
 				tiles[i * tileY + j].checkDist(alliedArmy[selectedTroop].getPos()[1], alliedArmy[selectedTroop].getPos()[0]);
+				}
+
 				tiles[i * tileY + j].render(0);
 			}
 		}

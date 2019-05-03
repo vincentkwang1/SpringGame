@@ -2,8 +2,9 @@
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(29): warning C4552: '&': result of expression not used
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(111): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(206): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(302): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(307): warning C4018: '<': signed/unsigned mismatch
-  tile.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(311): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(316): warning C4018: '<': signed/unsigned mismatch
+  troop.cpp
   Generating Code...
+C:\GitHub\SpringGame\game\Game\Game\troop.cpp(151): warning C4172: returning address of local variable or temporary: coords
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
