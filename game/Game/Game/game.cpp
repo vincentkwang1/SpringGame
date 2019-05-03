@@ -83,11 +83,6 @@ void drawTileLayer(map currentMap, tile * tiles, int layer) {
 		}
 	}
 }
-std::vector<troop> createTroop(tile * tiles, std::vector<troop> troops, int xCoord, int yCoord, bool team) {
-	troop newTroop = { 1 + rand() % 5, 1  + rand() % 5, 1, tiles, team };
-	troops.push_back(newTroop);
-	return troops;
-}
 std::vector<map> initMap(std::vector<map> localMaps) {
 	localMaps.resize(worldWidth * worldHeight);
 	return localMaps;
@@ -112,7 +107,7 @@ int main(int argc, char* args[]) {
 	//MAKE WORLD MAP////////////////////////////
 
 	//same as local map
-	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5); //array containing the randomized heights
+	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5, 2); //array containing the randomized heights
 	map worldMap = { worldWidth, worldHeight, worldArray, worldArray, true, 0, 0}; 
 
 	//keeps track of current local map
@@ -120,7 +115,7 @@ int main(int argc, char* args[]) {
 	int currentMapY = 20;
 
 	//MAKE LOCAL MAP////////////////////////////
-	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10); //array containing the randomized heights
+	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10, 2); //array containing the randomized heights
 	std::vector<map> localMaps;
 	localMaps.resize(worldWidth * worldHeight);
 	localMaps = initMap(localMaps);
@@ -147,11 +142,11 @@ int main(int argc, char* args[]) {
 
 	//Generate Armies//
 	std::vector<troop> troops;
-	troops = createTroop(tiles, troops, 1, 1, true);
+	troops = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, troops, 1, 1, true);
 
 	//Generatres enemies
 	std::vector<troop> enemies;
-	enemies = createTroop(tiles, enemies, 1, 1, false);
+	enemies = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, enemies, 1, 1, false);
 
 	//keeps track of selected troop
 	int selectedTroop = 0;
@@ -184,8 +179,8 @@ int main(int argc, char* args[]) {
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
 				case SDLK_0: troops[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-				case SDLK_1: troops = createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
-				case SDLK_2: enemies = createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
+				case SDLK_1: troops = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, troops, 2, 2, true); break; //CREATES NEW TROOP
+				case SDLK_2: enemies = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, enemies, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (troops[selectedTroop].getPos()[0] > 0) { if (troops[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
@@ -216,13 +211,19 @@ int main(int argc, char* args[]) {
 						case 3: x = currentMapX + 1; y = currentMapY; break;
 						}
 						SDL_Rect worldTile = { 620 + x * mapPixelWidth / worldWidth, 200 + y * mapPixelWidth / worldWidth, mapPixelWidth / worldWidth, mapPixelWidth / worldHeight };
+						//checks if clicked one of the 4 cardinal directions from current tile
 						if (checkClicked(worldTile, &e)) {
+							//figures out which tile was clicked
 							selectedWorldX = x;
 							selectedWorldY = y;
+							//changes the map that is shown	
 							currentMapX = selectedWorldX;
 							currentMapY = selectedWorldY;
-							localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10), x, y);
-							static const int number = tileX * tileY;
+							//if not yet loaded, creates a new perlin array for the map according to the type of tile
+							if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
+								localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
+							}
+							//sets the current tiles to the newly selected one, whether a new array or not
 							for (int i = 0; i < localMaps[currentMapX * worldWidth + currentMapY].getHeight(); i++)
 							{
 								for (int j = 0; j < localMaps[currentMapX * worldWidth + currentMapY].getWidth(); j++) {
@@ -335,8 +336,8 @@ int main(int argc, char* args[]) {
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
-		SDL_RenderPresent(gRenderer);
+ 		SDL_RenderPresent(gRenderer);
 	}
 	close();
 	return 0;
-}
+ }

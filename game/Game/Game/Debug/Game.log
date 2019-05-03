@@ -1,7 +1,9 @@
 ﻿  game.cpp
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(29,21): warning C4552:  '&': result of expression not used
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(107,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(200,23): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(310,21): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(315,21): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(102,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(195,23): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(311,21): warning C4018:  '<': signed/unsigned mismatch
+  map.cpp
+  Generating Code...
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(316,21): warning C4018:  '<': signed/unsigned mismatch
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

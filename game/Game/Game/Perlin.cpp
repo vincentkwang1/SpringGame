@@ -7,7 +7,7 @@
 Perlin::Perlin() {
 	std::vector<int> create(int width, int height, ppm image, unsigned int seed, int frequency, int size);
 }
-std::vector<int> Perlin::createArray(int gWidth, int gHeight, int frequency) {
+std::vector<int> Perlin::createArray(int gWidth, int gHeight, int frequency, int tileType) {
 
 	// Define the size of the image
 	unsigned int width = gWidth, height = gHeight;
@@ -29,9 +29,12 @@ std::vector<int> Perlin::createArray(int gWidth, int gHeight, int frequency) {
 	finalValue.resize(gSize);
 	for (int i = 0; i < gSize; i++) {
 		finalValue[i] = (gValue1[i] + gValue2[i] / 2 + gValue3[i] / 4) * 4 / 7;
+		if ((finalValue[i] + (tileType-2) * 20) < 255 && finalValue[i]+(tileType-2) * 20 > 0) {
+			finalValue[i] = finalValue[i] + (tileType-2) * 20;
+		}
 	}
 	return finalValue;
-}
+} 
 std::vector<int> Perlin::create(int width, int height, ppm image, unsigned int seed, int frequency, int size) {
 	std::vector<int> value;
 	value.resize(size);

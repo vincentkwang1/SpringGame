@@ -3,13 +3,12 @@
 #include <vector>
 
 map::map() {
-
+	loaded = false;
 }
 map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempdata, bool mapType, int gLocalXCoord, int gLocalYCoord) {
-
+	loaded = true;
 	mapHeight = height;
 	mapWidth = width;
-
 	if (!mapType) { //if its the regional map
 		localXCoord = gLocalXCoord;
 		localYCoord = gLocalYCoord;
@@ -36,7 +35,9 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 		worldArray = mapdata;
 	}
 }
-
+bool map::getLoaded() {
+	return loaded;
+}
 void map::render(int currentMapX, int currentMapY) {
 	//draw the background gray
 	SDL_SetRenderDrawColor(gRenderer, 100, 100, 100, 0);
@@ -65,26 +66,26 @@ void map::render(int currentMapX, int currentMapY) {
 					highlight = true;
 				}
 			}
+			mapNoise = worldArray[mapWidth * y + x];
 			if(highlight){
 				r.x = 620 + mapPixelWidth / mapWidth * x;
 				r.y = 200 + mapPixelWidth / mapHeight * y;
 				r.w = mapPixelWidth / mapWidth;
 				r.h = mapPixelWidth / mapHeight;
-				SDL_RenderFillRect(gRenderer, &r); 
-				int height = worldArray[mapWidth * y + x];
-				if (height >= 0 && height < 101) { //water
+				SDL_RenderFillRect(gRenderer, &r);
+				if (mapNoise >= 0 && mapNoise < 101) { //water
 					SDL_SetRenderDrawColor(gRenderer, 0, 119, 190, 0);
 				}
-				else if (height >= 101 && height < 132) { //grass
+				else if (mapNoise >= 101 && mapNoise < 132) { //grass
 					SDL_SetRenderDrawColor(gRenderer, 10, 168, 54, 0);
 				}
-				else if (height >= 132 && height < 145) { //hill
+				else if (mapNoise >= 132 && mapNoise < 145) { //hill
 					SDL_SetRenderDrawColor(gRenderer, 12, 137, 22, 0);
 				}
-				else if (height >= 145 && height < 165) { //JV mountain
+				else if (mapNoise >= 145 && mapNoise < 165) { //JV mountain
 					SDL_SetRenderDrawColor(gRenderer, 132, 132, 132, 0);
 				}
-				else if (height >= 165 && height <= 255) { //real mountain
+				else if (mapNoise >= 165 && mapNoise <= 255) { //real mountain
 					SDL_SetRenderDrawColor(gRenderer, 229, 229, 229, 0);
 				}
 				r.x = 622 + mapPixelWidth / mapWidth * x;
@@ -97,20 +98,19 @@ void map::render(int currentMapX, int currentMapY) {
 				highlight = false;
 			}
 			else {
-				int height = worldArray[mapWidth * y + x];
-				if (height >= 0 && height < 101) { //water
+				if (mapNoise >= 0 && mapNoise < 101) { //water
 					SDL_SetRenderDrawColor(gRenderer, 0, 119, 190, 0);
 				}
-				else if (height >= 101 && height < 132) { //grass
+				else if (mapNoise >= 101 && mapNoise < 132) { //grass
 					SDL_SetRenderDrawColor(gRenderer, 10, 168, 54, 0);
 				}
-				else if (height >= 132 && height < 145) { //hill
+				else if (mapNoise >= 132 && mapNoise < 145) { //hill
 					SDL_SetRenderDrawColor(gRenderer, 12, 137, 22, 0);
 				}
-				else if (height >= 145 && height < 165) { //JV mountain
+				else if (mapNoise >= 145 && mapNoise < 165) { //JV mountain
 					SDL_SetRenderDrawColor(gRenderer, 132, 132, 132, 0);
 				}
-				else if (height >= 165 && height <= 255) { //real mountain
+				else if (mapNoise >= 165 && mapNoise <= 255) { //real mountain
 					SDL_SetRenderDrawColor(gRenderer, 229, 229, 229, 0);
 				}
 				r.x = 620 + mapPixelWidth / mapWidth * x;
@@ -119,6 +119,12 @@ void map::render(int currentMapX, int currentMapY) {
 			}
 		}
 	}
+	std::ostringstream strs;
+	SDL_Color textColor = { 255, 255 , 255 };
+	strs << tileType;
+	std::string str = strs.str();
+	gTextTexture.loadFromRenderedText(str, textColor);
+	gTextTexture.render(0, 0);
 }
 
 tile map::createTile(int noise, int temp, int i, int j){
@@ -145,11 +151,32 @@ tile map::createTile(int noise, int temp, int i, int j){
 	int jay[10] = { 3,4,5,6,7,8,5,4,3,6 };
 	return tile(noiseScale, temp, false, false, i, j, 1, jay );
 }
-
+std::vector<troop> map::createTroop(tile* tiles, std::vector<troop> troops, int xCoord, int yCoord, bool team) {
+	troop newTroop = { 1 + rand() % 5, 1 + rand() % 5, 1, tiles, team };
+	troops.push_back(newTroop);
+	return troops;
+}
 std::vector<std::vector<tile>> map::getMapContainer() {
 	return mapContainer;
 }
-
+int map::getTileType(int y, int x) {
+	if (worldArray[x*worldWidth + y] >= 0 && worldArray[x * worldWidth + y] < 101) {
+		tileType = 0; //water
+	}
+	else if (worldArray[x * worldWidth + y] >= 101 && worldArray[x * worldWidth + y] < 132) {
+		tileType = 1; //grass
+	}
+	else if (worldArray[x * worldWidth + y] >= 132 && worldArray[x * worldWidth + y] < 145) {
+		tileType = 2; //hill
+	}
+	else if (worldArray[x * worldWidth + y] >= 145 && worldArray[x * worldWidth + y] < 165) {
+		tileType = 3; //steep hill or something?
+	}
+	else if (worldArray[x * worldWidth + y] >= 165 && worldArray[x * worldWidth + y] <= 255) {
+		tileType = 4; //mountain
+	}
+	return tileType;
+}
 int map::getHeight() {
 	return mapHeight;
 }
