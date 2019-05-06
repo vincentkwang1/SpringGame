@@ -25,9 +25,9 @@ public:
 
 	int getTileType(int x, int y); //returns the type of world tile
 	bool getLoaded(); //returns whether or not the map has been loaded
-
-	std::vector<troop> createTroop(tile* tiles, std::vector<troop> troops, int xCoord, int yCoord, bool team);
-	std::vector<troop> getTroops();
+	void setTroops(bool team, std::vector<troop> newTroop);
+	std::vector<troop> createTroop(tile* tiles, int xCoord, int yCoord, bool team);
+	std::vector<troop> getTroops(bool team); //true is allied, false is enemy
 private:
 	std::vector<troop> alliedTroops;
 	std::vector<troop> enemyTroops;

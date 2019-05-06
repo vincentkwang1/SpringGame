@@ -151,13 +151,35 @@ tile map::createTile(int noise, int temp, int i, int j){
 	int jay[10] = { 3,4,5,6,7,8,5,4,3,6 };
 	return tile(noiseScale, temp, false, false, i, j, 1, jay );
 }
-std::vector<troop> map::createTroop(tile* tiles, std::vector<troop> troops, int xCoord, int yCoord, bool team) {
+std::vector<troop> map::createTroop(tile* tiles, int xCoord, int yCoord, bool team) {
 	troop newTroop = { 1 + rand() % 5, 1 + rand() % 5, 1, tiles, team };
-	troops.push_back(newTroop);
-	return troops;
+	if (team) {
+		alliedTroops.push_back(newTroop);
+		return alliedTroops;
+	}
+	else {
+		enemyTroops.push_back(newTroop);
+		return enemyTroops;
+	}
 }
 std::vector<std::vector<tile>> map::getMapContainer() {
 	return mapContainer;
+}
+std::vector<troop> map::getTroops(bool team) {
+	if (team) {
+		return alliedTroops;
+	}
+	else {
+		return enemyTroops;
+	}
+}
+void map::setTroops(bool team, std::vector<troop> newTroop) {
+	if (team) {
+		alliedTroops = newTroop;
+	}
+	else {
+		enemyTroops = newTroop;
+	}
 }
 int map::getTileType(int y, int x) {
 	if (worldArray[x*worldWidth + y] >= 0 && worldArray[x * worldWidth + y] < 101) {
