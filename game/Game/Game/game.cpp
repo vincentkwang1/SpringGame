@@ -115,13 +115,12 @@ int main(int argc, char* args[]) {
 
 	//CONSTRUCTING CLASSES
 	Perlin perlin; //[1]
-	map worldMap = {worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5),perlin.createArray(worldWidth,worldHeight,5),true,0,0};//creates world map with perlin noise arrays for temperature and noise
+	map worldMap = {worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5, 2),perlin.createArray(worldWidth,worldHeight,5, 2),true,0,0};//creates world map with perlin noise arrays for temperature and noise
 	//Placeholder for local map/////
 
 	//MAKE WORLD MAP////////////////////////////
 	//same as local map
 	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5, 2); //array containing the randomized heights
-	map worldMap = { worldWidth, worldHeight, worldArray, worldArray, true, 0, 0}; 	
 
 	int turn = 0;//Turn counter will probably be vestigal soon
 
@@ -153,14 +152,14 @@ int main(int argc, char* args[]) {
 		}
 	}
 	
-	std::vector<troop> alliedArmy; alliedArmy.push_back(troop()); //Creates the array storing the data on the player army and puts a place hoder at the beginning
-	std::vector<troop> enemyArmy; enemyArmy.push_back(troop(1, 1, 1, tiles, false)); //Creates the array storing the data on the enemy army and puts a troop on the board 
+	std::vector<troop> alliedArmy; //Creates the array storing the data on the player army and puts a place hoder at the beginning
+	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
 	//Generate Armies//
-	localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
+	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
 
 	//Generatres enemies
-	localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
+	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
 
 	//keeps track of selected troop
 	int selectedTroop = 0;
@@ -197,7 +196,7 @@ int main(int argc, char* args[]) {
 				case SDLK_ESCAPE: quit = true; break;
 				case SDLK_0: alliedArmy[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
-				case SDLK_2: localEnemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
+				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
 				case SDLK_w: if (alliedArmy[selectedTroop].getPos()[0] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
@@ -237,8 +236,8 @@ int main(int argc, char* args[]) {
 							currentMapX = selectedWorldX;
 							currentMapY = selectedWorldY;
 							//sets the armies to the armies of the new map
-							alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
-							enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
+							/*alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
+							enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);*/
 							//if not yet loaded, creates a new perlin array for the map according to the type of tile
 							if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
 								localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
@@ -375,7 +374,6 @@ int main(int argc, char* args[]) {
 	close();
 	return 0;
  }
-}
 
 /*
 [1] taken from https://github.com/sol-prog/Perlin_Noise
