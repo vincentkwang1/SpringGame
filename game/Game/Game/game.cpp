@@ -41,7 +41,7 @@ void loadMedia() {
 	gHills.loadFromFile("resource/hills.png");
 	gEnemyTexture.loadFromFile("resource/enemy.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
-	gSelectingTexture.loadFromFile("resource/selectedTroop.png");
+	//gSelectingTexture.loadFromFile("resource/selectedTroop.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -92,23 +92,38 @@ std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightAr
 	localMaps.at(localXCoord * worldWidth + localYCoord) = localMap;
 	return localMaps;
 }
+
+
+
+
+//void Generate();
+
+
 //MAIN FUNCTION
 int main(int argc, char* args[]) {
 
+	//Basic setup DO NOT CHANGE////
 	init();
 	loadMedia();
 	bool quit = false;
 	SDL_Event e;
 	srand(time(NULL));
+	//////////////////
+
+
+
 
 	//CONSTRUCTING CLASSES
-	Perlin perlin; //taken from https://github.com/sol-prog/Perlin_Noise
+	Perlin perlin; //[1]
+	map worldMap = {worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5),perlin.createArray(worldWidth,worldHeight,5),true,0,0};//creates world map with perlin noise arrays for temperature and noise
+	//Placeholder for local map/////
 
 	//MAKE WORLD MAP////////////////////////////
-
 	//same as local map
 	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5, 2); //array containing the randomized heights
-	map worldMap = { worldWidth, worldHeight, worldArray, worldArray, true, 0, 0}; 
+	map worldMap = { worldWidth, worldHeight, worldArray, worldArray, true, 0, 0}; 	
+
+	int turn = 0;//Turn counter will probably be vestigal soon
 
 	//keeps track of current local map
 	int currentMapX = 20;
@@ -137,8 +152,9 @@ int main(int argc, char* args[]) {
 			hillTile[side * tileX + i] = { side, i };
 		}
 	}
-	//keep track of turns
-	int turn = 0;
+	
+	std::vector<troop> alliedArmy; alliedArmy.push_back(troop()); //Creates the array storing the data on the player army and puts a place hoder at the beginning
+	std::vector<troop> enemyArmy; enemyArmy.push_back(troop(1, 1, 1, tiles, false)); //Creates the array storing the data on the enemy army and puts a troop on the board 
 
 	//Generate Armies//
 	localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
@@ -148,9 +164,9 @@ int main(int argc, char* args[]) {
 
 	//keeps track of selected troop
 	int selectedTroop = 0;
-	bool selectingTroop = false; //helps separate clicking troops from clicking tiles
+	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
 
-	localMaps[currentMapX * worldWidth + currentMapY].getTroops(true)[0].setSelected(true); //makes the first troop selected by default
+	alliedArmy[0].setSelected(true); //makes the first troop selected by default
 
 	//keeps track of selected tile
 	int selectedX = 0;
@@ -167,8 +183,8 @@ int main(int argc, char* args[]) {
 
 	//GAME MAIN LOOP
 	while (!quit) {
-		std::vector<troop> localAlliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
-		std::vector<troop> localEnemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
+		alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
+		enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
 		//HANDLES EVENTS
 		while (SDL_PollEvent(&e) != 0) {
 			if (e.type == SDL_QUIT) {
@@ -179,26 +195,26 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: localAlliedArmy[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-				case SDLK_1: localAlliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
+				case SDLK_0: alliedArmy[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: localEnemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (localAlliedArmy[selectedTroop].getPos()[0] > 0) { if (localAlliedArmy[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
-				case SDLK_a: if (localAlliedArmy[selectedTroop].getPos()[1] > 0) { if (localAlliedArmy[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
-				case SDLK_s: if (localAlliedArmy[selectedTroop].getPos()[0] < tileX - 1) { if (localAlliedArmy[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
-				case SDLK_d: if (localAlliedArmy[selectedTroop].getPos()[1] < tileY - 1) { if (localAlliedArmy[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
+				case SDLK_w: if (alliedArmy[selectedTroop].getPos()[0] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
+				case SDLK_a: if (alliedArmy[selectedTroop].getPos()[1] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
+				case SDLK_s: if (alliedArmy[selectedTroop].getPos()[0] < tileX - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
+				case SDLK_d: if (alliedArmy[selectedTroop].getPos()[1] < tileY - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
 				//handles clicking troops
-				for (int x = 0; x < localAlliedArmy.size(); x++) {
-					if (checkClicked(localAlliedArmy[x].getCollider(), &e)) {
-						localAlliedArmy[selectedTroop].setSelected(false); //resets the old selected troop
+				for (int x = 0; x < alliedArmy.size(); x++) {
+					if (checkClicked(alliedArmy[x].getCollider(), &e)) {
+						alliedArmy[selectedTroop].setSelected(false); //resets the old selected troop
 						selectedTroop = x;
 						selectingTroop = true;
-						localAlliedArmy[x].setSelected(true); //selected the new selected troop
+						alliedArmy[x].setSelected(true); //selected the new selected troop
 					}
 				}
 				//handles clicking world map tiles
@@ -221,8 +237,8 @@ int main(int argc, char* args[]) {
 							currentMapX = selectedWorldX;
 							currentMapY = selectedWorldY;
 							//sets the armies to the armies of the new map
-							localAlliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
-							localEnemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
+							alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
+							enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
 							//if not yet loaded, creates a new perlin array for the map according to the type of tile
 							if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
 								localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
@@ -249,29 +265,37 @@ int main(int argc, char* args[]) {
 					for (int x = 0; x < tileX; x++) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
-								tiles[selectedX * tileY + selectedY].setHighlight(0);
-								tiles[tileY * x + y].setHighlight(1);
+
+								
+									tiles[selectedX * tileY + selectedY].setHighlight(0);
+									tiles[tileY * x + y].setHighlight(1);
+								
 								selectedX = x;
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;
-								if (localAlliedArmy[selectedTroop].getPos()[0] < selectedX) {
-									localAlliedArmy[selectedTroop].moveTroop(tiles, 2);
+								if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
+									alliedArmy[selectedTroop].moveTroop(tiles, 2);
 								}
-								else if (localAlliedArmy[selectedTroop].getPos()[1] < selectedY) {
-									localAlliedArmy[selectedTroop].moveTroop(tiles, 3);
+								else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
+									alliedArmy[selectedTroop].moveTroop(tiles, 3);
 								}
-								else if (localAlliedArmy[selectedTroop].getPos()[0] > selectedX) {
-									localAlliedArmy[selectedTroop].moveTroop(tiles, 0);
+								else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
+									alliedArmy[selectedTroop].moveTroop(tiles, 0);
 								}
-								else if (localAlliedArmy[selectedTroop].getPos()[1] > selectedY) {
-									localAlliedArmy[selectedTroop].moveTroop(tiles, 1);
+								else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
+									alliedArmy[selectedTroop].moveTroop(tiles, 1);
 								}
+								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
+								else { test++; }
 							}
+							
 						}
 					}
 				}
 				selectingTroop = false;
+				
 			}
+			
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
@@ -301,7 +325,10 @@ int main(int argc, char* args[]) {
 
 				tiles[i * tileY + j].handleEvent(e);
 				tiles[i * tileY + j].move();
-				tiles[i * tileY + j].checkDist(localAlliedArmy[selectedTroop].getPos()[1], localAlliedArmy[selectedTroop].getPos()[0]);
+				tiles[i * tileY + j].setHighlight(0);
+				if (!alliedArmy[selectedTroop].getPlaceholder()){
+					tiles[i * tileY + j].checkDist(alliedArmy[selectedTroop].getPos()[1], alliedArmy[selectedTroop].getPos()[0]);
+				}
 				tiles[i * tileY + j].render(0);
 			}
 		}
@@ -312,15 +339,15 @@ int main(int argc, char* args[]) {
 		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 4);
 		//*/
 		//gTestTexture.render(0, 0);
-		for (int i = 0; i < localAlliedArmy.size(); i++) {
-			localAlliedArmy[i].handleEvent(e);
-			localAlliedArmy[i].move();
-			localAlliedArmy[i].render();
+		for (int i = 0; i < alliedArmy.size(); i++) {
+			alliedArmy[i].handleEvent(e);
+			alliedArmy[i].move();
+			alliedArmy[i].render();
 		}
-		for (int i = 0; i < localEnemyArmy.size(); i++) {
-			localEnemyArmy[i].handleEvent(e);
-			localEnemyArmy[i].move();
-			localEnemyArmy[i].render();
+		for (int i = 0; i < enemyArmy.size(); i++) {
+			enemyArmy[i].handleEvent(e);
+			enemyArmy[i].move();
+			enemyArmy[i].render();
 		}
 
 		gHighlightTexture.colorMod(255, 255, 255);
@@ -331,8 +358,8 @@ int main(int argc, char* args[]) {
 			worldMap.render(currentMapX, currentMapY);
 		}
 
-		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, localAlliedArmy);
-		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, localEnemyArmy);
+		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, alliedArmy);
+		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
@@ -348,3 +375,10 @@ int main(int argc, char* args[]) {
 	close();
 	return 0;
  }
+}
+
+/*
+[1] taken from https://github.com/sol-prog/Perlin_Noise
+
+
+*/

@@ -6,15 +6,19 @@
 #include <SDL_ttf.h>
 #include "LTexture.h"
 //dimensions of tiles
+
+//Dimensions of Local map
 static const int tileX = 12;
 static const int tileY = 12;
-//create dimensions of the world map
 static const int worldWidth = 30;
 static const int worldHeight = 30;
 static const int mapPixelWidth = 720; // size of the drawn map
 static const int number = (tileX) * (tileY);
+
 typedef int32_t s32;
 extern SDL_Window* gWindow;
+
+
 extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;
