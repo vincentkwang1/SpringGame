@@ -93,6 +93,14 @@ std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightAr
 	return localMaps;
 }
 
+void isAnythingDead (std::vector<troop>Army){
+
+	for (int i = 0; i < Army.size();i++) {
+		if (Army[i].getHp() <= 0) {
+			Army.erase(Army.begin()+i);
+		}
+	}
+}
 
 
 
@@ -155,17 +163,13 @@ int main(int argc, char* args[]) {
 	std::vector<troop> alliedArmy; //Creates the array storing the data on the player army and puts a place hoder at the beginning
 	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
-	//Generate Armies//
-	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
-
-	//Generatres enemies
-	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
+	
 
 	//keeps track of selected troop
 	int selectedTroop = 0;
 	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
 
-	//alliedArmy[0].setSelected(true); //makes the first troop selected by default
+	
 
 	//keeps track of selected tile
 	int selectedX = 0;
@@ -203,6 +207,7 @@ int main(int argc, char* args[]) {
 				case SDLK_a: if (alliedArmy[selectedTroop].getPos()[1] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
 				case SDLK_s: if (alliedArmy[selectedTroop].getPos()[0] < tileX - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
 				case SDLK_d: if (alliedArmy[selectedTroop].getPos()[1] < tileY - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
+				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1);
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
 			}
@@ -349,6 +354,9 @@ int main(int argc, char* args[]) {
 
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
+
+
+		isAnythingDead(alliedArmy);
 
 		//draw world map if tab is pressed
 		if (showWorldMap) {
