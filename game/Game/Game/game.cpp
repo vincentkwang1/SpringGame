@@ -129,7 +129,7 @@ int main(int argc, char* args[]) {
 	int currentMapY = 20;
 
 	//MAKE LOCAL MAP////////////////////////////
-	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10, 2); //array containing the randomized heights
+	std::vector<int> heightArray = perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)); //array containing the randomized heights
 	std::vector<map> localMaps;
 	localMaps.resize(worldWidth * worldHeight);
 	localMaps = initMap(localMaps);
