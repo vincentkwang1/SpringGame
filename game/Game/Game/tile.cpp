@@ -48,6 +48,7 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 		waterClips[i].h = 120;
 	}
 }
+//constructor for hills
 tile::tile(int side, int i) {
 	setHillPosition(side);
 	switch (side) {
@@ -56,6 +57,7 @@ tile::tile(int side, int i) {
 	case 2: xCoord = i; yCoord = -1; break;
 	case 3: xCoord = i; yCoord = tileY; break;
 	}
+	sideHill = true;
 	setPosition();
 	//bounds for hillClips
 	for (int i = 0; i < 8; i++) {
@@ -64,7 +66,6 @@ tile::tile(int side, int i) {
 		hillClips[i].w = 240;
 		hillClips[i].h = 240;
 	}
-	sideHill = true;
 }
 SDL_Rect tile::getCollider() {
 	tCollider.x = xLoc + 30;
@@ -130,7 +131,7 @@ void tile::setPosition() {
 	}
 	else {
 		xLoc = 120 * (xCoord + yCoord); //initializes x and y pixel locations
-		yLoc = 1080 / 2 + 60 * (xCoord - yCoord) - 200;
+		yLoc = 1080/2 + 60 * (xCoord - yCoord);
 	}
 }
 

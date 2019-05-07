@@ -4,6 +4,9 @@
 
 map::map() {
 	loaded = false;
+	//create placeholder troop
+	alliedTroops.push_back(troop());
+	enemyTroops.push_back(troop());
 }
 map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempdata, bool mapType, int gLocalXCoord, int gLocalYCoord) {
 	loaded = true;
@@ -30,12 +33,12 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 			mapContainer[j].push_back(createTile(mapdata[i], tempdata[i], k, j));
 			k++;
 		}
-		//create placeholder troop
-		alliedTroops.push_back();
 	}
 	else { //for the world map
 		worldArray = mapdata;
 	}
+	alliedTroops.push_back(troop());
+	enemyTroops.push_back(troop());
 }
 bool map::getLoaded() {
 	return loaded;

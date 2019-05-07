@@ -156,7 +156,7 @@ int main(int argc, char* args[]) {
 	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
 	//Generate Armies//
-	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
+	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
 
 	//Generatres enemies
 	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
@@ -165,7 +165,7 @@ int main(int argc, char* args[]) {
 	int selectedTroop = 0;
 	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
 
-	alliedArmy[0].setSelected(true); //makes the first troop selected by default
+	//alliedArmy[0].setSelected(true); //makes the first troop selected by default
 
 	//keeps track of selected tile
 	int selectedX = 0;
@@ -236,8 +236,8 @@ int main(int argc, char* args[]) {
 							currentMapX = selectedWorldX;
 							currentMapY = selectedWorldY;
 							//sets the armies to the armies of the new map
-							/*alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
-							enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);*/
+							alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
+							enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
 							//if not yet loaded, creates a new perlin array for the map according to the type of tile
 							if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
 								localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
@@ -249,11 +249,9 @@ int main(int argc, char* args[]) {
 									tiles[tileY * i + j] = localMaps[currentMapX * worldWidth + currentMapY].getMapContainer()[i][j];
 								}
 							}
-							//hill tiles
-							tile hillTile[tileX * 4];
 							for (int side = 0; side < 4; side++) {
 								for (int i = 0; i < tileX; i++) {
-									hillTile[side * tileX + i] = { side, i };
+									hillTile[side * tileX + i].setPosition();
 								}
 							}
 						}
