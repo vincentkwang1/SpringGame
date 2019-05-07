@@ -30,6 +30,8 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 			mapContainer[j].push_back(createTile(mapdata[i], tempdata[i], k, j));
 			k++;
 		}
+		//create placeholder troop
+		alliedTroops.push_back();
 	}
 	else { //for the world map
 		worldArray = mapdata;
