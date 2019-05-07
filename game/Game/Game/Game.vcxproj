@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gui.cpp" />
     <ClCompile Include="LTexture.cpp" />
     <ClCompile Include="global.cpp" />
     <ClCompile Include="Perlin.cpp" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h" />
+    <ClInclude Include="gui.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="LTexture.h" />
     <ClInclude Include="PerlinNoise.h" />

@@ -10,6 +10,7 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
+    <ClCompile Include="gui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -37,6 +38,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="SDL_gfx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

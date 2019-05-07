@@ -5,6 +5,7 @@
 #include "ppm.h"
 #include "Perlin.h"
 #include "map.h"
+#include "gui.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -109,10 +110,7 @@ int main(int argc, char* args[]) {
 	SDL_Event e;
 	srand(time(NULL));
 	//////////////////
-
-
-
-
+	gui tileGui; //creates the box that describes tiles
 	//CONSTRUCTING CLASSES
 	Perlin perlin; //[1]
 	map worldMap = {worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5, 2),perlin.createArray(worldWidth,worldHeight,5, 2),true,0,0};//creates world map with perlin noise arrays for temperature and noise
@@ -354,6 +352,7 @@ int main(int argc, char* args[]) {
 		if (showWorldMap) {
 			worldMap.render(currentMapX, currentMapY);
 		}
+		tileGui.render();
 
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, alliedArmy);
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
