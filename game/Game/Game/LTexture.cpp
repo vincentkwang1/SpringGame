@@ -28,7 +28,7 @@ void LTexture::loadFromFile(std::string path) {
 	SDL_FreeSurface(loadedSurface);
 	mTexture = newTexture;
 }
-void LTexture::loadFromRenderedText(std::string textureText, SDL_Color textColor)
+void LTexture::loadFromRenderedText( std::string textureText, SDL_Color textColor)
 {
 	free();
 	SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, textureText.c_str(), textColor);

@@ -41,8 +41,8 @@ void loadMedia() {
 	gMountainRockTexture.loadFromFile("resource/TempTiles/mountain1.png");
 	gHills.loadFromFile("resource/hills.png");
 	gEnemyTexture.loadFromFile("resource/enemy.png");
+	gTreeTexture.loadFromFile("resource/tree.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
-	//gSelectingTexture.loadFromFile("resource/selectedTroop.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -332,6 +332,7 @@ int main(int argc, char* args[]) {
 		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 1);
 		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 3);
 		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 4);
+		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 5);
 		//*/
 		//gTestTexture.render(0, 0);
 		for (int i = 0; i < alliedArmy.size(); i++) {
@@ -352,7 +353,7 @@ int main(int argc, char* args[]) {
 		if (showWorldMap) {
 			worldMap.render(currentMapX, currentMapY);
 		}
-		tileGui.render();
+		tileGui.renderTileInfo(tiles[selectedX * tileY + selectedY]);
 
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, alliedArmy);
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);

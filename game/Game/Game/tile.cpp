@@ -1,8 +1,9 @@
 #include "tile.h"
-tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, int buildings[10]){
+tile::tile(int noise, int temp, bool river, int x, int y, int dev, int buildings[10]){
 	noiseScale = noise;
+	treeDensity = 20;
 	tempScale = temp;
-	hasTrees = trees;
+	hasTrees = true;
 	hasRiver = river;
 	xCoord = x;
 	yCoord = y;
@@ -32,6 +33,13 @@ tile::tile(int noise, int temp, bool trees, bool river, int x, int y, int dev, i
 		grassClips[i].y = 0;
 		grassClips[i].w = 240;
 		grassClips[i].h = 120;
+	}
+	//creates the bounds for trees
+	for (int i = 0; i < 6; i++) {
+		treeClips[i].x = 61 * i;
+		treeClips[i].y = 0;
+		treeClips[i].w = 61;
+		treeClips[i].h = 139;
 	}
 	//creates the bounds for mountainClips
 	for (int i = 0; i < 12; i++) {
@@ -184,6 +192,12 @@ void tile::render(int noise) {
 			if (noiseScale == 0) {
 				currentClip = &waterClips[random % 3];
 				gWaterTexture.render(xLoc, yLoc, currentClip);
+			}
+		}
+		if (hasTrees && noise == 5 && noiseScale > 0 && noiseScale < 3) {
+			if (random % 10 == 0) {
+				currentClip = &treeClips[random % 6];
+				gTreeTexture.render(xLoc + 90 + random % 90, yLoc - 45 - random % 45, currentClip);
 			}
 		}
 		if (showCoords) {

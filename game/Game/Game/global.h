@@ -18,10 +18,10 @@ static const int number = (tileX) * (tileY);
 typedef int32_t s32;
 extern SDL_Window* gWindow;
 
-
 extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;
+extern LTexture gTreeTexture;
 extern LTexture gSwordsmanTexture;
 extern LTexture gMountainRockTexture;
 extern LTexture gWaterTexture;

@@ -154,7 +154,7 @@ tile map::createTile(int noise, int temp, int i, int j){
 	}
 	////////////////////////////////////////////
 	int jay[10] = { 3,4,5,6,7,8,5,4,3,6 };
-	return tile(noiseScale, temp, false, false, i, j, 1, jay );
+	return tile(noiseScale, temp, false, i, j, 1, jay );
 }
 std::vector<troop> map::createTroop(tile* tiles, int xCoord, int yCoord, bool team) {
 	troop newTroop = { 1 + rand() % 5, 1 + rand() % 5, 1, tiles, team };
