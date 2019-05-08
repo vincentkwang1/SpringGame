@@ -6,6 +6,7 @@
 #include "Perlin.h"
 #include "map.h"
 #include "gui.h"
+#include "structure.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -43,6 +44,7 @@ void loadMedia() {
 	gEnemyTexture.loadFromFile("resource/enemy.png");
 	gTreeTexture.loadFromFile("resource/tree.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
+	gCastleTexture.loadFromFile("resource/castle.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -149,7 +151,9 @@ int main(int argc, char* args[]) {
 			hillTile[side * tileX + i] = { side, i };
 		}
 	}
-	
+	//create fort
+	structure castle;
+
 	std::vector<troop> alliedArmy; //Creates the array storing the data on the player army and puts a place hoder at the beginning
 	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
@@ -364,6 +368,8 @@ int main(int argc, char* args[]) {
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
+
+		castle.render();
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);

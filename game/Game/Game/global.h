@@ -27,6 +27,7 @@ extern LTexture gMountainRockTexture;
 extern LTexture gWaterTexture;
 extern LTexture gHillTexture;
 extern LTexture gEnemyTexture;
+extern LTexture gCastleTexture;
 extern LTexture gHills;
 extern LTexture gGrassTexture;
 extern LTexture gHighlightTexture;

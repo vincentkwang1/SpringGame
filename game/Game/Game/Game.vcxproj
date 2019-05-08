@@ -140,6 +140,7 @@
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="ppm.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="structure.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
@@ -152,6 +153,7 @@
     <ClInclude Include="ppm.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="SDL_gfx.h" />
+    <ClInclude Include="structure.h" />
     <ClInclude Include="troop.h" />
   </ItemGroup>
   <ItemGroup>

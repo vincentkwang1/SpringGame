@@ -1,13 +1,2 @@
-﻿  game.cpp
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(30,21): warning C4552:  '&': result of expression not used
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(111,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(209,23): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(338,21): warning C4018:  '<': signed/unsigned mismatch
-  gui.cpp
-  map.cpp
-  tile.cpp
-  troop.cpp
-  Generating Code...
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(343,21): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(343,21): warning C4018: C:\GitHub\SpringGame\game\Game\Game\troop.cpp(151) : warning C4172: returning address of local variable or temporary: coords
+﻿  structure.cpp
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
