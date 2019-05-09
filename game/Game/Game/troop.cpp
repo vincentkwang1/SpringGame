@@ -104,12 +104,12 @@ void troop::render() {
 			else {
 				frame = 0;
 			}
-			/*std::ostringstream strs;
+			std::ostringstream strs;
 			SDL_Color textColor = { 255, 255 , 255 };
-			strs << movesTaken;
+			strs << movesLeft;
 			std::string str = strs.str();
 			gTextTexture.loadFromRenderedText(str, textColor);
-			gTextTexture.render(40, 20);*/
+			gTextTexture.render(tPosX, tPosY - 50);
 		}
 		else {
 			gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
@@ -152,46 +152,48 @@ int * troop::getPos() {
 }
 bool troop::moveTroop(tile * tiles, int direction) {
 	bool success = true;
-	switch(direction){
-	case 0:
-		if (tiles[tileY * (xCoord-1) + yCoord].getPassable()) {
-			xCoord = xCoord - 1;
+	if (movesLeft > 0) {
+		switch (direction) {
+		case 0:
+			if (tiles[tileY * (xCoord - 1) + yCoord].getPassable()) {
+				xCoord = xCoord - 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 1:
+			if (tiles[tileY * xCoord + (yCoord - 1)].getPassable()) {
+				yCoord = yCoord - 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 2:
+			if (tiles[tileY * (xCoord + 1) + yCoord].getPassable()) {
+				xCoord = xCoord + 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 3:
+			if (tiles[tileY * xCoord + (yCoord + 1)].getPassable()) {
+				yCoord = yCoord + 1;
+			}
+			else {
+				success = false;
+			}
+			break;
 		}
-		else{
-			success = false;
+		if (success) {
+			movesLeft--;
 		}
-		break;
-	case 1:
-		if (tiles[tileY * xCoord + (yCoord-1)].getPassable()) {
-			yCoord = yCoord - 1;
-		}
-		else {
-			success = false;
-		}
-		break;
-	case 2: 
-		if (tiles[tileY * (xCoord+1) + yCoord].getPassable()) {
-			xCoord = xCoord + 1;
-		}
-		else {
-			success = false;
-		}
-		break;
-	case 3:
-		if (tiles[tileY * xCoord + (yCoord+1)].getPassable()) {
-			yCoord = yCoord + 1;
-		}
-		else {
-			success = false;
-		}
-		break;
+		updatePos(tiles);
 	}
-	if (success) {
-		movesTaken++;
-	}
-	updatePos(tiles);
-	if (movesTaken == maxMoves) {
-		movesTaken = 0;
+	if (movesLeft == 0) {
+		//movesLeft = maxMoves;
 		return true;
 	}
 	else {
@@ -199,7 +201,7 @@ bool troop::moveTroop(tile * tiles, int direction) {
 	}
 }
 void troop::attack() {
-	movesTaken = 0;
+	movesLeft = 0;
 	frame = 0; //resets frame counter when starting attack animation
 	attacking = true;
 }

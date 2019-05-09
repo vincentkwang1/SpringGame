@@ -12,6 +12,7 @@
     <ClCompile Include="troop.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="structure.cpp" />
+    <ClCompile Include="button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -45,6 +46,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="structure.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

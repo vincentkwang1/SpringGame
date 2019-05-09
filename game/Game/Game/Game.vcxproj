@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="button.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="LTexture.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="Perlin.h" />

@@ -19,6 +19,7 @@ typedef int32_t s32;
 extern SDL_Window* gWindow;
 
 extern SDL_Renderer* gRenderer;
+extern LTexture gButtonTexture;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;
 extern LTexture gTreeTexture;
