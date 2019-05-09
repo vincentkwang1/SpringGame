@@ -20,7 +20,7 @@ public:
 	void handleEvent(SDL_Event& e);
 	int * getPos();
 	void setSelected(bool newSelected);
-	void setHp(int newhealth);
+	void setHp(	int newhealth);
 	int getHp();
 	void renderHealthBar();
 	SDL_Rect getCollider();

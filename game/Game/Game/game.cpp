@@ -93,13 +93,17 @@ std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightAr
 	return localMaps;
 }
 
-void isAnythingDead (std::vector<troop>Army){
+std::vector<troop> isAnythingDead (std::vector<troop>Army){
 
 	for (int i = 0; i < Army.size();i++) {
+		
 		if (Army[i].getHp() <= 0) {
 			Army.erase(Army.begin()+i);
+			std::cout << "Death\n";
+
 		}
 	}
+	return Army;
 }
 
 
@@ -355,8 +359,8 @@ int main(int argc, char* args[]) {
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
 
-
-		isAnythingDead(alliedArmy);
+		
+		alliedArmy = isAnythingDead(alliedArmy);
 
 		//draw world map if tab is pressed
 		if (showWorldMap) {
