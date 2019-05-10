@@ -148,7 +148,7 @@ void troop::renderHealthBar() {
 }
 
 
-void troop::setHp(int newhealth) { Health = newhealth;  }
+void troop::setHp(int newhealth) { if (placeholder) { Health = 100; } else { Health = newhealth; } }
 int troop::getHp() { return Health; }
 
 int * troop::getPos() {

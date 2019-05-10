@@ -93,18 +93,7 @@ std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightAr
 	return localMaps;
 }
 
-std::vector<troop> isAnythingDead (std::vector<troop>Army){
 
-	for (int i = 0; i < Army.size();i++) {
-		
-		if (Army[i].getHp() <= 0) {
-			Army.erase(Army.begin()+i);
-			std::cout << "Death\n";
-
-		}
-	}
-	return Army;
-}
 
 
 
@@ -272,7 +261,18 @@ int main(int argc, char* args[]) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
 
-								
+
+								for (int i = 0; i < enemyArmy.size(); i++) {
+									//check if occupuied
+									if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
+										{
+											enemyArmy[i].setHp(enemyArmy[i].getHp()-10);
+										}
+									
+
+								}
+
+
 									tiles[selectedX * tileY + selectedY].setHighlight(0);
 									tiles[tileY * x + y].setHighlight(1);
 								
@@ -359,13 +359,38 @@ int main(int argc, char* args[]) {
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
 
-		
-		alliedArmy = isAnythingDead(alliedArmy);
+
+
+		//Check to see if things are dead
+		{
+			// isAnythingDead(alliedArmy);
+			for (int i = 0; i < alliedArmy.size(); i++) {
+
+				if (alliedArmy[i].getHp() <= 0) {
+					alliedArmy.erase(alliedArmy.begin() + i);
+					std::cout << "Death\n";
+					selectedTroop = 0;
+				}
+			}
+			//Is anything dead(enemyArmy)
+			for (int i = 0; i < enemyArmy.size(); i++) {
+
+				if (enemyArmy[i].getHp() <= 0) {
+					enemyArmy.erase(enemyArmy.begin() + i);
+					std::cout << "Death\n";
+					selectedTroop = 0;
+				}
+			}
+		}
+
 
 		//draw world map if tab is pressed
-		if (showWorldMap) {
-			worldMap.render(currentMapX, currentMapY);
+		{
+			if (showWorldMap) {
+				worldMap.render(currentMapX, currentMapY);
+			}
 		}
+
 
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, alliedArmy);
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
