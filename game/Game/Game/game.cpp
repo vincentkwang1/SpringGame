@@ -7,7 +7,6 @@
 #include "map.h"
 #include "gui.h"
 #include "structure.h"
-#include "button.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -46,7 +45,6 @@ void loadMedia() {
 	gTreeTexture.loadFromFile("resource/tree.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
 	gCastleTexture.loadFromFile("resource/castle.png");
-	gButtonTexture.loadFromFile("resource/buttons.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -125,7 +123,6 @@ int main(int argc, char* args[]) {
 	loadMedia();
 	bool quit = false;
 	SDL_Event e;
-	button turnButton = {};
 	srand(time(NULL));
 	//////////////////
 	gui tileGui; //creates the box that describes tiles
@@ -196,7 +193,7 @@ int main(int argc, char* args[]) {
 	//keeps track of whether to show world map or not, toggled with 'tab'
 	bool showWorldMap = false; 
 
-	//int test = 0;
+	int test = 0;
 
 	//GAME MAIN LOOP
 	while (!quit) {
@@ -301,6 +298,11 @@ int main(int argc, char* args[]) {
 										selectedTroop = 0;
 									}
 								}
+<<<<<<< HEAD
+=======
+								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
+								else { test++; }
+>>>>>>> parent of 56bd941... turns
 							}
 							
 						}
@@ -384,9 +386,13 @@ int main(int argc, char* args[]) {
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
 
+<<<<<<< HEAD
 		turnButton.check(localMaps);
 		turnButton.render();
 		//castle.render();
+=======
+		castle.render();
+>>>>>>> parent of 56bd941... turns
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);

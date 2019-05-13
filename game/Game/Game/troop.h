@@ -29,7 +29,7 @@ private:
 	bool placeholder;
 	bool selected = false;
 	bool team; //true is player, false is enemy
-	int movesLeft = maxMoves;
+	int movesTaken = 0;
 	int frame = 0;
 	SDL_Rect troopClips[20];
 	SDL_Rect tCollider;

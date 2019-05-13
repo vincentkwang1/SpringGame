@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  LTexture.cpp
   Perlin.cpp
 C:\GitHub\SpringGame\game\Game\Game\LTexture.cpp(10,1): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
@@ -35,3 +36,7 @@ game.obj : error LNK2019: unresolved external symbol "public: __thiscall button:
 game.obj : error LNK2019: unresolved external symbol "public: void __thiscall button::render(void)" (?render@button@@QAEXXZ) referenced in function _SDL_main
 game.obj : error LNK2019: unresolved external symbol "public: void __thiscall button::check(class std::vector<class map,class std::allocator<class map> >)" (?check@button@@QAEXV?$vector@Vmap@@V?$allocator@Vmap@@@std@@@std@@@Z) referenced in function _SDL_main
 C:\GitHub\SpringGame\game\Game\Debug\Game.exe : fatal error LNK1120: 6 unresolved externals
+=======
+﻿  structure.cpp
+  Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
+>>>>>>> parent of 56bd941... turns

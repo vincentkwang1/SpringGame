@@ -10,6 +10,11 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="tile.cpp" />
     <ClCompile Include="troop.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="structure.cpp" />
+>>>>>>> parent of 56bd941... turns
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -36,7 +41,19 @@
     <ClInclude Include="troop.h">
       <Filter>Headers</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="PerlinCreateArray.h" />
+=======
+    <ClInclude Include="SDL_gfx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="structure.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+>>>>>>> parent of 56bd941... turns
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">

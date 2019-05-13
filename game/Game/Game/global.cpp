@@ -19,7 +19,6 @@ LTexture gGrassTexture;
 LTexture gEnemyTexture;
 LTexture gHighlightTexture;
 LTexture gTreeTexture;
-LTexture gButtonTexture;
 LTexture gSelectingTexture;
 LTexture gCastleTexture;
 #endif // !global_h_
