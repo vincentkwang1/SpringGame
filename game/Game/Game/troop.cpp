@@ -193,7 +193,7 @@ bool troop::moveTroop(tile * tiles, int direction) {
 		updatePos(tiles);
 	}
 	if (movesLeft == 0) {
-		//movesLeft = maxMoves;
+		setSelected(false);
 		return true;
 	}
 	else {
@@ -204,4 +204,12 @@ void troop::attack() {
 	movesLeft = 0;
 	frame = 0; //resets frame counter when starting attack animation
 	attacking = true;
+}
+bool troop::getMovesLeft() {
+	if (movesLeft == 0) {
+ 		return false;
+	}
+	else {
+		return true;
+	}
 }

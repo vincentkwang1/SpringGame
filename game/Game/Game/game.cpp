@@ -80,6 +80,19 @@ bool checkClicked(SDL_Rect a, SDL_Event* e) {
 		return true;
 	}
 }
+bool checkCircleClicked(int radius, int cx, int cy, SDL_Event* e) {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	int dx = cx - x;
+	int dy = cy - y;
+	int distance = sqrt(dx * dx + dy * dy);
+	if (distance < radius) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 void drawTileLayer(map currentMap, tile * tiles, int layer) {
 	for (int i = currentMap.getHeight() - 1; i >= 0; i--)
 	{
@@ -125,7 +138,7 @@ int main(int argc, char* args[]) {
 	//same as local map
 	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5, 2); //array containing the randomized heights
 
-	int turn = 0;//Turn counter will probably be vestigal soon
+	int turnCounter = 0;
 
 	//keeps track of current local map
 	int currentMapX = 20;
@@ -199,17 +212,12 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: alliedArmy[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_0: alliedArmy[selectedTroop].attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
-				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (alliedArmy[selectedTroop].getPos()[0] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
-				case SDLK_a: if (alliedArmy[selectedTroop].getPos()[1] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
-				case SDLK_s: if (alliedArmy[selectedTroop].getPos()[0] < tileX - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
-				case SDLK_d: if (alliedArmy[selectedTroop].getPos()[1] < tileY - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
-					/////////////////////////////////////////////////////////////////////////////////////////////////////////
 				}
+				//if a button is pressed, check if the troops are done
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
 				//handles clicking troops
@@ -266,9 +274,7 @@ int main(int argc, char* args[]) {
 					//handles clicking local map tiles
 					for (int x = 0; x < tileX; x++) {
 						for (int y = 0; y < tileY; y++) {
-							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
-
-								
+							if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
 									tiles[selectedX * tileY + selectedY].setHighlight(0);
 									tiles[tileY * x + y].setHighlight(1);
 								
@@ -276,19 +282,25 @@ int main(int argc, char* args[]) {
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;
 								if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 2);
+									if(alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 3);
+									if(alliedArmy[selectedTroop].moveTroop(tiles, 3)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 0);
+									if(alliedArmy[selectedTroop].moveTroop(tiles, 0)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 1);
+									if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
+										selectedTroop = 0;
+									}
 								}
-								/*if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
-								else { test++; }*/
 							}
 							
 						}
@@ -367,11 +379,12 @@ int main(int argc, char* args[]) {
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn << ", " << selectedWorldX << ", " << selectedWorldY;
+		strs << turnCounter;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
 
+		turnButton.check(localMaps);
 		turnButton.render();
 		//castle.render();
 

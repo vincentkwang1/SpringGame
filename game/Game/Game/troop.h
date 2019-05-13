@@ -23,6 +23,7 @@ public:
 	void renderHealthBar();
 	SDL_Rect getCollider();
 	bool getPlaceholder();
+	bool getMovesLeft();
 private:
 	//FRAME COUNTER
 	bool placeholder;
