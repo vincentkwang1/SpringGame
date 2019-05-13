@@ -188,6 +188,7 @@ bool troop::moveTroop(tile * tiles, int direction) {
 	}
 <<<<<<< HEAD
 	if (movesLeft == 0) {
+<<<<<<< HEAD
 		setSelected(false);
 =======
 	if (success) {
@@ -197,6 +198,9 @@ bool troop::moveTroop(tile * tiles, int direction) {
 	if (movesTaken == maxMoves) {
 		movesTaken = 0;
 >>>>>>> parent of 56bd941... turns
+=======
+		//movesLeft = maxMoves;
+>>>>>>> parent of 0538a35... broken
 		return true;
 	}
 	else {
@@ -207,12 +211,4 @@ void troop::attack() {
 	movesTaken = 0;
 	frame = 0; //resets frame counter when starting attack animation
 	attacking = true;
-}
-bool troop::getMovesLeft() {
-	if (movesLeft == 0) {
- 		return false;
-	}
-	else {
-		return true;
-	}
 }
