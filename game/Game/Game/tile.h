@@ -39,6 +39,7 @@ public:
 	//Set Functions
 	void setX(int x);
 	void setY(int y);
+	int getMovementPenalty();
 
 	void setHighlight(int newHighlight);
 	void setNoise(int noise);

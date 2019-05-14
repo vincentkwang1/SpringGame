@@ -84,7 +84,7 @@ void tile::setHighlight(int newHightlight) {
 	highlight = newHightlight;
 }
 void tile::checkDist(int x, int y) {
-	if (abs(xCoord - x) + abs(yCoord - y) < 3) {
+	if (abs(xCoord - x) + abs(yCoord - y) < 2) {
 		if (noiseScale != 0 && noiseScale != 4) {
 			highlight = 2;
 		}
@@ -125,6 +125,16 @@ bool tile::getPassable() {
 	else {
 		return false;
 	}
+}
+int tile::getMovementPenalty() {
+	switch (noiseScale) {
+	case 0: return 1000; break; //water
+	case 1: return 1; break;
+	case 2: return 2; break;
+	case 3: return 2; break;
+	case 4: return 1000; break;
+	}
+	return 0;
 }
 void tile::setPosition() {
 	if (!sideHill) {

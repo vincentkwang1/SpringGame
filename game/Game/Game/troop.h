@@ -24,6 +24,7 @@ public:
 	SDL_Rect getCollider();
 	bool getPlaceholder();
 	bool getMovesLeft();
+	void reset();
 private:
 	//FRAME COUNTER
 	bool placeholder;

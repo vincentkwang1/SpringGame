@@ -17,6 +17,9 @@ troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 		troopClips[i].h = 86;
 	}
 }
+void troop::reset() {
+	movesLeft = maxMoves;
+}
 void troop::updatePos(tile* tiles) {
 	tPosX = tiles[tileX * xCoord + yCoord].getX() + 60;
 	tPosY = tiles[tileY * xCoord + yCoord].getY() - 60;
@@ -188,7 +191,12 @@ bool troop::moveTroop(tile* tiles, int direction) {
 			break;
 		}
 		if (success) {
-			movesLeft--;
+			if (movesLeft - tiles[tileY * xCoord + yCoord].getMovementPenalty() > 0) {
+				movesLeft = movesLeft - tiles[tileY * xCoord + yCoord].getMovementPenalty();
+			}
+			else {
+				movesLeft = 0;
+			}
 		}
 		updatePos(tiles);
 	}

@@ -9,7 +9,9 @@ public:
 	button();
 	void render();
 	void check(std::vector<map> localMaps);
+	int getType();
 	SDL_Rect getCollider();
+	void setType(int newType);
 private:
 	int buttonType = 0; //1 is unit needs orders, 0 is next turn
 	int xCoord;

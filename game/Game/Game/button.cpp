@@ -21,6 +21,12 @@ void button::render() {
 SDL_Rect button::getCollider() {
 	return bCollider;
 }
+int button::getType() {
+	return buttonType;
+}
+void button::setType(int newType) {
+	buttonType = newType;
+}
 void button::check(std::vector<map> localMaps) {
 	for (int i = 0; i < localMaps.size(); i++) {
 		//goes through all maps and checks if they've been loaded
