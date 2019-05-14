@@ -161,6 +161,7 @@ int main(int argc, char* args[]) {
 	//keeps track of selected troop
 	int selectedTroop = 0;
 	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
+	bool Attackingrange = false;
 
 	
 
@@ -261,38 +262,56 @@ int main(int argc, char* args[]) {
 						for (int y = 0; y < tileY; y++) {
 							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
 
+								if (selectedTroop != 0) {
 
-								for (int i = 0; i < enemyArmy.size(); i++) {
-									//check if occupuied
-									if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
+									for (int i = 1; i < enemyArmy.size(); i++) {
+										//check if occupuied
+										if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
 										{
-											enemyArmy[i].setHp(enemyArmy[i].getHp()-10);
+											int y = enemyArmy[i].getPos()[0];
+											int x = alliedArmy[selectedTroop].getPos()[0];
+											int z = x - y;
+											if (z < 2 && z > -2) {
+												int a = enemyArmy[i].getPos()[1];
+												int b = alliedArmy[selectedTroop].getPos()[1];
+												int c = a - b;
+												if (c < 2 && c > -2)
+												{
+													Attackingrange = true;
+													
+													//alliedArmy[selectedTroop].attack();
+													enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
+												}
+											}
 										}
-									
+					
+									}
 
 								}
 
-
+								if (Attackingrange) { Attackingrange = false; }
+								else {
 									tiles[selectedX * tileY + selectedY].setHighlight(0);
 									tiles[tileY * x + y].setHighlight(1);
-								
-								selectedX = x;
-								selectedY = y;
-								int selected = selectedX * tileY + selectedY;
-								if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 2);
+
+									selectedX = x;
+									selectedY = y;
+									int selected = selectedX * tileY + selectedY;
+									if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
+										alliedArmy[selectedTroop].moveTroop(tiles, 2);
+									}
+									else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
+										alliedArmy[selectedTroop].moveTroop(tiles, 3);
+									}
+									else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
+										alliedArmy[selectedTroop].moveTroop(tiles, 0);
+									}
+									else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
+										alliedArmy[selectedTroop].moveTroop(tiles, 1);
+									}
+									if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
+									else { test++; }
 								}
-								else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 3);
-								}
-								else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 0);
-								}
-								else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 1);
-								}
-								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
-								else { test++; }
 							}
 							
 						}
