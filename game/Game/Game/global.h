@@ -17,7 +17,7 @@ static const int number = (tileX) * (tileY);
 
 typedef int32_t s32;
 extern SDL_Window* gWindow;
-
+extern LTexture gButtonTexture;
 extern SDL_Renderer* gRenderer;
 extern TTF_Font *gFont;
 extern LTexture gTextTexture;

@@ -1,54 +1,10 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-﻿  LTexture.cpp
-  Perlin.cpp
-C:\GitHub\SpringGame\game\Game\Game\LTexture.cpp(10,1): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:  'std::vector<int,std::allocator<_Ty>> create(int,int,ppm,unsigned int,int,int)': prototyped function not called (was a variable definition intended?)
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         with
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         [
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:             _Ty=int
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(8,19): warning C4930:         ]
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(47,29): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(48,30): warning C4018:  '<': signed/unsigned mismatch
-  PerlinNoise.cpp
-  game.cpp
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(54,21): warning C4244:  '=': conversion from 'double' to '_Ty', possible loss of data
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(54,21): warning C4244:         with
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(54,21): warning C4244:         [
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(54,21): warning C4244:             _Ty=int
-C:\GitHub\SpringGame\game\Game\Game\Perlin.cpp(54,21): warning C4244:         ]
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(32,21): warning C4552:  '&': result of expression not used
+﻿  game.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(32,20): warning C4552:  '&': result of expression not used
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(88,15): warning C4244:  'initializing': conversion from 'double' to 'int', possible loss of data
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(129,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(224,23): warning C4018:  '<': signed/unsigned mismatch
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(357,21): warning C4018:  '<': signed/unsigned mismatch
-  global.cpp
-  map.cpp
-  ppm.cpp
-  tile.cpp
-  troop.cpp
+  gui.cpp
   Generating Code...
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(362,21): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(362,21): warning C4018: C:\GitHub\SpringGame\game\Game\Game\troop.cpp(151) : warning C4172: returning address of local variable or temporary: coords
-game.obj : error LNK2019: unresolved external symbol "public: __thiscall gui::gui(void)" (??0gui@@QAE@XZ) referenced in function _SDL_main
-game.obj : error LNK2019: unresolved external symbol "public: void __thiscall gui::renderTileInfo(class tile)" (?renderTileInfo@gui@@QAEXVtile@@@Z) referenced in function _SDL_main
-game.obj : error LNK2019: unresolved external symbol "public: __thiscall structure::structure(void)" (??0structure@@QAE@XZ) referenced in function _SDL_main
-game.obj : error LNK2019: unresolved external symbol "public: __thiscall button::button(void)" (??0button@@QAE@XZ) referenced in function _SDL_main
-game.obj : error LNK2019: unresolved external symbol "public: void __thiscall button::render(void)" (?render@button@@QAEXXZ) referenced in function _SDL_main
-game.obj : error LNK2019: unresolved external symbol "public: void __thiscall button::check(class std::vector<class map,class std::allocator<class map> >)" (?check@button@@QAEXV?$vector@Vmap@@V?$allocator@Vmap@@@std@@@std@@@Z) referenced in function _SDL_main
-C:\GitHub\SpringGame\game\Game\Debug\Game.exe : fatal error LNK1120: 6 unresolved externals
-=======
-﻿  structure.cpp
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
->>>>>>> parent of 56bd941... turns
-=======
-﻿  troop.cpp
-  C:\GitHub\SpringGame\game\Game\Game\troop.cpp(151) : warning C4172: returning address of local variable or temporary: coords
-  Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
->>>>>>> parent of 0538a35... broken
-=======
-﻿  troop.cpp
-  C:\GitHub\SpringGame\game\Game\Game\troop.cpp(151) : warning C4172: returning address of local variable or temporary: coords
-  Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe
->>>>>>> parent of 0538a35... broken

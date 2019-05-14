@@ -11,7 +11,7 @@ public:
 	void drawText(tile tile);
 	void setFontSize(int fontSize);
 private:
-	int xLoc = 1620;
+	int xLoc = 0;
 	int yLoc = 800;
 	int boxWidth = 300;
 	int boxHeight = 280;

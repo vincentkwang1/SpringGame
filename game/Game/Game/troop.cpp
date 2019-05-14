@@ -2,7 +2,7 @@
 
 troop::troop() {
 	placeholder = true;
-	
+
 }
 troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 	placeholder = false;
@@ -104,12 +104,12 @@ void troop::render() {
 			else {
 				frame = 0;
 			}
-			/*std::ostringstream strs;
+			std::ostringstream strs;
 			SDL_Color textColor = { 255, 255 , 255 };
-			strs << movesTaken;
+			strs << movesLeft;
 			std::string str = strs.str();
 			gTextTexture.loadFromRenderedText(str, textColor);
-			gTextTexture.render(40, 20);*/
+			gTextTexture.render(tPosX, tPosY - 50);
 		}
 		else {
 			gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[0]);/*
@@ -144,67 +144,56 @@ void troop::renderHealthBar() {
 	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
 	SDL_RenderFillRect(gRenderer, &fillRect);
 }
-int * troop::getPos() {
+int* troop::getPos() {
 	int coords[2];
 	coords[0] = xCoord;
 	coords[1] = yCoord;
 	return coords;
 }
-bool troop::moveTroop(tile * tiles, int direction) {
+bool troop::moveTroop(tile* tiles, int direction) {
 	bool success = true;
-	switch(direction){
-	case 0:
-		if (tiles[tileY * (xCoord-1) + yCoord].getPassable()) {
-			xCoord = xCoord - 1;
+	if (movesLeft > 0) {
+		switch (direction) {
+		case 0:
+			if (tiles[tileY * (xCoord - 1) + yCoord].getPassable()) {
+				xCoord = xCoord - 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 1:
+			if (tiles[tileY * xCoord + (yCoord - 1)].getPassable()) {
+				yCoord = yCoord - 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 2:
+			if (tiles[tileY * (xCoord + 1) + yCoord].getPassable()) {
+				xCoord = xCoord + 1;
+			}
+			else {
+				success = false;
+			}
+			break;
+		case 3:
+			if (tiles[tileY * xCoord + (yCoord + 1)].getPassable()) {
+				yCoord = yCoord + 1;
+			}
+			else {
+				success = false;
+			}
+			break;
 		}
-		else{
-			success = false;
+		if (success) {
+			movesLeft--;
 		}
-		break;
-	case 1:
-		if (tiles[tileY * xCoord + (yCoord-1)].getPassable()) {
-			yCoord = yCoord - 1;
-		}
-		else {
-			success = false;
-		}
-		break;
-	case 2: 
-		if (tiles[tileY * (xCoord+1) + yCoord].getPassable()) {
-			xCoord = xCoord + 1;
-		}
-		else {
-			success = false;
-		}
-		break;
-	case 3:
-		if (tiles[tileY * xCoord + (yCoord+1)].getPassable()) {
-			yCoord = yCoord + 1;
-		}
-		else {
-			success = false;
-		}
-		break;
+		updatePos(tiles);
 	}
-<<<<<<< HEAD
 	if (movesLeft == 0) {
-<<<<<<< HEAD
-<<<<<<< HEAD
 		setSelected(false);
-=======
-	if (success) {
-		movesTaken++;
-	}
-	updatePos(tiles);
-	if (movesTaken == maxMoves) {
-		movesTaken = 0;
->>>>>>> parent of 56bd941... turns
-=======
-		//movesLeft = maxMoves;
->>>>>>> parent of 0538a35... broken
-=======
-		//movesLeft = maxMoves;
->>>>>>> parent of 0538a35... broken
 		return true;
 	}
 	else {
@@ -212,7 +201,15 @@ bool troop::moveTroop(tile * tiles, int direction) {
 	}
 }
 void troop::attack() {
-	movesTaken = 0;
+	movesLeft = 0;
 	frame = 0; //resets frame counter when starting attack animation
 	attacking = true;
+}
+bool troop::getMovesLeft() {
+	if (movesLeft == 0) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }

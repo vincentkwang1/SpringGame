@@ -7,6 +7,7 @@
 #include "map.h"
 #include "gui.h"
 #include "structure.h"
+#include "button.h"
 #include <time.h>
 
 #define SCREEN_WIDTH 1920
@@ -28,7 +29,7 @@ bool init() {
 	gWindow = SDL_CreateWindow("Game!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, NULL);
 	gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	int imgFlags = IMG_INIT_PNG;
-	IMG_Init(imgFlags) & imgFlags;
+	IMG_Init(imgFlags)& imgFlags;
 	TTF_Init();
 	return success;
 }
@@ -45,6 +46,7 @@ void loadMedia() {
 	gTreeTexture.loadFromFile("resource/tree.png");
 	gHighlightTexture.loadFromFile("resource/highlight.png");
 	gCastleTexture.loadFromFile("resource/castle.png");
+	gButtonTexture.loadFromFile("resource/buttons.png");
 }
 void close() {
 	//DON'T CHANGE, CLOSES ALL SURFACES AND CLOSES THE PROGRAM
@@ -78,7 +80,20 @@ bool checkClicked(SDL_Rect a, SDL_Event* e) {
 		return true;
 	}
 }
-void drawTileLayer(map currentMap, tile * tiles, int layer) {
+bool checkCircleClicked(int radius, int cx, int cy, SDL_Event* e) {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	int dx = cx - x;
+	int dy = cy - y;
+	int distance = sqrt(dx * dx + dy * dy);
+	if (distance < radius) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+void drawTileLayer(map currentMap, tile* tiles, int layer) {
 	for (int i = currentMap.getHeight() - 1; i >= 0; i--)
 	{
 		for (int j = 0; j < currentMap.getWidth(); j++) {
@@ -90,7 +105,7 @@ std::vector<map> initMap(std::vector<map> localMaps) {
 	localMaps.resize(worldWidth * worldHeight);
 	return localMaps;
 }
-std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightArray, int localXCoord ,int localYCoord) {
+std::vector<map> createMap(std::vector<map> localMaps, std::vector<int> heightArray, int localXCoord, int localYCoord) {
 	map localMap = { tileX, tileY, heightArray, heightArray, false, localXCoord, localYCoord };
 	localMaps.at(localXCoord * worldWidth + localYCoord) = localMap;
 	return localMaps;
@@ -110,19 +125,20 @@ int main(int argc, char* args[]) {
 	loadMedia();
 	bool quit = false;
 	SDL_Event e;
+	button turnButton = {};
 	srand(time(NULL));
 	//////////////////
 	gui tileGui; //creates the box that describes tiles
 	//CONSTRUCTING CLASSES
 	Perlin perlin; //[1]
-	map worldMap = {worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5, 2),perlin.createArray(worldWidth,worldHeight,5, 2),true,0,0};//creates world map with perlin noise arrays for temperature and noise
+	map worldMap = { worldWidth,worldHeight,perlin.createArray(worldWidth,worldHeight,5, 2),perlin.createArray(worldWidth,worldHeight,5, 2),true,0,0 };//creates world map with perlin noise arrays for temperature and noise
 	//Placeholder for local map/////
 
 	//MAKE WORLD MAP////////////////////////////
 	//same as local map
 	std::vector<int> worldArray = perlin.createArray(worldWidth, worldHeight, 5, 2); //array containing the randomized heights
 
-	int turn = 0;//Turn counter will probably be vestigal soon
+	int turnCounter = 0;
 
 	//keeps track of current local map
 	int currentMapX = 20;
@@ -138,10 +154,10 @@ int main(int argc, char* args[]) {
 	//creates first tiles
 	static const int number = tileX * tileY;
 	tile tiles[number];
-	for (int i = 0; i < localMaps[currentMapX* worldWidth + currentMapY].getHeight(); i++)
+	for (int i = 0; i < localMaps[currentMapX * worldWidth + currentMapY].getHeight(); i++)
 	{
-		for (int j = 0; j < localMaps[currentMapX* worldWidth + currentMapY].getWidth(); j++) {
-			tiles[tileY * i + j] = localMaps[currentMapX* worldWidth + currentMapY].getMapContainer()[i][j];
+		for (int j = 0; j < localMaps[currentMapX * worldWidth + currentMapY].getWidth(); j++) {
+			tiles[tileY * i + j] = localMaps[currentMapX * worldWidth + currentMapY].getMapContainer()[i][j];
 		}
 	}
 	//hill tiles
@@ -178,9 +194,9 @@ int main(int argc, char* args[]) {
 	int selectedWorldY = 0;
 
 	//keeps track of whether to show world map or not, toggled with 'tab'
-	bool showWorldMap = false; 
+	bool showWorldMap = false;
 
-	int test = 0;
+	//int test = 0;
 
 	//GAME MAIN LOOP
 	while (!quit) {
@@ -196,17 +212,12 @@ int main(int argc, char* args[]) {
 				//HANDLES KEYPRESSES
 				switch (e.key.keysym.sym) {
 				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: alliedArmy[selectedTroop].attack(); turn++; break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+				case SDLK_0: alliedArmy[selectedTroop].attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
-				case SDLK_TAB: if(e.key.repeat == 0) showWorldMap = !showWorldMap; break;
-				//Handles Moving troops in the four cardinal directions based on keypress////////////////////////////////
-				case SDLK_w: if (alliedArmy[selectedTroop].getPos()[0] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) turn++; } break;
-				case SDLK_a: if (alliedArmy[selectedTroop].getPos()[1] > 0) { if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) turn++; }break;
-				case SDLK_s: if (alliedArmy[selectedTroop].getPos()[0] < tileX - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) turn++; }break;
-				case SDLK_d: if (alliedArmy[selectedTroop].getPos()[1] < tileY - 1) { if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) turn++; }break;
-					/////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 				}
+				//if a button is pressed, check if the troops are done
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
 				//handles clicking troops
@@ -263,51 +274,42 @@ int main(int argc, char* args[]) {
 					//handles clicking local map tiles
 					for (int x = 0; x < tileX; x++) {
 						for (int y = 0; y < tileY; y++) {
-							if (checkClicked(tiles[tileY * x + y].getCollider(), &e)) {
+							if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
+								tiles[selectedX * tileY + selectedY].setHighlight(0);
+								tiles[tileY * x + y].setHighlight(1);
 
-								
-									tiles[selectedX * tileY + selectedY].setHighlight(0);
-									tiles[tileY * x + y].setHighlight(1);
-								
 								selectedX = x;
 								selectedY = y;
 								int selected = selectedX * tileY + selectedY;
 								if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 2);
+									if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 3);
+									if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 0);
+									if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) {
+										selectedTroop = 0;
+									}
 								}
 								else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
-									alliedArmy[selectedTroop].moveTroop(tiles, 1);
+									if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
+										selectedTroop = 0;
+									}
 								}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
-								else { test++; }
->>>>>>> parent of 56bd941... turns
-=======
-								/*if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
-								else { test++; }*/
->>>>>>> parent of 0538a35... broken
-=======
-								/*if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
-								else { test++; }*/
->>>>>>> parent of 0538a35... broken
 							}
-							
+
 						}
 					}
 				}
 				selectingTroop = false;
-				
+
 			}
-			
+
 		}
 		SDL_RenderClear(gRenderer);
 		//GAME THINGS HAPPENING, PUT ALL GAME THINGS HERE
@@ -331,25 +333,25 @@ int main(int argc, char* args[]) {
 			hillTile[i].move();
 			hillTile[i].render(false);
 		}
-		for (int i = 0; i < localMaps[currentMapX* worldWidth + currentMapY].getHeight(); i++)
+		for (int i = 0; i < localMaps[currentMapX * worldWidth + currentMapY].getHeight(); i++)
 		{
-			for (int j = 0; j < localMaps[currentMapX* worldWidth + currentMapY].getWidth(); j++) {
+			for (int j = 0; j < localMaps[currentMapX * worldWidth + currentMapY].getWidth(); j++) {
 
 				tiles[i * tileY + j].handleEvent(e);
 				tiles[i * tileY + j].move();
 				tiles[i * tileY + j].setHighlight(0);
-				if (!alliedArmy[selectedTroop].getPlaceholder()){
+				if (!alliedArmy[selectedTroop].getPlaceholder()) {
 					tiles[i * tileY + j].checkDist(alliedArmy[selectedTroop].getPos()[1], alliedArmy[selectedTroop].getPos()[0]);
 				}
 				tiles[i * tileY + j].render(0);
 			}
 		}
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 2);
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 0);
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 1);
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 3);
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 4);
-		drawTileLayer(localMaps.at(currentMapX* worldWidth + currentMapY), tiles, 5);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 2);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 0);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 1);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 3);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 4);
+		drawTileLayer(localMaps.at(currentMapX * worldWidth + currentMapY), tiles, 5);
 		//*/
 		//gTestTexture.render(0, 0);
 		for (int i = 0; i < alliedArmy.size(); i++) {
@@ -377,35 +379,23 @@ int main(int argc, char* args[]) {
 
 		std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
-		strs << turn << ", " << selectedWorldX << ", " << selectedWorldY;
+		strs << turnCounter;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 		turnButton.check(localMaps);
-=======
->>>>>>> parent of 0538a35... broken
-=======
->>>>>>> parent of 0538a35... broken
 		turnButton.render();
 		//castle.render();
-=======
-		castle.render();
->>>>>>> parent of 56bd941... turns
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);
- 		SDL_RenderPresent(gRenderer);
+		SDL_RenderPresent(gRenderer);
 	}
 	close();
 	return 0;
- }
+}
 
 /*
 [1] taken from https://github.com/sol-prog/Perlin_Noise
-
-
 */
