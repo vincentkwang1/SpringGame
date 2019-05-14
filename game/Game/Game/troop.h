@@ -20,13 +20,15 @@ public:
 	void handleEvent(SDL_Event& e);
 	int* getPos();
 	void setSelected(bool newSelected);
+	void setHp(	int newhealth);
+	int getHp();
 	void renderHealthBar();
 	SDL_Rect getCollider();
 	bool getPlaceholder();
 	bool getMovesLeft();
 	void reset();
 private:
-	//FRAME COUNTER
+	//FRAME COUNTER22222
 	bool placeholder;
 	bool selected = false;
 	bool team; //true is player, false is enemy
@@ -39,6 +41,7 @@ private:
 	int xCoord = 0, yCoord = 0;
 	int velX = 0, velY = 0;
 	int type; //1 = infantry
+	int Health = 100;
 	SDL_Rect fillRect;
 };
 #endif 

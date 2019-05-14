@@ -1,3 +1,11 @@
-﻿  troop.cpp
-  C:\GitHub\SpringGame\game\Game\Game\troop.cpp(154) : warning C4172: returning address of local variable or temporary: coords
+﻿﻿  troop.cpp
+﻿  game.cpp
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(29): warning C4552: '&': result of expression not used
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(111): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(210): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(267): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(367): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(372): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(386): warning C4018: '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(395): warning C4018: '<': signed/unsigned mismatch
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

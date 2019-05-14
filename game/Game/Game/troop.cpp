@@ -137,17 +137,22 @@ void troop::render() {
 }
 
 void troop::renderHealthBar() {
-	//Render outside
-	fillRect = { tPosX + 20, tPosY, 100, 20 };
-	SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
-	SDL_RenderFillRect(gRenderer, &fillRect);
+	if (Health != 100) {
+		//Render outside
+		fillRect = { tPosX + 20, tPosY, 100, 20 };
+		SDL_SetRenderDrawColor(gRenderer, 0x00, 0x00, 0x00, 0x00);
+		SDL_RenderFillRect(gRenderer, &fillRect);
 
-	//render inside
-	fillRect = { tPosX + 25, tPosY + 5, 90, 10 };
-	SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
-	SDL_RenderFillRect(gRenderer, &fillRect);
+		//render inside
+		fillRect = { tPosX + 25, tPosY + 5, 90 * Health / 100, 10 };
+		SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+		SDL_RenderFillRect(gRenderer, &fillRect);
+	}
 }
-int* troop::getPos() {
+void troop::setHp(int newhealth) { if (placeholder) { Health = 100; } else { Health = newhealth; } }
+int troop::getHp() { return Health; }
+
+int * troop::getPos() {
 	int coords[2];
 	coords[0] = xCoord;
 	coords[1] = yCoord;
