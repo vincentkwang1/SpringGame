@@ -12,10 +12,16 @@
     <ClCompile Include="troop.cpp" />
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="structure.cpp" />
 >>>>>>> parent of 56bd941... turns
+=======
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="structure.cpp" />
+    <ClCompile Include="button.cpp" />
+>>>>>>> parent of 0538a35... broken
 =======
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="structure.cpp" />
@@ -49,8 +55,11 @@
     </ClInclude>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClInclude Include="PerlinCreateArray.h" />
 =======
+=======
+>>>>>>> parent of 0538a35... broken
 =======
 >>>>>>> parent of 0538a35... broken
     <ClInclude Include="SDL_gfx.h">
@@ -63,7 +72,13 @@
       <Filter>Headers</Filter>
     </ClInclude>
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of 56bd941... turns
+=======
+    <ClInclude Include="button.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+>>>>>>> parent of 0538a35... broken
 =======
     <ClInclude Include="button.h">
       <Filter>Headers</Filter>

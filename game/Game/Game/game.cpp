@@ -286,10 +286,15 @@ int main(int argc, char* args[]) {
 								}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 								if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
 								else { test++; }
 >>>>>>> parent of 56bd941... turns
+=======
+								/*if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
+								else { test++; }*/
+>>>>>>> parent of 0538a35... broken
 =======
 								/*if (test == 1) { selectedTroop = 0; test = 0; alliedArmy[selectedTroop].setSelected(false); }
 								else { test++; }*/
@@ -379,7 +384,10 @@ int main(int argc, char* args[]) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		turnButton.check(localMaps);
+=======
+>>>>>>> parent of 0538a35... broken
 =======
 >>>>>>> parent of 0538a35... broken
 		turnButton.render();

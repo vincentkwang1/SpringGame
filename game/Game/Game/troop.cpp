@@ -189,6 +189,7 @@ bool troop::moveTroop(tile * tiles, int direction) {
 <<<<<<< HEAD
 	if (movesLeft == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		setSelected(false);
 =======
 	if (success) {
@@ -198,6 +199,9 @@ bool troop::moveTroop(tile * tiles, int direction) {
 	if (movesTaken == maxMoves) {
 		movesTaken = 0;
 >>>>>>> parent of 56bd941... turns
+=======
+		//movesLeft = maxMoves;
+>>>>>>> parent of 0538a35... broken
 =======
 		//movesLeft = maxMoves;
 >>>>>>> parent of 0538a35... broken
