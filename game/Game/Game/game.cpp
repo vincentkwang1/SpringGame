@@ -174,6 +174,8 @@ int main(int argc, char* args[]) {
 	std::vector<troop> alliedArmy; //Creates the array storing the data on the player army and puts a place hoder at the beginning
 	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
+	bool Attackingrange = false;
+
 	//Generate Armies//
 	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
 
@@ -216,6 +218,7 @@ int main(int argc, char* args[]) {
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
+				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1);
 				}
 				//if a button is pressed, check if the troops are done
 			}
@@ -296,30 +299,58 @@ int main(int argc, char* args[]) {
 						for (int x = 0; x < tileX; x++) {
 							for (int y = 0; y < tileY; y++) {
 								if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
-									tiles[selectedX * tileY + selectedY].setHighlight(0);
-									tiles[tileY * x + y].setHighlight(1);
+									if (selectedTroop != 0) {
 
-									selectedX = x;
-									selectedY = y;
-									int selected = selectedX * tileY + selectedY;
-									if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
-										if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
-											selectedTroop = 0;
+										for (int i = 1; i < enemyArmy.size(); i++) {
+											//check if occupuied
+											if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
+											{
+												int y = enemyArmy[i].getPos()[0];
+												int x = alliedArmy[selectedTroop].getPos()[0];
+												int z = x - y;
+												if (z < 2 && z > -2) {
+													int a = enemyArmy[i].getPos()[1];
+													int b = alliedArmy[selectedTroop].getPos()[1];
+													int c = a - b;
+													if (c < 2 && c > -2)
+													{
+														Attackingrange = true;
+
+														//alliedArmy[selectedTroop].attack();
+														enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
+													}
+												}
+											}
+
 										}
 									}
-									else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
-										if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) {
-											selectedTroop = 0;
+									if (Attackingrange) { Attackingrange = false; }
+									else {
+										tiles[selectedX * tileY + selectedY].setHighlight(0);
+										tiles[tileY * x + y].setHighlight(1);
+
+										selectedX = x;
+										selectedY = y;
+										int selected = selectedX * tileY + selectedY;
+										if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
+											if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
+												selectedTroop = 0;
+											}
 										}
-									}
-									else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
-										if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) {
-											selectedTroop = 0;
+										else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
+											if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) {
+												selectedTroop = 0;
+											}
 										}
-									}
-									else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
-										if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
-											selectedTroop = 0;
+										else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
+											if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) {
+												selectedTroop = 0;
+											}
+										}
+										else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
+											if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
+												selectedTroop = 0;
+											}
 										}
 									}
 								}
@@ -390,6 +421,28 @@ int main(int argc, char* args[]) {
 
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
+
+		//Check to see if things are dead
+		{
+			// isAnythingDead(alliedArmy);
+			for (int i = 0; i < alliedArmy.size(); i++) {
+
+				if (alliedArmy[i].getHp() <= 0) {
+					alliedArmy.erase(alliedArmy.begin() + i);
+					std::cout << "Death\n";
+					selectedTroop = 0;
+				}
+			}
+			//Is anything dead(enemyArmy)
+			for (int i = 0; i < enemyArmy.size(); i++) {
+
+				if (enemyArmy[i].getHp() <= 0) {
+					enemyArmy.erase(enemyArmy.begin() + i);
+					std::cout << "Death\n";
+					selectedTroop = 0;
+				}
+			}
+		}
 
 		//draw world map if tab is pressed
 		if (showWorldMap) {
