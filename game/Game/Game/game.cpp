@@ -229,6 +229,56 @@ int main(int argc, char* args[]) {
 				//if a button is pressed, check if the troops are done
 			}
 			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
+				if (e.button.button == SDL_BUTTON_RIGHT) {
+					if (e.type == SDL_MOUSEBUTTONDOWN) {
+						moving = true;
+					}
+					else {
+						moving = false;
+					}
+					for (int x = 0; x < tileX; x++) {
+						for (int y = 0; y < tileY; y++) {
+							if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
+								if (selectedTroop != 0) {
+
+									for (int i = 1; i < enemyArmy.size(); i++) {
+										//check if occupuied
+										if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
+										{
+											int y = enemyArmy[i].getPos()[0];
+											int x = alliedArmy[selectedTroop].getPos()[0];
+											int z = x - y;
+											if (z < 2 && z > -2) {
+												int a = enemyArmy[i].getPos()[1];
+												int b = alliedArmy[selectedTroop].getPos()[1];
+												int c = a - b;
+												if (c < 2 && c > -2)
+												{
+													Attackingrange = true;
+
+													//alliedArmy[selectedTroop].attack();
+													enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
+												}
+											}
+										}
+
+									}
+								}
+								if (Attackingrange) { Attackingrange = false; }
+								else {
+									tiles[selectedX * tileY + selectedY].setHighlight(0);
+									tiles[tileY * x + y].setHighlight(1);
+
+									selectedX = x;
+									selectedY = y;
+									int selected = selectedX * tileY + selectedY;
+								}
+							}
+
+						}
+					}
+				}
+				else if(e.button.button == SDL_BUTTON_LEFT){
 				//handles clicking the next turn button
 				if (checkClicked(buttonBox, &e)) {
 					if (turnButton.getType() == 0) {
@@ -338,26 +388,6 @@ int main(int argc, char* args[]) {
 										selectedX = x;
 										selectedY = y;
 										int selected = selectedX * tileY + selectedY;
-										/*if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
-											if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
-												selectedTroop = 0;
-											}
-										}
-										else if (alliedArmy[selectedTroop].getPos()[1] < selectedY) {
-											if (alliedArmy[selectedTroop].moveTroop(tiles, 3)) {
-												selectedTroop = 0;
-											}
-										}
-										else if (alliedArmy[selectedTroop].getPos()[0] > selectedX) {
-											if (alliedArmy[selectedTroop].moveTroop(tiles, 0)) {
-												selectedTroop = 0;
-											}
-										}
-										else if (alliedArmy[selectedTroop].getPos()[1] > selectedY) {
-											if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
-												selectedTroop = 0;
-											}
-										}*/
 									}
 								}
 
@@ -365,7 +395,7 @@ int main(int argc, char* args[]) {
 						}
 					}
 					selectingTroop = false;
-
+				}
 				}
 			}
 		}
@@ -460,8 +490,6 @@ int main(int argc, char* args[]) {
 			b.x = selectedX;
 			b.y = selectedY;
 
-
-
 			if (moving == true) {
 				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
 				if (path.size() > 0) {
@@ -477,8 +505,8 @@ int main(int argc, char* args[]) {
 					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
 						alliedArmy[selectedTroop].moveTroop(tiles, 3);
 					}
-					moving = false;
 				}
+				SDL_Delay(100);
 			}
 		}
 		//END OF TESTING

@@ -137,10 +137,10 @@ tile map::createTile(int noise, int temp, int i, int j){
 	
 
 	//handele height/////////////////////////
-	if (noise >= 0 && noise < 101) {
+	if (noise >= 0 && noise < 91) {
 		noiseScale = 0; //water
 	}
-	else if (noise >= 101 && noise < 132) {
+	else if (noise >= 91 && noise < 132) {
 		noiseScale = 1; //grass
 	}
 	else if (noise >= 132 && noise < 145) {
@@ -157,7 +157,12 @@ tile map::createTile(int noise, int temp, int i, int j){
 	return tile(noiseScale, temp, false, i, j, 1, jay );
 }
 std::vector<troop> map::createTroop(tile* tiles, int xCoord, int yCoord, bool team) {
-	troop newTroop = { 1 + rand() % 5, 1 + rand() % 5, 1, tiles, team };
+	int x, y;
+	do {
+		x = 1 + rand() % 5;
+		y = 1 + rand() % 5;
+	} while (tiles[x * tileX + y].getPassable() == false);
+	troop newTroop = {x, y, 1, tiles, team };
 	if (team) {
 		alliedTroops.push_back(newTroop);
 		return alliedTroops;

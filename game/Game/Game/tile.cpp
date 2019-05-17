@@ -76,8 +76,8 @@ tile::tile(int side, int i) {
 	}
 }
 SDL_Rect tile::getCollider() {
-	tCollider.x = xLoc + 30;
-	tCollider.y = yLoc + 15;
+	tCollider.x = xLoc;
+	tCollider.y = yLoc;
 	return tCollider;
 }
 void tile::setHighlight(int newHightlight) {

@@ -6,7 +6,7 @@
 #define troop_h
 class troop {
 public:
-	static const int maxMoves = 500;
+	static const int maxMoves = 8;
 	static const int panSpeed = 5;
 	troop();
 	troop(int invisible);
