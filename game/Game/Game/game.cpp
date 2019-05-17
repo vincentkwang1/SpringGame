@@ -223,7 +223,7 @@ int main(int argc, char* args[]) {
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
-				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1); break;
+				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 10); break;
 				case SDLK_a: moving = true; break;
 				}
 				//if a button is pressed, check if the troops are done
@@ -248,14 +248,14 @@ int main(int argc, char* args[]) {
 											int y = enemyArmy[i].getPos()[0];
 											int x = alliedArmy[selectedTroop].getPos()[0];
 											int z = x - y;
-											if (z < 2 && z > -2) {
+											if (z <= 2 && z >= -2) {
 												int a = enemyArmy[i].getPos()[1];
 												int b = alliedArmy[selectedTroop].getPos()[1];
 												int c = a - b;
-												if (c < 2 && c > -2)
+												if (c <= 2 && c >= -2)
 												{
 													Attackingrange = true;
-
+													moving = false;
 													//alliedArmy[selectedTroop].attack();
 													enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
 												}
@@ -264,15 +264,16 @@ int main(int argc, char* args[]) {
 
 									}
 								}
-								if (Attackingrange) { Attackingrange = false; }
-								else {
+								
+								
+								
 									tiles[selectedX * tileY + selectedY].setHighlight(0);
 									tiles[tileY * x + y].setHighlight(1);
 
 									selectedX = x;
 									selectedY = y;
 									int selected = selectedX * tileY + selectedY;
-								}
+								
 							}
 
 						}
@@ -357,31 +358,6 @@ int main(int argc, char* args[]) {
 								if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
 									if (selectedTroop != 0) {
 
-										for (int i = 1; i < enemyArmy.size(); i++) {
-											//check if occupuied
-											if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
-											{
-												int y = enemyArmy[i].getPos()[0];
-												int x = alliedArmy[selectedTroop].getPos()[0];
-												int z = x - y;
-												if (z < 2 && z > -2) {
-													int a = enemyArmy[i].getPos()[1];
-													int b = alliedArmy[selectedTroop].getPos()[1];
-													int c = a - b;
-													if (c < 2 && c > -2)
-													{
-														Attackingrange = true;
-
-														//alliedArmy[selectedTroop].attack();
-														enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
-													}
-												}
-											}
-
-										}
-									}
-									if (Attackingrange) { Attackingrange = false; }
-									else {
 										tiles[selectedX * tileY + selectedY].setHighlight(0);
 										tiles[tileY * x + y].setHighlight(1);
 
@@ -490,7 +466,7 @@ int main(int argc, char* args[]) {
 			b.x = selectedX;
 			b.y = selectedY;
 
-			if (moving == true) {
+			if (moving == true && !Attackingrange) {
 				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
 				if (path.size() > 0) {
 					if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
