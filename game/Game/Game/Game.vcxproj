@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="cordinate.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="LTexture.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="troop.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cordinate.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="gui.h" />
@@ -154,7 +156,6 @@
     <ClInclude Include="PerlinNoise.h" />
     <ClInclude Include="ppm.h" />
     <ClInclude Include="map.h" />
-    <ClInclude Include="SDL_gfx.h" />
     <ClInclude Include="structure.h" />
     <ClInclude Include="troop.h" />
   </ItemGroup>

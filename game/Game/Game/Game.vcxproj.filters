@@ -1,93 +1,90 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="LTexture.cpp" />
-    <ClCompile Include="global.cpp" />
-    <ClCompile Include="Perlin.cpp" />
-    <ClCompile Include="PerlinNoise.cpp" />
-    <ClCompile Include="ppm.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="tile.cpp" />
-    <ClCompile Include="troop.cpp" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    <ClCompile Include="gui.cpp" />
-    <ClCompile Include="structure.cpp" />
->>>>>>> parent of 56bd941... turns
-=======
-    <ClCompile Include="gui.cpp" />
-    <ClCompile Include="structure.cpp" />
-    <ClCompile Include="button.cpp" />
->>>>>>> parent of 0538a35... broken
-=======
-    <ClCompile Include="gui.cpp" />
-    <ClCompile Include="structure.cpp" />
-    <ClCompile Include="button.cpp" />
->>>>>>> parent of 0538a35... broken
+    <ClCompile Include="button.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LTexture.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Perlin.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoise.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ppm.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="structure.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tile.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="troop.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cordinate.cpp">
+      <Filter>CPP Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="global.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="LTexture.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Perlin.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="PerlinNoise.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ppm.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="tile.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="troop.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <ClInclude Include="PerlinCreateArray.h" />
-=======
-=======
->>>>>>> parent of 0538a35... broken
-=======
->>>>>>> parent of 0538a35... broken
-    <ClInclude Include="SDL_gfx.h">
-      <Filter>Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gui.h">
-      <Filter>Headers</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Perlin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ppm.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="structure.h">
-      <Filter>Headers</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 56bd941... turns
-=======
-    <ClInclude Include="button.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="tile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
->>>>>>> parent of 0538a35... broken
-=======
-    <ClInclude Include="button.h">
-      <Filter>Headers</Filter>
+    <ClInclude Include="troop.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
->>>>>>> parent of 0538a35... broken
+    <ClInclude Include="cordinate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{9375258a-5ddc-42e1-a7c1-27b217925f11}</UniqueIdentifier>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{27238250-f638-4963-a1d8-ac7ad0185609}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CPP Files">
+      <UniqueIdentifier>{c296df0e-9032-484d-9bcf-cf17b56315d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

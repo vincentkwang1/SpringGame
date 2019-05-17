@@ -7,6 +7,7 @@
 #include "map.h"
 #include "gui.h"
 #include "structure.h"
+#include "cordinate.h"
 #include "button.h"
 #include <time.h>
 
@@ -141,6 +142,8 @@ int main(int argc, char* args[]) {
 
 	int turnCounter = 0;
 
+	std::vector<Node> path;
+
 	//keeps track of current local map
 	int currentMapX = 20;
 	int currentMapY = 20;
@@ -199,6 +202,8 @@ int main(int argc, char* args[]) {
 	//keeps track of whether to show world map or not, toggled with 'tab'
 	bool showWorldMap = false;
 
+	//test boolean
+	bool moving = false;
 	//int test = 0;
 
 	//GAME MAIN LOOP
@@ -218,7 +223,8 @@ int main(int argc, char* args[]) {
 				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
 				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
-				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1);
+				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1); break;
+				case SDLK_a: moving = true; break;
 				}
 				//if a button is pressed, check if the troops are done
 			}
@@ -332,7 +338,7 @@ int main(int argc, char* args[]) {
 										selectedX = x;
 										selectedY = y;
 										int selected = selectedX * tileY + selectedY;
-										if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
+										/*if (alliedArmy[selectedTroop].getPos()[0] < selectedX) {
 											if (alliedArmy[selectedTroop].moveTroop(tiles, 2)) {
 												selectedTroop = 0;
 											}
@@ -351,7 +357,7 @@ int main(int argc, char* args[]) {
 											if (alliedArmy[selectedTroop].moveTroop(tiles, 1)) {
 												selectedTroop = 0;
 											}
-										}
+										}*/
 									}
 								}
 
@@ -444,6 +450,39 @@ int main(int argc, char* args[]) {
 			}
 		}
 
+		SDL_Color textColor = { 255, 255 , 255 };
+		//A STAR TESTING
+		if (selectedTroop != 0 && alliedArmy.size() != 1) {
+			Node a;
+			a.x = alliedArmy[selectedTroop].getPos()[0];
+			a.y = alliedArmy[selectedTroop].getPos()[1];
+			Node b;
+			b.x = selectedX;
+			b.y = selectedY;
+
+
+
+			if (moving == true) {
+				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
+				if (path.size() > 0) {
+					if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
+						alliedArmy[selectedTroop].moveTroop(tiles, 0);
+					}
+					else if (path[1].x == alliedArmy[selectedTroop].getPos()[0] + 1) { //dest is to x + 1
+						alliedArmy[selectedTroop].moveTroop(tiles, 2);
+					}
+					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] - 1) { //dest is y - 1
+						alliedArmy[selectedTroop].moveTroop(tiles, 1);
+					}
+					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
+						alliedArmy[selectedTroop].moveTroop(tiles, 3);
+					}
+					moving = false;
+				}
+			}
+		}
+		//END OF TESTING
+
 		//draw world map if tab is pressed
 		if (showWorldMap) {
 			worldMap.render(currentMapX, currentMapY);
@@ -454,7 +493,6 @@ int main(int argc, char* args[]) {
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
 
 		std::ostringstream strs;
-		SDL_Color textColor = { 255, 255 , 255 };
 		strs << "Turn " << turnCounter;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
@@ -463,6 +501,8 @@ int main(int argc, char* args[]) {
 		turnButton.check(localMaps);
 		turnButton.render();
 		//castle.render();
+
+		
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);

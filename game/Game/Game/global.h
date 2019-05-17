@@ -14,6 +14,16 @@ static const int worldWidth = 30;
 static const int worldHeight = 30;
 static const int mapPixelWidth = 720; // size of the drawn map
 static const int number = (tileX) * (tileY);
+struct Node
+{
+	int y;
+	int x;
+	int parentX;
+	int parentY;
+	float gCost;
+	float hCost;
+	float fCost;
+};
 
 typedef int32_t s32;
 extern SDL_Window* gWindow;
