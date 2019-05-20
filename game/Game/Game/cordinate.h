@@ -19,10 +19,10 @@ inline bool operator < (const Node& lhs, const Node& rhs)
 class Cordinate {
 public:
 	Cordinate();
-	static bool isValid(map localMap, int x, int y);
+	static bool isValid(bool team, int number, std::vector<troop> alliedArmy, std::vector<troop> enemyArmy, map localMap, int x, int y);
 	static bool isDestination(int x, int y, Node dest);
 	static double calculateH(int x, int y, Node dest);
 	static std::vector<Node> makePath(std::array<std::array<Node, (Y_MAX / Y_STEP)>, (X_MAX / X_STEP)> map, Node dest);
-	static std::vector<Node> aStar(map localMap, Node player, Node dest);
+	static std::vector<Node> aStar(bool team, int number, std::vector<troop> alliedArmy, std::vector<troop> enemyArmy, map localMap, Node player, Node dest);
 };
 #endif

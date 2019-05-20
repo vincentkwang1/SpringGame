@@ -6,7 +6,6 @@
 #define troop_h
 class troop {
 public:
-	static const int maxMoves = 8;
 	static const int panSpeed = 5;
 	troop();
 	troop(int invisible);
@@ -29,6 +28,7 @@ public:
 	void reset();
 private:
 	//FRAME COUNTER22222
+	int maxMoves = 8;
 	bool placeholder;
 	bool selected = false;
 	bool team; //true is player, false is enemy

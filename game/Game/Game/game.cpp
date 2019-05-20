@@ -143,6 +143,7 @@ int main(int argc, char* args[]) {
 	int turnCounter = 0;
 
 	std::vector<Node> path;
+	std::vector<Node> enemyPath;
 
 	//keeps track of current local map
 	int currentMapX = 20;
@@ -203,6 +204,7 @@ int main(int argc, char* args[]) {
 	bool showWorldMap = false;
 
 	//test boolean
+	bool playerTurn = true;
 	bool moving = false;
 	//int test = 0;
 
@@ -216,142 +218,31 @@ int main(int argc, char* args[]) {
 				//ALLOWS QUITTING
 			}
 			if (e.type == SDL_KEYDOWN) {
-				//HANDLES KEYPRESSES
-				switch (e.key.keysym.sym) {
-				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_0: alliedArmy[selectedTroop].attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
-				case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
-				case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
-				case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
-				case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1); break;
-				case SDLK_a: moving = true; break;
+				if (e.key.keysym.sym == SDLK_ESCAPE) {
+					quit = true;
 				}
-				//if a button is pressed, check if the troops are done
 			}
-			else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
-				if (e.button.button == SDL_BUTTON_RIGHT) {
-					if (e.type == SDL_MOUSEBUTTONDOWN) {
-						moving = true;
+			if (playerTurn) {
+				if (e.type == SDL_KEYDOWN) {
+					//HANDLES KEYPRESSES
+					switch (e.key.keysym.sym) {
+					case SDLK_0: alliedArmy[selectedTroop].attack(); break; //MAKES TROOP ATTACK WHEN A IS PRESSED, FOR TESTING PURPOSES
+					case SDLK_1: alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true); break; //CREATES NEW TROOP
+					case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
+					case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
+					case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1); break;
+					case SDLK_a: moving = true; break;
 					}
-					else {
-						moving = false;
-					}
-					for (int x = 0; x < tileX; x++) {
-						for (int y = 0; y < tileY; y++) {
-							if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
-								if (selectedTroop != 0) {
-
-									for (int i = 1; i < enemyArmy.size(); i++) {
-										//check if occupuied
-										if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
-										{
-											int y = enemyArmy[i].getPos()[0];
-											int x = alliedArmy[selectedTroop].getPos()[0];
-											int z = x - y;
-											if (z < 2 && z > -2) {
-												int a = enemyArmy[i].getPos()[1];
-												int b = alliedArmy[selectedTroop].getPos()[1];
-												int c = a - b;
-												if (c < 2 && c > -2)
-												{
-													Attackingrange = true;
-
-													//alliedArmy[selectedTroop].attack();
-													enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
-												}
-											}
-										}
-
-									}
-								}
-								if (Attackingrange) { Attackingrange = false; }
-								else {
-									tiles[selectedX * tileY + selectedY].setHighlight(0);
-									tiles[tileY * x + y].setHighlight(1);
-
-									selectedX = x;
-									selectedY = y;
-									int selected = selectedX * tileY + selectedY;
-								}
-							}
-
-						}
-					}
+					//if a button is pressed, check if the troops are done
 				}
-				else if(e.button.button == SDL_BUTTON_LEFT){
-				//handles clicking the next turn button
-				if (checkClicked(buttonBox, &e)) {
-					if (turnButton.getType() == 0) {
-						turnCounter++;
-						turnButton.setType(1);
-						for (int i = 0; i < alliedArmy.size(); i++) {
-							for (int i = 0; i < localMaps.size(); i++) {
-								//goes through all maps and checks if they've been loaded
-								if (localMaps[i].getLoaded()) {
-									//checks if there are any allied troops
-									if (localMaps[i].getTroops(true).size() != 1) {
-										for (int a = 0; a < alliedArmy.size(); a++) {
-											alliedArmy[a].reset();
-										}
-									}
-								}
-							}
+				else if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP) {//FOR MOUSE
+					if (e.button.button == SDL_BUTTON_RIGHT) {
+						if (e.type == SDL_MOUSEBUTTONDOWN) {
+							moving = true;
 						}
-					}
-				}
-				else {
-					//handles clicking troops
-					for (int x = 0; x < alliedArmy.size(); x++) {
-						if (checkClicked(alliedArmy[x].getCollider(), &e)) {
-							alliedArmy[selectedTroop].setSelected(false); //resets the old selected troop
-							selectedTroop = x;
-							selectingTroop = true;
-							alliedArmy[x].setSelected(true); //selected the new selected troop
+						else {
+							moving = false;
 						}
-					}
-					//handles clicking world map tiles
-					if (showWorldMap) {
-						for (int i = 0; i < 4; i++) {
-							int x, y;
-							switch (i) {
-							case 0: x = currentMapX; y = currentMapY - 1; break;
-							case 1: x = currentMapX; y = currentMapY + 1; break;
-							case 2: x = currentMapX - 1; y = currentMapY; break;
-							case 3: x = currentMapX + 1; y = currentMapY; break;
-							}
-							SDL_Rect worldTile = { 620 + x * mapPixelWidth / worldWidth, 200 + y * mapPixelWidth / worldWidth, mapPixelWidth / worldWidth, mapPixelWidth / worldHeight };
-							//checks if clicked one of the 4 cardinal directions from current tile
-							if (checkClicked(worldTile, &e)) {
-								//figures out which tile was clicked
-								selectedWorldX = x;
-								selectedWorldY = y;
-								//changes the map that is shown	
-								currentMapX = selectedWorldX;
-								currentMapY = selectedWorldY;
-								//sets the armies to the armies of the new map
-								alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
-								enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
-								//if not yet loaded, creates a new perlin array for the map according to the type of tile
-								if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
-									localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
-								}
-								//sets the current tiles to the newly selected one, whether a new array or not
-								for (int i = 0; i < localMaps[currentMapX * worldWidth + currentMapY].getHeight(); i++)
-								{
-									for (int j = 0; j < localMaps[currentMapX * worldWidth + currentMapY].getWidth(); j++) {
-										tiles[tileY * i + j] = localMaps[currentMapX * worldWidth + currentMapY].getMapContainer()[i][j];
-									}
-								}
-								for (int side = 0; side < 4; side++) {
-									for (int i = 0; i < tileX; i++) {
-										hillTile[side * tileX + i].setPosition();
-									}
-								}
-							}
-						}
-					}
-					else if (!selectingTroop) {
-						//handles clicking local map tiles
 						for (int x = 0; x < tileX; x++) {
 							for (int y = 0; y < tileY; y++) {
 								if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
@@ -394,8 +285,125 @@ int main(int argc, char* args[]) {
 							}
 						}
 					}
-					selectingTroop = false;
-				}
+					else if (e.button.button == SDL_BUTTON_LEFT) {
+						//handles clicking the next turn button
+						if (checkClicked(buttonBox, &e)) {
+							if (turnButton.getType() == 0) {
+								turnCounter++;
+								turnButton.setType(1);
+								playerTurn = false;
+								for (int i = 0; i < alliedArmy.size(); i++) {
+									for (int i = 0; i < localMaps.size(); i++) {
+										//goes through all maps and checks if they've been loaded
+										if (localMaps[i].getLoaded()) {
+											//checks if there are any allied troops
+											if (localMaps[i].getTroops(true).size() != 1) {
+												for (int a = 0; a < alliedArmy.size(); a++) {
+													alliedArmy[a].reset();
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						else {
+							//handles clicking troops
+							for (int x = 0; x < alliedArmy.size(); x++) {
+								if (checkClicked(alliedArmy[x].getCollider(), &e)) {
+									alliedArmy[selectedTroop].setSelected(false); //resets the old selected troop
+									selectedTroop = x;
+									selectingTroop = true;
+									alliedArmy[x].setSelected(true); //selected the new selected troop
+								}
+							}
+							//handles clicking world map tiles
+							if (showWorldMap) {
+								for (int i = 0; i < 4; i++) {
+									int x, y;
+									switch (i) {
+									case 0: x = currentMapX; y = currentMapY - 1; break;
+									case 1: x = currentMapX; y = currentMapY + 1; break;
+									case 2: x = currentMapX - 1; y = currentMapY; break;
+									case 3: x = currentMapX + 1; y = currentMapY; break;
+									}
+									SDL_Rect worldTile = { 620 + x * mapPixelWidth / worldWidth, 200 + y * mapPixelWidth / worldWidth, mapPixelWidth / worldWidth, mapPixelWidth / worldHeight };
+									//checks if clicked one of the 4 cardinal directions from current tile
+									if (checkClicked(worldTile, &e)) {
+										//figures out which tile was clicked
+										selectedWorldX = x;
+										selectedWorldY = y;
+										//changes the map that is shown	
+										currentMapX = selectedWorldX;
+										currentMapY = selectedWorldY;
+										//sets the armies to the armies of the new map
+										alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(true);
+										enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].getTroops(false);
+										//if not yet loaded, creates a new perlin array for the map according to the type of tile
+										if (!localMaps[currentMapX * worldWidth + currentMapY].getLoaded()) {
+											localMaps = createMap(localMaps, perlin.createArray(tileX, tileY, 10, worldMap.getTileType(currentMapX, currentMapY)), x, y);
+										}
+										//sets the current tiles to the newly selected one, whether a new array or not
+										for (int i = 0; i < localMaps[currentMapX * worldWidth + currentMapY].getHeight(); i++)
+										{
+											for (int j = 0; j < localMaps[currentMapX * worldWidth + currentMapY].getWidth(); j++) {
+												tiles[tileY * i + j] = localMaps[currentMapX * worldWidth + currentMapY].getMapContainer()[i][j];
+											}
+										}
+										for (int side = 0; side < 4; side++) {
+											for (int i = 0; i < tileX; i++) {
+												hillTile[side * tileX + i].setPosition();
+											}
+										}
+									}
+								}
+							}
+							else if (!selectingTroop) {
+								//handles clicking local map tiles
+								for (int x = 0; x < tileX; x++) {
+									for (int y = 0; y < tileY; y++) {
+										if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
+											if (selectedTroop != 0) {
+												for (int i = 1; i < enemyArmy.size(); i++) {
+													//check if occupuied
+													if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
+													{
+														int y = enemyArmy[i].getPos()[0];
+														int x = alliedArmy[selectedTroop].getPos()[0];
+														int z = x - y;
+														if (z < 2 && z > -2) {
+															int a = enemyArmy[i].getPos()[1];
+															int b = alliedArmy[selectedTroop].getPos()[1];
+															int c = a - b;
+															if (c < 2 && c > -2)
+															{
+																Attackingrange = true;
+
+																//alliedArmy[selectedTroop].attack();
+																enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
+															}
+														}
+													}
+
+												}
+											}
+											if (Attackingrange) { Attackingrange = false; }
+											else {
+												tiles[selectedX * tileY + selectedY].setHighlight(0);
+												tiles[tileY * x + y].setHighlight(1);
+
+												selectedX = x;
+												selectedY = y;
+												int selected = selectedX * tileY + selectedY;
+											}
+										}
+
+									}
+								}
+							}
+							selectingTroop = false;
+						}
+					}
 				}
 			}
 		}
@@ -455,6 +463,54 @@ int main(int argc, char* args[]) {
 			enemyArmy[i].render();
 		}
 
+		//IF ITS THE ENEMY'S TURN
+		if (!playerTurn) {
+			//AI SHENANIGANS
+			for (int i = 1; i < enemyArmy.size(); i++) {
+				bool done = false;
+				do {
+					Node a;
+					a.x = enemyArmy[i].getPos()[0];
+					a.y = enemyArmy[i].getPos()[1];
+					Node b;
+					b.x = alliedArmy[1].getPos()[0];
+					b.y = alliedArmy[1].getPos()[1];
+					enemyPath = Cordinate::aStar(false, i, alliedArmy, enemyArmy, localMaps[currentMapX * worldWidth + currentMapY], a, b);
+					if (enemyPath.size() > 0) {
+						if (enemyPath[1].x == enemyArmy[i].getPos()[0] - 1) { //dest is to x - 1
+							enemyArmy[i].moveTroop(tiles, 0);
+						}
+						else if (enemyPath[1].x == enemyArmy[i].getPos()[0] + 1) { //dest is to x + 1
+							enemyArmy[i].moveTroop(tiles, 2);
+						}
+						else if (enemyPath[1].y == enemyArmy[i].getPos()[1] - 1) { //dest is y - 1
+							enemyArmy[i].moveTroop(tiles, 1);
+						}
+						else if (enemyPath[1].y == enemyArmy[i].getPos()[1] + 1) { //dest is y + 1
+							enemyArmy[i].moveTroop(tiles, 3);
+						}
+					}
+					else {
+						done = true;
+					}
+					SDL_Point enemyArmyC = { enemyArmy[i].getPos()[0], enemyArmy[i].getPos()[1] };
+					SDL_Point destination = { alliedArmy[1].getPos()[0], alliedArmy[1].getPos()[1] };
+					if (enemyArmyC.x == destination.x) {
+						if (enemyArmyC.y = destination.y) {
+							done = true;
+						}
+					}
+					if (enemyArmy[i].getMovesLeft() == 0) {
+						done = true;
+					}
+					SDL_Delay(10);
+				} while (done == false);
+				if (done == true) {
+					enemyArmy[i].attack();
+				}
+			}
+		}
+
 		gHighlightTexture.colorMod(255, 255, 255);
 		gHighlightTexture.render(tiles[selectedX * tileY + selectedY].getX(), tiles[selectedX * tileY + selectedY].getY());
 
@@ -481,7 +537,8 @@ int main(int argc, char* args[]) {
 		}
 
 		SDL_Color textColor = { 255, 255 , 255 };
-		//A STAR TESTING
+
+		//MOVE ALLIED ARMY
 		if (selectedTroop != 0 && alliedArmy.size() != 1) {
 			Node a;
 			a.x = alliedArmy[selectedTroop].getPos()[0];
@@ -491,7 +548,7 @@ int main(int argc, char* args[]) {
 			b.y = selectedY;
 
 			if (moving == true) {
-				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
+				path = Cordinate::aStar(true, selectedTroop, alliedArmy, enemyArmy, localMaps[currentMapX * worldWidth + currentMapY], a, b);
 				if (path.size() > 0) {
 					if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
 						alliedArmy[selectedTroop].moveTroop(tiles, 0);
@@ -509,7 +566,6 @@ int main(int argc, char* args[]) {
 				SDL_Delay(100);
 			}
 		}
-		//END OF TESTING
 
 		//draw world map if tab is pressed
 		if (showWorldMap) {
@@ -521,7 +577,7 @@ int main(int argc, char* args[]) {
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
 
 		std::ostringstream strs;
-		strs << "Turn " << turnCounter;
+		strs << "Turn " << turnCounter << ", Player's Turn = " << playerTurn;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
 		gTextTexture.render(100, 100);
@@ -530,7 +586,7 @@ int main(int argc, char* args[]) {
 		turnButton.render();
 		//castle.render();
 
-		
+
 
 		//GAME THINGS HAPPENING END
 		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0);

@@ -3,15 +3,33 @@
 Cordinate::Cordinate()
 {
 }
-bool Cordinate::isValid(map localMap, int x, int y) { //If our Node is an obstacle it is not valid
+bool Cordinate::isValid(bool team, int number, std::vector<troop> alliedArmy, std::vector<troop> enemyArmy, map localMap, int x, int y) { //If our Node is an obstacle it is not valid
 	if (x < 0 || y < 0 || x >= tileX || y >= tileY) {
 		return false;
 	}
-	else if(localMap.getMapContainer()[x][y].getNoise() > 0 && localMap.getMapContainer()[x][y].getNoise() < 4) {
+	else if (localMap.getMapContainer()[x][y].getNoise() > 0 && localMap.getMapContainer()[x][y].getNoise() < 4) {
+		/*if (team) {
+			for (int i = 0; i < alliedArmy.size(); i++) {
+				if (i != number) {
+					if (alliedArmy[i].getPos()[0] == x && alliedArmy[i].getPos()[1] == y) {
+						return false;
+					}
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < enemyArmy.size(); i++) {
+				if (i != number) {
+					if (enemyArmy[i].getPos()[0] == x && enemyArmy[i].getPos()[1] == y) {
+						return false;
+					}
+				}
+			}
+		}*/
 		return true;
 	}
 	return false;
-}	
+}
 bool Cordinate::isDestination(int x, int y, Node dest) {
 	if (x == dest.x && y == dest.y) {
 		return true;
@@ -64,9 +82,9 @@ std::vector<Node> Cordinate::makePath(std::array<std::array<Node, (Y_MAX / Y_STE
 		gTextTexture.render(1000, 150);*/
 	}
 }
-std::vector<Node> Cordinate::aStar(map localMap, Node player, Node dest) {
+std::vector<Node> Cordinate::aStar(bool team, int number, std::vector<troop> alliedArmy, std::vector<troop> enemyArmy, map localMap, Node player, Node dest) {
 	std::vector<Node> empty;
-	if (isValid(localMap, dest.x, dest.y) == false) {
+	if (isValid(team, number, alliedArmy, enemyArmy, localMap, dest.x, dest.y) == false) {
 		/*std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
 		strs << "Destination is an obstacle";
@@ -76,7 +94,7 @@ std::vector<Node> Cordinate::aStar(map localMap, Node player, Node dest) {
 		return empty;
 		//Destination is invalid
 	}
- 	if (isDestination(player.x, player.y, dest)) {
+	if (isDestination(player.x, player.y, dest)) {
 		/*std::ostringstream strs;
 		SDL_Color textColor = { 255, 255 , 255 };
 		strs << "You are the destination";
@@ -138,14 +156,14 @@ std::vector<Node> Cordinate::aStar(map localMap, Node player, Node dest) {
 			}
 			node = *itNode;
 			openList.erase(itNode);
-		} while (isValid(localMap, node.x, node.y) == false);
+		} while (isValid(team, number, alliedArmy, enemyArmy, localMap, node.x, node.y) == false);
 
 		x = node.x;
 		y = node.y;
 		closedList[x][y] = true;
 
 		//For each neighbour starting from North-West to South-East
-		for(int i = 0; i <4; i++){
+		for (int i = 0; i < 4; i++) {
 			int newX, newY;
 			switch (i) {
 			case 0: newX = -1; newY = 0; break;
@@ -153,36 +171,36 @@ std::vector<Node> Cordinate::aStar(map localMap, Node player, Node dest) {
 			case 2: newX = 0; newY = 1; break;
 			case 3: newX = 0; newY = -1; break;
 			}
-				double gNew, hNew, fNew;
-				if (isValid(localMap, x + newX, y + newY)) {
-					if (isDestination(x + newX, y + newY, dest))
+			double gNew, hNew, fNew;
+			if (isValid(team, number, alliedArmy, enemyArmy, localMap, x + newX, y + newY)) {
+				if (isDestination(x + newX, y + newY, dest))
+				{
+					//Destination found - make path
+					allMap[x + newX][y + newY].parentX = x;
+					allMap[x + newX][y + newY].parentY = y;
+					destinationFound = true;
+					return makePath(allMap, dest);
+				}
+				else if (closedList[x + newX][y + newY] == false)
+				{
+					gNew = node.gCost + 1.0;
+					hNew = calculateH(x + newX, y + newY, dest);
+					fNew = gNew + hNew;
+					// Check if this path is better than the one already present
+					if (allMap[x + newX][y + newY].fCost == FLT_MAX ||
+						allMap[x + newX][y + newY].fCost > fNew)
 					{
-						//Destination found - make path
+						// Update the details of this neighbour node
+						allMap[x + newX][y + newY].fCost = fNew;
+						allMap[x + newX][y + newY].gCost = gNew;
+						allMap[x + newX][y + newY].hCost = hNew;
 						allMap[x + newX][y + newY].parentX = x;
 						allMap[x + newX][y + newY].parentY = y;
-						destinationFound = true;
-						return makePath(allMap, dest);
-					}
-					else if (closedList[x + newX][y + newY] == false)
-					{
-						gNew = node.gCost + 1.0;
-						hNew = calculateH(x + newX, y + newY, dest);
-						fNew = gNew + hNew;
-						// Check if this path is better than the one already present
-						if (allMap[x + newX][y + newY].fCost == FLT_MAX ||
-							allMap[x + newX][y + newY].fCost > fNew)
-						{
-							// Update the details of this neighbour node
-							allMap[x + newX][y + newY].fCost = fNew;
-							allMap[x + newX][y + newY].gCost = gNew;
-							allMap[x + newX][y + newY].hCost = hNew;
-							allMap[x + newX][y + newY].parentX = x;
-							allMap[x + newX][y + newY].parentY = y;
-							openList.emplace_back(allMap[x + newX][y + newY]);
-						}
+						openList.emplace_back(allMap[x + newX][y + newY]);
 					}
 				}
 			}
+		}
 	}
 	if (destinationFound == false) {
 		/*std::ostringstream strs;

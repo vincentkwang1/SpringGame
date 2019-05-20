@@ -7,6 +7,10 @@ troop::troop() {
 troop::troop(int gXCoord, int gYCoord, int type, tile* tiles, bool teamInit) {
 	placeholder = false;
 	team = teamInit;
+	if (team == false) {
+		maxMoves = 8;
+		movesLeft = maxMoves;
+	}
 	xCoord = gXCoord;
 	yCoord = gYCoord;
 	updatePos(tiles);
@@ -121,6 +125,13 @@ void troop::render() {
 			gEnemyTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
 			gEnemyTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
 			gEnemyTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);*/
+
+			std::ostringstream strs;
+			SDL_Color textColor = { 255, 255 , 255 };
+			strs << movesLeft;
+			std::string str = strs.str();
+			gTextTexture.loadFromRenderedText(str, textColor);
+			gTextTexture.render(tPosX, tPosY - 50);
 
 			//UPDATING FRAME COUNTERS
 			if (frame < 100) {
