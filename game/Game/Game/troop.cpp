@@ -226,3 +226,6 @@ bool troop::getMovesLeft() {
 		return true;
 	}
 }
+
+bool troop::getAttackRange() { return AttackingRange; }
+void troop::setAttackRange(bool inRange) { AttackingRange = inRange; }

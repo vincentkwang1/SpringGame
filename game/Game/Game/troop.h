@@ -27,9 +27,12 @@ public:
 	bool getPlaceholder();
 	bool getMovesLeft();
 	void reset();
+	bool getAttackRange();
+	void setAttackRange(bool inRange);
 private:
 	//FRAME COUNTER22222
 	bool placeholder;
+	bool AttackingRange;
 	bool selected = false;
 	bool team; //true is player, false is enemy
 	int movesLeft = maxMoves;

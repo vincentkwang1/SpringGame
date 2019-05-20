@@ -177,7 +177,7 @@ int main(int argc, char* args[]) {
 	std::vector<troop> alliedArmy; //Creates the array storing the data on the player army and puts a place hoder at the beginning
 	std::vector<troop> enemyArmy;  //Creates the array storing the data on the enemy army and puts a troop on the board 
 
-	bool Attackingrange = false;
+	
 
 	//Generate Armies//
 	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
@@ -236,48 +236,7 @@ int main(int argc, char* args[]) {
 					else {
 						moving = false;
 					}
-					for (int x = 0; x < tileX; x++) {
-						for (int y = 0; y < tileY; y++) {
-							if (checkCircleClicked(56, tiles[tileY * x + y].getCollider().x + 120, tiles[tileY * x + y].getCollider().y + 60, &e)) {
-								if (selectedTroop != 0) {
-
-									for (int i = 1; i < enemyArmy.size(); i++) {
-										//check if occupuied
-										if (selectedX == enemyArmy[i].getPos()[0] && selectedY == enemyArmy[i].getPos()[1])
-										{
-											int y = enemyArmy[i].getPos()[0];
-											int x = alliedArmy[selectedTroop].getPos()[0];
-											int z = x - y;
-											if (z <= 2 && z >= -2) {
-												int a = enemyArmy[i].getPos()[1];
-												int b = alliedArmy[selectedTroop].getPos()[1];
-												int c = a - b;
-												if (c <= 2 && c >= -2)
-												{
-													Attackingrange = true;
-													moving = false;
-													//alliedArmy[selectedTroop].attack();
-													enemyArmy[i].setHp(enemyArmy[i].getHp() - 10);
-												}
-											}
-										}
-
-									}
-								}
-								
-								
-								
-									tiles[selectedX * tileY + selectedY].setHighlight(0);
-									tiles[tileY * x + y].setHighlight(1);
-
-									selectedX = x;
-									selectedY = y;
-									int selected = selectedX * tileY + selectedY;
-								
-							}
-
-						}
-					}
+				
 				}
 				else if(e.button.button == SDL_BUTTON_LEFT){
 				//handles clicking the next turn button
@@ -452,6 +411,7 @@ int main(int argc, char* args[]) {
 					enemyArmy.erase(enemyArmy.begin() + i);
 					std::cout << "Death\n";
 					selectedTroop = 0;
+					
 				}
 			}
 		}
@@ -466,24 +426,49 @@ int main(int argc, char* args[]) {
 			b.x = selectedX;
 			b.y = selectedY;
 
-			if (moving == true && !Attackingrange) {
-				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
-				if (path.size() > 0) {
-					if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
-						alliedArmy[selectedTroop].moveTroop(tiles, 0);
-					}
-					else if (path[1].x == alliedArmy[selectedTroop].getPos()[0] + 1) { //dest is to x + 1
-						alliedArmy[selectedTroop].moveTroop(tiles, 2);
-					}
-					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] - 1) { //dest is y - 1
-						alliedArmy[selectedTroop].moveTroop(tiles, 1);
-					}
-					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
-						alliedArmy[selectedTroop].moveTroop(tiles, 3);
-					}
+
+
+			for(int i = 0; i < enemyArmy.size(); i++){
+			
+				if (false) {
+
+
+					alliedArmy[selectedTroop].setAttackRange(true);
 				}
-				SDL_Delay(100);
+				else {
+					alliedArmy[selectedTroop].setAttackRange(false); 
+				}
+
+
+
+
+
 			}
+
+
+			if (moving == true) {
+				if (alliedArmy[selectedTroop].getAttackRange()) { }
+				else {
+					path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
+					if (path.size() > 0) {
+						if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
+							alliedArmy[selectedTroop].moveTroop(tiles, 0);
+						}
+						else if (path[1].x == alliedArmy[selectedTroop].getPos()[0] + 1) { //dest is to x + 1
+							alliedArmy[selectedTroop].moveTroop(tiles, 2);
+						}
+						else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] - 1) { //dest is y - 1
+							alliedArmy[selectedTroop].moveTroop(tiles, 1);
+						}
+						else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
+							alliedArmy[selectedTroop].moveTroop(tiles, 3);
+						}
+					}
+					SDL_Delay(100);
+				}
+			}
+
+
 		}
 		//END OF TESTING
 
