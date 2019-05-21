@@ -125,6 +125,7 @@ int main(int argc, char* args[]) {
 	init();
 	loadMedia();
 	bool quit = false;
+	bool done = false;
 	SDL_Event e;
 	button turnButton = {};
 	SDL_Rect buttonBox = { 1761, 940, 159, 159 };
@@ -180,6 +181,7 @@ int main(int argc, char* args[]) {
 
 	bool Attackingrange = false;
 
+	bool attacked = false;
 	//Generate Armies//
 	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
 
@@ -191,6 +193,8 @@ int main(int argc, char* args[]) {
 	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
 
 	//alliedArmy[0].setSelected(true); //makes the first troop selected by default
+
+	int aiCurrentTroop = 1;
 
 	//keeps track of selected tile
 	int selectedX = 0;
@@ -231,7 +235,7 @@ int main(int argc, char* args[]) {
 					case SDLK_2: enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false); break; //CREATES NEW TROOP
 					case SDLK_TAB: if (e.key.repeat == 0) showWorldMap = !showWorldMap; break;
 					case SDLK_z:  alliedArmy[selectedTroop].setHp(alliedArmy[selectedTroop].getHp() - 1); break;
-					case SDLK_a: moving = true; break;
+					case SDLK_a: enemyArmy[1].attack(); break;
 					}
 					//if a button is pressed, check if the troops are done
 				}
@@ -289,6 +293,8 @@ int main(int argc, char* args[]) {
 						//handles clicking the next turn button
 						if (checkClicked(buttonBox, &e)) {
 							if (turnButton.getType() == 0) {
+								done = false;
+								attacked = false;
 								turnCounter++;
 								turnButton.setType(1);
 								playerTurn = false;
@@ -465,48 +471,69 @@ int main(int argc, char* args[]) {
 
 		//IF ITS THE ENEMY'S TURN
 		if (!playerTurn) {
+			SDL_Point enemyArmyC = { enemyArmy[aiCurrentTroop].getPos()[0], enemyArmy[aiCurrentTroop].getPos()[1] };;
+			SDL_Point destination = { alliedArmy[1].getPos()[0], alliedArmy[1].getPos()[1] };
 			//AI SHENANIGANS
-			for (int i = 1; i < enemyArmy.size(); i++) {
-				bool done = false;
-				do {
-					Node a;
-					a.x = enemyArmy[i].getPos()[0];
-					a.y = enemyArmy[i].getPos()[1];
-					Node b;
-					b.x = alliedArmy[1].getPos()[0];
-					b.y = alliedArmy[1].getPos()[1];
-					enemyPath = Cordinate::aStar(false, i, alliedArmy, enemyArmy, localMaps[currentMapX * worldWidth + currentMapY], a, b);
-					if (enemyPath.size() > 0) {
-						if (enemyPath[1].x == enemyArmy[i].getPos()[0] - 1) { //dest is to x - 1
-							enemyArmy[i].moveTroop(tiles, 0);
-						}
-						else if (enemyPath[1].x == enemyArmy[i].getPos()[0] + 1) { //dest is to x + 1
-							enemyArmy[i].moveTroop(tiles, 2);
-						}
-						else if (enemyPath[1].y == enemyArmy[i].getPos()[1] - 1) { //dest is y - 1
-							enemyArmy[i].moveTroop(tiles, 1);
-						}
-						else if (enemyPath[1].y == enemyArmy[i].getPos()[1] + 1) { //dest is y + 1
-							enemyArmy[i].moveTroop(tiles, 3);
-						}
+			if(done == false) {
+				Node a;
+				a.x = enemyArmy[aiCurrentTroop].getPos()[0];
+				a.y = enemyArmy[aiCurrentTroop].getPos()[1];
+				Node b;
+				b.x = alliedArmy[1].getPos()[0];
+				b.y = alliedArmy[1].getPos()[1];
+				enemyPath = Cordinate::aStar(false, aiCurrentTroop, alliedArmy, enemyArmy, localMaps[currentMapX * worldWidth + currentMapY], a, b);
+				if (enemyPath.size() > 0) {
+					if (enemyPath[1].x == enemyArmy[aiCurrentTroop].getPos()[0] - 1) { //dest is to x - 1
+						enemyArmy[aiCurrentTroop].moveTroop(tiles, 0);
 					}
-					else {
+					else if (enemyPath[1].x == enemyArmy[aiCurrentTroop].getPos()[0] + 1) { //dest is to x + 1
+						enemyArmy[aiCurrentTroop].moveTroop(tiles, 2);
+					}
+					else if (enemyPath[1].y == enemyArmy[aiCurrentTroop].getPos()[1] - 1) { //dest is y - 1
+						enemyArmy[aiCurrentTroop].moveTroop(tiles, 1);
+					}
+					else if (enemyPath[1].y == enemyArmy[aiCurrentTroop].getPos()[1] + 1) { //dest is y + 1
+						enemyArmy[aiCurrentTroop].moveTroop(tiles, 3);
+					}
+				}
+				else {
+					done = true;
+				}
+				enemyArmyC = { enemyArmy[aiCurrentTroop].getPos()[0], enemyArmy[aiCurrentTroop].getPos()[1] };
+				destination = { alliedArmy[1].getPos()[0], alliedArmy[1].getPos()[1] };
+				if (enemyArmyC.x == destination.x) {
+					if (enemyArmyC.y == destination.y) {
 						done = true;
 					}
-					SDL_Point enemyArmyC = { enemyArmy[i].getPos()[0], enemyArmy[i].getPos()[1] };
-					SDL_Point destination = { alliedArmy[1].getPos()[0], alliedArmy[1].getPos()[1] };
-					if (enemyArmyC.x == destination.x) {
-						if (enemyArmyC.y = destination.y) {
-							done = true;
+				}
+				if (enemyArmy[aiCurrentTroop].getMovesLeft() == 0) {
+					done = true;
+				}
+				SDL_Delay(200);
+			}
+			if (done == true) {
+				if (enemyArmy[aiCurrentTroop].getPos()[0] == destination.x) {
+					if (enemyArmy[aiCurrentTroop].getPos()[1] == destination.y) {
+						if (attacked == false) {
+ 							enemyArmy[aiCurrentTroop].attack();
+							attacked = true;
+						}
+						if (enemyArmy[aiCurrentTroop].getAttacking() == false) {
+							aiCurrentTroop++;
+							attacked = false;
 						}
 					}
-					if (enemyArmy[i].getMovesLeft() == 0) {
-						done = true;
+				}
+				if(enemyArmy[aiCurrentTroop].getMovesLeft() == 0) {
+					aiCurrentTroop++;
+					done = false;
+				}
+				if (aiCurrentTroop >= enemyArmy.size()) {
+					aiCurrentTroop = 1;
+					playerTurn = true;
+					for (int i = 1; i < enemyArmy.size(); i++) {
+						enemyArmy[i].reset();
 					}
-					SDL_Delay(10);
-				} while (done == false);
-				if (done == true) {
-					enemyArmy[i].attack();
 				}
 			}
 		}

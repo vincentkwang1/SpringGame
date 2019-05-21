@@ -1,17 +1,18 @@
 ﻿  game.cpp
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(33,20): warning C4552:  '&': result of expression not used
 C:\GitHub\SpringGame\game\Game\Game\game.cpp(89,15): warning C4244:  'initializing': conversion from 'double' to 'int', possible loss of data
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(131,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(251,29): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(295,27): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(296,28): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(301,31): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(312,26): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(367,31): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(439,23): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(455,21): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(460,21): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(469,22): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(520,22): warning C4018:  '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\game.cpp(529,22): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(132,12): warning C4244:  'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(255,29): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(301,27): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(302,28): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(307,31): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(318,26): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(373,31): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(445,23): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(461,21): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(466,21): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(531,24): warning C4018:  '>=': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(534,24): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(547,22): warning C4018:  '<': signed/unsigned mismatch
+C:\GitHub\SpringGame\game\Game\Game\game.cpp(556,22): warning C4018:  '<': signed/unsigned mismatch
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

@@ -66,6 +66,9 @@ bool troop::getPlaceholder() {
 void troop::setSelected(bool newSelected) {
 	selected = newSelected;
 }
+bool troop::getAttacking() {
+	return attacking;
+}
 void troop::render() {
 	if (!placeholder) {
 		if (selected) {
@@ -74,7 +77,7 @@ void troop::render() {
 		SDL_Rect* currentClip[6];
 		if (attacking) { //if attacking is true, execute attack animation
 			for (int i = 0; i < 6; i++) {
-				currentClip[i] = &troopClips[(frame / 5 + i) % 20];
+ 				currentClip[i] = &troopClips[(frame / 5 + i) % 20];
 			}
 			if ((frame / 5) % 20 == 19) { //stops attacking when last animation is done
 				attacking = false;
