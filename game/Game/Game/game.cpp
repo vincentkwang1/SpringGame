@@ -184,7 +184,7 @@ int main(int argc, char* args[]) {
 
 	//Generatres enemies
 	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
-
+	int damagedEnemy = 0;
 	//keeps track of selected troop
 	int selectedTroop = 0;
 	bool selectingTroop = false; //helps separate clicking alliedArmy from clicking tiles
@@ -428,45 +428,29 @@ int main(int argc, char* args[]) {
 
 
 
-			for(int i = 0; i < enemyArmy.size(); i++){
 			
-				if (false) {
-
-
-					alliedArmy[selectedTroop].setAttackRange(true);
-				}
-				else {
-					alliedArmy[selectedTroop].setAttackRange(false); 
-				}
-
-
-
-
-
-			}
 
 
 			if (moving == true) {
-				if (alliedArmy[selectedTroop].getAttackRange()) { }
-				else {
-					path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
-					if (path.size() > 0) {
-						if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
-							alliedArmy[selectedTroop].moveTroop(tiles, 0);
-						}
-						else if (path[1].x == alliedArmy[selectedTroop].getPos()[0] + 1) { //dest is to x + 1
-							alliedArmy[selectedTroop].moveTroop(tiles, 2);
-						}
-						else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] - 1) { //dest is y - 1
-							alliedArmy[selectedTroop].moveTroop(tiles, 1);
-						}
-						else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
-							alliedArmy[selectedTroop].moveTroop(tiles, 3);
-						}
+				path = Cordinate::aStar(localMaps[currentMapX * worldWidth + currentMapY], a, b);
+				if (path.size() > 0) {
+					if (path[1].x == alliedArmy[selectedTroop].getPos()[0] - 1) { //dest is to x - 1
+						damagedEnemy = alliedArmy[selectedTroop].moveTroop(tiles, 0, enemyArmy);
 					}
-					SDL_Delay(100);
+					else if (path[1].x == alliedArmy[selectedTroop].getPos()[0] + 1) { //dest is to x + 1
+						damagedEnemy = alliedArmy[selectedTroop].moveTroop(tiles, 2, enemyArmy);
+					}
+					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] - 1) { //dest is y - 1
+						damagedEnemy = alliedArmy[selectedTroop].moveTroop(tiles, 1, enemyArmy);
+					}
+					else if (path[1].y == alliedArmy[selectedTroop].getPos()[1] + 1) { //dest is y + 1
+						damagedEnemy = alliedArmy[selectedTroop].moveTroop(tiles, 3, enemyArmy);
+					}
 				}
+				SDL_Delay(100);
+
 			}
+			if (damagedEnemy != 0) { enemyArmy[damagedEnemy].setHp(enemyArmy[damagedEnemy].getHp() - 10); damagedEnemy = 0; }
 
 
 		}

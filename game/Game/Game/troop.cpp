@@ -85,7 +85,14 @@ void troop::render() {
 		if (team) {
 			if (attacking) {
 				if (clip > 13 && clip < 18) {
-					gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]);
+					switch (Direction) {
+					case 1: gSwordsmanTexture.render(tPosX - 90, tPosY + 90, currentClip[0]); break;
+					case 2: gSwordsmanTexture.render(tPosX - 90, tPosY -45, currentClip[0]); break;
+					case 3: gSwordsmanTexture.render(tPosX + 135, tPosY - 45, currentClip[0]); break;
+					case 4: gSwordsmanTexture.render(tPosX + 135, tPosY + 90, currentClip[0]); break;
+
+					}
+					
 				}
 				else {
 					gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
@@ -94,11 +101,11 @@ void troop::render() {
 			else {
 				gSwordsmanTexture.render(tPosX, tPosY, currentClip[0]);
 			}
-			gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
-			gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
-			gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
-			gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
-			gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
+			//gSwordsmanTexture.render(tPosX + 40, tPosY, currentClip[1]);
+			//gSwordsmanTexture.render(tPosX - 10, tPosY + 30, currentClip[2]);
+			//gSwordsmanTexture.render(tPosX + 30, tPosY + 30, currentClip[3]);
+			//gSwordsmanTexture.render(tPosX + 50, tPosY + 60, currentClip[4]);
+			//gSwordsmanTexture.render(tPosX + 10, tPosY + 60, currentClip[5]);
 
 			//UPDATING FRAME COUNTERS
 			if (frame < 100) {
@@ -158,40 +165,76 @@ int * troop::getPos() {
 	coords[1] = yCoord;
 	return coords;
 }
-bool troop::moveTroop(tile* tiles, int direction) {
+int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 	bool success = true;
 	if (movesLeft > 0) {
 		switch (direction) {
 		case 0:
 			if (tiles[tileY * (xCoord - 1) + yCoord].getPassable()) {
+				for (int i = 0; i < enemyArmy.size(); i++) {
+					if (enemyArmy[i].getPos()[0] == xCoord-1 && enemyArmy[i].getPos()[1] == yCoord) {
+						std::cout << "1";
+						Direction = 1;
+						attacking = true;
+						return i;
+						
+					}
+				}
 				xCoord = xCoord - 1;
+				
 			}
 			else {
-				success = false;
+				success = 0;
 			}
 			break;
 		case 1:
 			if (tiles[tileY * xCoord + (yCoord - 1)].getPassable()) {
+				for (int i = 0; i < enemyArmy.size(); i++) {
+					if (enemyArmy[i].getPos()[0] == xCoord && enemyArmy[i].getPos()[1] == yCoord-1) {
+						std::cout << "2";
+						Direction = 2;
+						attacking = true;
+						return i;
+					}
+				}
+
 				yCoord = yCoord - 1;
 			}
 			else {
-				success = false;
+				success = 0;
 			}
 			break;
 		case 2:
 			if (tiles[tileY * (xCoord + 1) + yCoord].getPassable()) {
+				for (int i = 0; i < enemyArmy.size(); i++) {
+					if (enemyArmy[i].getPos()[0] == xCoord +1 && enemyArmy[i].getPos()[1] == yCoord) {
+						std::cout << "3";
+						Direction = 3;
+						attacking = true;
+						return i;
+					}
+				}
+				
 				xCoord = xCoord + 1;
 			}
 			else {
-				success = false;
+				success = 0;
 			}
 			break;
 		case 3:
 			if (tiles[tileY * xCoord + (yCoord + 1)].getPassable()) {
+				for (int i = 0; i < enemyArmy.size(); i++) {
+					if (enemyArmy[i].getPos()[0] == xCoord && enemyArmy[i].getPos()[1] == yCoord+1) {
+						std::cout << "4";
+						Direction = 4;
+						attacking = true;
+						return i;
+					}
+				}
 				yCoord = yCoord + 1;
 			}
 			else {
-				success = false;
+				success = 0;
 			}
 			break;
 		}
@@ -207,10 +250,10 @@ bool troop::moveTroop(tile* tiles, int direction) {
 	}
 	if (movesLeft == 0) {
 		setSelected(false);
-		return true;
+		return 0;
 	}
 	else {
-		return false;
+		return 0;
 	}
 }
 void troop::attack() {
@@ -227,5 +270,3 @@ bool troop::getMovesLeft() {
 	}
 }
 
-bool troop::getAttackRange() { return AttackingRange; }
-void troop::setAttackRange(bool inRange) { AttackingRange = inRange; }
