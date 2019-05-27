@@ -186,6 +186,12 @@ int main(int argc, char* args[]) {
 	//alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, true);
 
 	//Generatres enemies
+	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true);
+	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true);
+	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true);
+	alliedArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, true);
+	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false);
+	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 2, 2, false);
 	enemyArmy = localMaps[currentMapX * worldWidth + currentMapY].createTroop(tiles, 1, 1, false);
 	int damagedEnemy = 0;
 	//keeps track of selected troop
@@ -445,7 +451,7 @@ int main(int argc, char* args[]) {
 					done = true;
 				}
 				if (damagedEnemy != 0) {
-					alliedArmy[damagedEnemy].setHp(alliedArmy[damagedEnemy].getHp() - 10); damagedEnemy = 0; 
+					alliedArmy[damagedEnemy].setHp(alliedArmy[damagedEnemy].getHp() - 25); damagedEnemy = 0; 
 				}
 				enemyArmyC = { enemyArmy[aiCurrentTroop].getPos()[0], enemyArmy[aiCurrentTroop].getPos()[1] };
 				destination = { alliedArmy[1].getPos()[0], alliedArmy[1].getPos()[1] };
@@ -457,7 +463,9 @@ int main(int argc, char* args[]) {
 				if (enemyArmy[aiCurrentTroop].getMovesLeft() == 0) {
 					done = true;
 				}
-				SDL_Delay(200);
+				else {
+					SDL_Delay(200);
+				}
 			}
 			if (done == true) {
 				if (enemyArmy[aiCurrentTroop].getPos()[0] == destination.x) {
@@ -539,10 +547,10 @@ int main(int argc, char* args[]) {
 						damagedEnemy = alliedArmy[selectedTroop].moveTroop(tiles, 3, enemyArmy);
 					}
 				}
-				SDL_Delay(100);
+				//SDL_Delay(100);
 			}
 			if (damagedEnemy != 0) { 
-				enemyArmy[damagedEnemy].setHp(enemyArmy[damagedEnemy].getHp() - 10); 
+				enemyArmy[damagedEnemy].setHp(enemyArmy[damagedEnemy].getHp() - 40); 
 				damagedEnemy = 0;
 			}
 		}
@@ -556,11 +564,11 @@ int main(int argc, char* args[]) {
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(true, alliedArmy);
 		localMaps[currentMapX * worldWidth + currentMapY].setTroops(false, enemyArmy);
 
-		std::ostringstream strs;
+		/*std::ostringstream strs;
 		strs << "Turn " << turnCounter << ", Player's Turn = " << playerTurn;
 		std::string str = strs.str();
 		gTextTexture.loadFromRenderedText(str, textColor);
-		gTextTexture.render(100, 100);
+		gTextTexture.render(100, 100);*/
 
 		turnButton.check(localMaps);
 		turnButton.render();

@@ -1,7 +1,2 @@
-﻿  troop.cpp
-C:\GitHub\SpringGame\game\Game\Game\troop.cpp(189): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\troop.cpp(207): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\troop.cpp(224): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\troop.cpp(241): warning C4018: '<': signed/unsigned mismatch
-C:\GitHub\SpringGame\game\Game\Game\troop.cpp(180): warning C4172: returning address of local variable or temporary: coords
+﻿  map.cpp
   Game.vcxproj -> C:\GitHub\SpringGame\game\Game\Debug\Game.exe

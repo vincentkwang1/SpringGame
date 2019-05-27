@@ -36,6 +36,7 @@ map::map(int width, int height, std::vector<int> mapdata,std::vector<int> tempda
 	}
 	else { //for the world map
 		worldArray = mapdata;
+		worldArray[620] = 120;
 	}
 	alliedTroops.push_back(troop());
 	enemyTroops.push_back(troop());
@@ -159,8 +160,14 @@ tile map::createTile(int noise, int temp, int i, int j){
 std::vector<troop> map::createTroop(tile* tiles, int xCoord, int yCoord, bool team) {
 	int x, y;
 	do {
-		x = 1 + rand() % 5;
-		y = 1 + rand() % 5;
+		if (team) {
+			x = 1 + rand() % 5;
+			y = 1 + rand() % 5;
+		}
+		else {
+			x = 6 + rand() % 5;
+			y = 6 + rand() % 5;
+		}
 	} while (tiles[x * tileX + y].getPassable() == false);
 	troop newTroop = {x, y, 1, tiles, team };
 	if (team) {
