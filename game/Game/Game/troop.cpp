@@ -180,6 +180,7 @@ int * troop::getPos() {
 	return coords;
 }
 int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
+	
 	bool success = true;
 	if (movesLeft > 0) {
 		switch (direction) {
@@ -262,6 +263,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 		}
 		updatePos(tiles);
 	}
+	
 	if (movesLeft == 0) {
 		setSelected(false);
 		return 0;
@@ -269,6 +271,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 	else {
 		return 0;
 	}
+	
 }
 void troop::attack() {
 	movesLeft = 0;
