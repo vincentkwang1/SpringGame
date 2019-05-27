@@ -190,7 +190,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 					if (enemyArmy[i].getPos()[0] == xCoord-1 && enemyArmy[i].getPos()[1] == yCoord) {
 						std::cout << "1";
 						Direction = 1;
-						attacking = true;
+						attack();
 						return i;
 						
 					}
@@ -208,7 +208,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 					if (enemyArmy[i].getPos()[0] == xCoord && enemyArmy[i].getPos()[1] == yCoord-1) {
 						std::cout << "2";
 						Direction = 2;
-						attacking = true;
+						attack();
 						return i;
 					}
 				}
@@ -225,7 +225,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 					if (enemyArmy[i].getPos()[0] == xCoord +1 && enemyArmy[i].getPos()[1] == yCoord) {
 						std::cout << "3";
 						Direction = 3;
-						attacking = true;
+						attack();
 						return i;
 					}
 				}
@@ -242,7 +242,7 @@ int troop::moveTroop(tile* tiles, int direction, std::vector<troop> enemyArmy) {
 					if (enemyArmy[i].getPos()[0] == xCoord && enemyArmy[i].getPos()[1] == yCoord+1) {
 						std::cout << "4";
 						Direction = 4;
-						attacking = true;
+						attack();
 						return i;
 					}
 				}
