@@ -11,7 +11,7 @@ public:
 	troop(int invisible);
 	troop(int xPos, int yPos, int type, tile* tiles, bool teamInit); //constructor with type of troop and position
 	void move(); //moves the troop when panningx
-	bool moveTroop(tile* tiles, int direction); //actually moves the tile the troop is on, returns successful movement
+	int moveTroop(tile* tiles, int direction, std::vector<troop> enemyarmy); //actually moves the tile the troop is on, returns successful movement
 	//0 is with w, 1 is with a, 2 is with s, 3 is with d
 	void attack();
 	void updatePos(tile* tiles); //updates the position to match the coordinate
@@ -27,14 +27,17 @@ public:
 	bool getMovesLeft();
 	bool getAttacking();
 	void reset();
+	
 private:
 	//FRAME COUNTER22222
 	int maxMoves = 8;
 	bool placeholder;
+
 	bool selected = false;
 	bool team; //true is player, false is enemy
 	int movesLeft = maxMoves;
 	int frame = 0;
+	int Direction;
 	SDL_Rect troopClips[20];
 	SDL_Rect tCollider;
 	bool attacking = false; //determines whether the troop is in its attack animation
